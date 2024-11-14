@@ -4,12 +4,12 @@
 		.popup-slider__body.swiper(ref="dynamicSlider")
 			.popup-slider__wrapper.swiper-wrapper
 				.popup-slider__item.swiper-slide(v-for="image, index in popupData.images" :key="index")
-					.popup-slider__image.ibg
+					.popup-slider__image.ibg(v-html="image.markup")
 						//- NuxtImg(:src="`/images/dynamic/dynamic-${image}@2x.jpg`" format="avif" :alt="`Динамика строительства ${popupData.caption}`")
-						picture
-							source(type="image/webp" :srcset="`/images/dynamic/dynamic-${image}@2x.webp`")
-							source(:srcset="`/images/dynamic/dynamic-${image}@2x.jpg`")
-							img(:src="`/images/dynamic/dynamic-${image}@2x.jpg`" :alt="`Динамика строительства ${popupData.caption}`")
+						//- picture
+						//- 	source(type="image/webp" :srcset="`/images/dynamic/dynamic-${image}@2x.webp`")
+						//- 	source(:srcset="`/images/dynamic/dynamic-${image}@2x.jpg`")
+						//- 	img(:src="`/images/dynamic/dynamic-${image}@2x.jpg`" :alt="`Динамика строительства ${popupData.caption}`")
 		.slider-controls
 			.slider-pagination(ref="sliderPagination")
 			.slider-buttons

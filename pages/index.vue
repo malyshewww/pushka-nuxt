@@ -7,8 +7,8 @@
 		SectionMainAdvantages
 		SectionMainHouse
 		SectionMainScenariors
-		SectionMainNews
-		SectionMainProgress
+		SectionMainNews(:news-list="front.main.news")
+		SectionMainProgress(:dynamic-list="front.main.dynamicList")
 </template>
 
 <script setup>
@@ -20,6 +20,33 @@ useHead({
       class: "page--home",
    },
 });
+
+const runtimeConfig = useRuntimeConfig();
+const {
+   data: front,
+   status,
+   error,
+} = await useAsyncData(
+   "front",
+   () =>
+      $fetch(
+         `${runtimeConfig.public.apiBase}/wsapi/packs/front?_format=json`,
+         {}
+      ),
+   {
+      transform: ({ data, links, meta, metatag }) => {
+         console.log(data);
+         // const metadata = useGenerateMeta(metatag.html_head);
+         // const { acc: meta, title } = metadata;
+         return {
+            main: {
+               dynamicList: data.dynamic_front,
+               news: data.news_front,
+            },
+         };
+      },
+   }
+);
 </script>
 
 <style lang="scss" scoped>

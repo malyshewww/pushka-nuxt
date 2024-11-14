@@ -2,8 +2,8 @@
 	.main-progress__cards
 		.swiper(ref="dynamicSlider")
 			.swiper-wrapper
-				ProgressCard(v-for="(item, index) in dynamic.data" :key="index" @openPopupDynamic="openPopupDynamic($event, item)" :card="item")
-		.slider-controls
+				ProgressCard(v-for="(item, index) in dynamicList" :key="index" @openPopupDynamic="openPopupDynamic($event, item)" :card="item")
+		.slider-controls(ref="sliderControls")
 			button(ref="buttonPrev" type="button").slider-button.slider-button-prev
 			button(ref="buttonNext" type="button").slider-button.slider-button-next
 		PopupDynamic(:is-open.sync="storePopupDynamic.isOpenPopupDynamic" @close-popup="closePopupDynamic" :popup-data="initialState" :initial-slide="initialSlide")
@@ -17,6 +17,15 @@ import "swiper/css/navigation";
 
 import { usePopupDynamicStore } from "~/stores/popup/dynamic";
 
+const props = defineProps({
+   dynamicList: {
+      type: Object,
+      required: true,
+   },
+});
+
+console.log(props.dynamicList);
+
 const initialSlide = ref(0);
 
 const storePopupDynamic = usePopupDynamicStore();
@@ -27,8 +36,8 @@ const initialState = reactive({
 });
 
 const openPopupDynamic = (event, item) => {
-   initialState.caption = item.caption;
-   initialState.images = item.images;
+   initialState.caption = item.date_text;
+   initialState.images = item.field_images;
    storePopupDynamic.openPopupDynamic();
 };
 const closePopupDynamic = () => {
@@ -39,40 +48,11 @@ const closePopupDynamic = () => {
    }, 100);
 };
 
-const dynamic = reactive({
-   data: [
-      {
-         img: "1",
-         caption: "Август 2024",
-         images: ["1", "2", "3"],
-      },
-      {
-         img: "2",
-         caption: "Сентябрь 2024",
-         images: ["2", "3", "1"],
-      },
-      {
-         img: "3",
-         caption: "Октябрь 2024",
-         images: ["3", "1", "3"],
-      },
-      {
-         img: "4",
-         caption: "Ноябрь 2024",
-         images: ["1", "2", "3", "4"],
-      },
-      {
-         img: "4",
-         caption: "Ноябрь 2024",
-         images: ["1", "2", "3", "4"],
-      },
-   ],
-});
-
 const dynamicSlider = ref("");
 const dynamicSwiper = ref("");
 const buttonPrev = ref("");
 const buttonNext = ref("");
+const sliderControls = ref("");
 
 const initSlider = () => {
    if (dynamicSlider.value) {
@@ -80,6 +60,7 @@ const initSlider = () => {
          modules: [Navigation],
          slideClass: "item-dynamic",
          speed: 1000,
+         slidesPerView: 4,
          navigation: {
             nextEl: buttonNext.value,
             prevEl: buttonPrev.value,

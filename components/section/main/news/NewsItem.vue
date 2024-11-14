@@ -3,10 +3,10 @@
 		.news-item__body
 			.news-item__title {{item.title}}
 			.news-item__content
-				.news-item__text 
-					p {{item.text}}
+				.news-item__text(v-html="item.body")
+					//- p {{item.text}}
 			.news-item__bottom
-				.news-item__date {{item.date}}
+				.news-item__date {{item.field_date}}
 				button(type="button").news-item__read-more читать
 </template>
 
@@ -17,7 +17,6 @@ defineProps({
       required: true,
    },
 });
-
 const emit = defineEmits(["openPopupNews"]);
 
 const openPopupNews = () => {

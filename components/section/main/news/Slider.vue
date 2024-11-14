@@ -17,6 +17,13 @@ import "swiper/css/navigation";
 
 import { usePopupNewsStore } from "~/stores/popup/news";
 
+defineProps({
+   newsList: {
+      type: Array,
+      required: true,
+   },
+});
+
 const storePopupNews = usePopupNewsStore();
 
 const popupNewsData = reactive({
@@ -32,8 +39,8 @@ const closePopupNews = () => {
 const openPopupNews = (item) => {
    storePopupNews.openPopupNews();
    popupNewsData.title = item.title;
-   popupNewsData.date = item.date;
-   popupNewsData.text = item.text;
+   popupNewsData.date = item.field_date;
+   popupNewsData.text = item.body;
 };
 
 const sliderNews = ref("");
@@ -73,29 +80,6 @@ const initSlider = () => {
       });
    }
 };
-
-const newsList = [
-   {
-      title: "Новости по этапам строительства, июль 2024",
-      text: "ГК Каскад представляет новый проект — апарт комплекс «Пушка» в Нижегородском районе города Нижний Новгород. Архитектурно апартаменты «Пушка» будут представлены 12-ти этажным жилым домом с дополнительным парапетом первого этажа.",
-      date: "12 июля 2024",
-   },
-   {
-      title: "Скидка при покупке студии с парковочным местом",
-      text: "ГК Каскад представляет новый проект — апарт комплекс «Пушка» в Нижегородском районе города Нижний Новгород. Архитектурно апартаменты «Пушка» будут представлены 12-ти этажным жилым домом с дополнительным парапетом первого этажа.",
-      date: "13 июля 2024",
-   },
-   {
-      title: "График работы отдела продаж в праздники",
-      date: "14 июля 2024",
-   },
-   {
-      title: "Новости по этапам строительства, июль 2024",
-      text: "ГК Каскад представляет новый проект — апарт комплекс «Пушка» в Нижегородском районе города Нижний Новгород. Архитектурно апартаменты «Пушка» будут представлены 12-ти этажным жилым домом с дополнительным парапетом первого этажа.",
-      date: "12 июля 2024",
-   },
-];
-
 onMounted(() => {
    initSlider();
 });

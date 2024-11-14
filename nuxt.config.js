@@ -80,6 +80,8 @@ export default defineNuxtConfig({
          ],
       },
    },
+   // site: { url: "http://localhost:3000" },
+   ssr: true,
    vite: {
       server: {
          port: 3001,

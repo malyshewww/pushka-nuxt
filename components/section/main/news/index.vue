@@ -6,8 +6,17 @@
 					.section-top__content
 						h2.section-top__title.custom-title
 							| Новости #[span.text-transparent-current и&nbsp;акции]
-				SectionMainNewsSlider
+				SectionMainNewsSlider(:news-list="newsList")
 </template>
+
+<script setup>
+defineProps({
+   newsList: {
+      type: Array,
+      required: true,
+   },
+});
+</script>
 
 <style lang="scss" scoped>
 .main-news {

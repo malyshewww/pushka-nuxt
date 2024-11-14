@@ -1,10 +1,10 @@
 <template lang="pug">
 	.dynamic__item.item-dynamic(@click="openPopupDynamic($event, card)")
-		.item-dynamic__image.ibg
+		.item-dynamic__image.ibg(v-html="card.first_image[0].markup")
 			//- NuxtImg(:src="`/images/dynamic/dynamic-${card.images[0]}@2x.jpg`" format="avif" :alt="`Динамика строительства ${card.caption}`")
-			img(:src="`/images/dynamic/dynamic-${card.images[0]}@2x.jpg`" :alt="`Динамика строительства ${card.caption}`")
+			//- img(:src="`${card.first_image[0].raw}`" :alt="`Динамика строительства ${card.date_text}`")
 		.item-dynamic__content
-			.item-dynamic__caption {{ card.caption }}
+			.item-dynamic__caption {{ card.date_text }}
 </template>
 
 <script setup>

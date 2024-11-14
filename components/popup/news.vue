@@ -6,7 +6,7 @@
 					.popup-news__title {{popupData.title}}
 					.popup-news__date {{popupData.date}}
 				.popup-news__content
-					.content(v-if="popupData.text") {{popupData.text}}
+					.content(v-if="popupData.text" v-html="popupData.text")
 					.popup-news__bottom
 						UiButton(class-names="btn-white" text="закрыть" @buttonClick="closePopup")
 </template>

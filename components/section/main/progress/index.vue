@@ -9,10 +9,17 @@
 							span.text-transparent-current
 								| строительства
 								nuxt-link(to="dynamic").section-top__link
-				SectionMainProgressSlider
+				SectionMainProgressSlider(:dynamic-list="dynamicList")
 </template>
 
-<script setup></script>
+<script setup>
+const props = defineProps({
+   dynamicList: {
+      type: Object,
+      required: false,
+   },
+});
+</script>
 
 <style lang="scss" scoped>
 .main-progress {
