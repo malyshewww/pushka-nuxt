@@ -5,7 +5,7 @@
 				nuxt-link(to="/" @click.prevent="goBack").breadcrumbs__back
 				ul.breadcrumbs__list
 					li.breadcrumbs__item(v-for="item, index in list")
-						nuxt-link(:to="item.path" :class="{ disabled: index === list.length - 1 }").breadcrumbs__link {{item.title}}
+						nuxt-link(:to="item.url" :class="{ disabled: index === list.length - 1 }").breadcrumbs__link {{item.text}}
 </template>
 
 <script setup>

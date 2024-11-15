@@ -6,7 +6,7 @@
 		.slider-controls(ref="sliderControls")
 			button(ref="buttonPrev" type="button").slider-button.slider-button-prev
 			button(ref="buttonNext" type="button").slider-button.slider-button-next
-		PopupDynamic(:is-open.sync="storePopupDynamic.isOpenPopupDynamic" @close-popup="closePopupDynamic" :popup-data="initialState" :initial-slide="initialSlide")
+		PopupDynamic(:is-open.sync="storePopupDynamic.isOpenPopupDynamic" @close-popup="closePopupDynamic" :popup-data="initialState")
 </template>
 
 <script setup>
@@ -23,10 +23,6 @@ const props = defineProps({
       required: true,
    },
 });
-
-console.log(props.dynamicList);
-
-const initialSlide = ref(0);
 
 const storePopupDynamic = usePopupDynamicStore();
 

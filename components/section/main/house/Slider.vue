@@ -34,7 +34,7 @@ const device = useDevice();
 const router = useRouter();
 
 const changeRoute = () => {
-   navigateTo("/flats/list");
+   navigateTo("/flats-list");
 };
 
 const initSlider = () => {

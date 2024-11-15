@@ -2,11 +2,17 @@
 	.main-footer__contacts.contacts-footer
 		.contacts-footer__items
 			.contacts-footer__item
-				address.contacts-footer__address г. Нижний Новгород, ул. Ковалихинская, 8Б (ориентир — Центр Международной торговли)
+				address.contacts-footer__address(v-if="info.address") {{info.address}}
 				AppFooterSchedule
 			.contacts-footer__item
 				AppFooterContactLinks
 </template>
+
+<script setup>
+import { useMainInfoStore } from "~/stores/maininfo";
+const mainInfoStore = useMainInfoStore();
+const { info } = mainInfoStore;
+</script>
 
 <style lang="scss" scoped>
 .contacts-footer {

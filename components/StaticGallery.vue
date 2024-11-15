@@ -3,12 +3,12 @@
 		.heading
 			h2.heading__title Фотогалерея
 		.gallery__body
-			.gallery-item(v-for="item in 3")
+			.gallery-item(v-for="item in gallery")
 				span.mask
 					span.mask__icon
-				a(:href="`/images/text-page/gallery-${item}.jpg`" data-fancybox="gallery-static").gallery-item__image.ibg
+				a(:href="item.raw" data-fancybox="gallery-static").gallery-item__image.ibg(v-html="item.markup")
 					//- NuxtImg(:src="`/images/text-page/gallery-${item}.jpg`" format="avif" alt="изображение")
-					img(:src="`/images/text-page/gallery-${item}.jpg`")
+					//- img(:src="item.raw")
 </template>
 
 <script setup>
@@ -18,6 +18,14 @@ const fancyboxOptions = {
    Hash: false,
 };
 Fancybox.bind(`[data-fancybox="gallery-static"]`, fancyboxOptions);
+
+defineProps({
+   gallery: {
+      type: Array,
+      required: true,
+      default: () => [],
+   },
+});
 </script>
 
 <style lang="scss" scoped>

@@ -1,6 +1,6 @@
 <template lang="pug">
 	div
-		BreadCrumbs(:list="crumbs")
+		BreadCrumbs(:list="flatsScheme.breadcrumb")
 		main.main.flats.flats-scheme
 			.container
 				FlatHeading
@@ -41,16 +41,26 @@ useHead({
    },
 });
 
-const crumbs = [
+const runtimeConfig = useRuntimeConfig();
+const {
+   data: flatsScheme,
+   status,
+   error,
+} = await useAsyncData(
+   "flatsScheme",
+   () =>
+      $fetch(`${runtimeConfig.public.apiBase}/flats-scheme?_format=json`, {}),
    {
-      title: "Главная",
-      path: "/",
-   },
-   {
-      title: "Апартаменты в продаже",
-      path: "/",
-   },
-];
+      transform: (res) => {
+         console.log(res);
+         const { breadcrumb, data } = res;
+         return {
+            breadcrumb,
+            // data,
+         };
+      },
+   }
+);
 
 const corpus = reactive({
    floorsNumber: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],

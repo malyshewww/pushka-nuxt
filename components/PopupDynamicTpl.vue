@@ -32,10 +32,6 @@ const props = defineProps({
       type: Object,
       required: true,
    },
-   initialSlide: {
-      type: Number,
-      required: true,
-   },
 });
 
 const dynamicSlider = ref("");

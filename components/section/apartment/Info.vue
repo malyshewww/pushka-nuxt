@@ -1,7 +1,7 @@
 <template lang="pug">
 	.apartment-card.apartment-card__info.info-apartment
 		.info-apartment__header
-			.info-apartment__title Апартаменты {{info.area}} м²
+			.info-apartment__title(v-if="info.space") Апартаменты {{info.space}} м²
 			.info-apartment__date Срок сдачи III кв. 2027 года
 		.info-apartment__characteristics.characteristics
 			ul.characteristics__list
@@ -9,20 +9,20 @@
 					.characteristics__label 
 						span Этаж
 					.characteristics__value {{info.floor}} из 20
-				li.characteristics__item(v-if="info.rooms")
+				li.characteristics__item(v-if="info.room")
 					.characteristics__label
 						span Количество комнат
-					.characteristics__value {{info.rooms}}
+					.characteristics__value {{info.room}}
 				li.characteristics__item(v-if="info.number")
 					.characteristics__label 
 						span Номер апартаментов
 					.characteristics__value {{info.number}}
-			ul.features-list
-				.features-item(v-for="item in info.features") {{item.title}}
+			ul.features-list(v-if="info.options")
+				.features-item(v-for="(item, index) in info.options" :class="`features-item--${index}`") {{item}}
 		.info-apartment__bottom
 			.info-apartment__prices(v-if="info.price")
 				.info-apartment__price {{formatNumber(info.price)}}
-				.info-apartment__price-label {{info.priceArea}}
+				.info-apartment__price-label {{formatNumber(info.price_square)}}/м²
 			.info-apartment__actions
 				UiButton(text="забронировать" class-names="btn-green" @buttonClick="openPopupBook")
 				UiButton(text="консультация" class-names="btn-white" @buttonClick="openPopupConsultation")
@@ -32,6 +32,15 @@
 import { usePopupBookStore } from "~/stores/popup/book";
 import { usePopupConsultationStore } from "~/stores/popup/consultation";
 import { usePopupRequestStore } from "~/stores/popup/request";
+
+defineProps({
+   info: {
+      type: Object,
+      required: true,
+   },
+});
+
+const featuresList = ["design", "offer", "view"];
 
 const storePopupBook = usePopupBookStore();
 const storePopupConsultation = usePopupConsultationStore();
@@ -46,13 +55,6 @@ const openPopupConsultation = () => {
 const openPopupRequest = () => {
    storePopupRequest.openPopup();
 };
-
-defineProps({
-   info: {
-      type: Object,
-      required: true,
-   },
-});
 </script>
 <style lang="scss">
 .apartment-card {
@@ -218,10 +220,25 @@ defineProps({
       background-repeat: no-repeat;
       background-position: center;
    }
-   @for $i from 1 through 3 {
-      &:nth-child(#{$i})::before {
-         background-image: url("/images/icons/feature-#{$i}.svg");
+   &--design {
+      &::before {
+         background-image: url("/images/icons/feature-1.svg");
       }
    }
+   &--view {
+      &::before {
+         background-image: url("/images/icons/feature-2.svg");
+      }
+   }
+   &--offer {
+      &::before {
+         background-image: url("/images/icons/feature-3.svg");
+      }
+   }
+   // @for $i from 1 through 3 {
+   //    &:nth-child(#{$i})::before {
+   //       background-image: url("/images/icons/feature-#{$i}.svg");
+   //    }
+   // }
 }
 </style>

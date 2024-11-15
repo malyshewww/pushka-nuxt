@@ -5,6 +5,16 @@
 </template>
 
 <script setup>
+import { useMainInfoStore } from "@/stores/maininfo";
+
+const runtimeConfig = useRuntimeConfig();
+
+const mainInfoStore = useMainInfoStore();
+const { data: mainInfoData } = await useFetch("/wsapi/packs/site_info", {
+   baseURL: `${runtimeConfig.public.apiBase}`,
+});
+mainInfoStore.setData(mainInfoData.value);
+
 const menu = [
    {
       title: "О проекте",
@@ -13,7 +23,7 @@ const menu = [
    },
    {
       title: "Апартаменты в продаже",
-      path: "/flats/list",
+      path: "/flats-list",
    },
    {
       title: "Динамика строительства",
@@ -37,7 +47,6 @@ const menu = [
       path: "/contacts",
    },
 ];
-
 provide("menu", menu);
 
 onMounted(() => {

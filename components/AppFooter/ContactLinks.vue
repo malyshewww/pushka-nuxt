@@ -1,8 +1,15 @@
 <template lang="pug">
-	.contacts-footer__links
-		a(href="tel:+78312662195").footer__phone +7 831 266-21-95
-		UiEmailLink(email="kaskad2601500@yandex.ru")
+	.contacts-footer__links(v-if="info.phone || info.email")
+		a(v-if="info.phone" :href="`tel:${formatPhone(info.phone)}`").footer__phone {{info.phone}}
+		UiEmailLink(v-if="info.email" :email="info.email")
 </template>
+
+<script setup>
+import { useMainInfoStore } from "~/stores/maininfo";
+const mainInfoStore = useMainInfoStore();
+const { info } = mainInfoStore;
+</script>
+
 <style lang="scss" scoped>
 .footer {
    &__phone {

@@ -1,8 +1,8 @@
 <template lang="pug">
 	.menu-trigger(:class="{active: isOpenMenu}")
 		button(type="button" @click="openFilter").menu-trigger__filter
-		a(href="tel:88003448888").menu-trigger__phone
-			span.menu-trigger__phone-text 8 800 344-88-88
+		a(v-if="info.phone" :href="`tel:${formatPhone(info.phone)}`").menu-trigger__phone
+			span.menu-trigger__phone-text {{info.phone}}
 			span.menu-trigger__phone-icon 
 		.menu-trigger__burger.burger(@click="openMenu")
 			.burger__close
@@ -21,9 +21,15 @@
 <script setup>
 import { useFilterStore } from "~/stores/filter-actions";
 
+import { useMainInfoStore } from "~/stores/maininfo";
+
+const mainInfoStore = useMainInfoStore();
+const { info } = mainInfoStore;
+
 const store = useFilterStore();
 
 const emit = defineEmits(["openMenu"]);
+
 const props = defineProps({
    isOpenMenu: {
       type: Boolean,

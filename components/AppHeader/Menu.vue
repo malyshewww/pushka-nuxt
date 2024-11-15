@@ -9,23 +9,37 @@
 			AppHeaderActions
 		nav.menu__body
 			ul.menu__list 
-				li.menu__item(v-for="(item, index) in menu" :key="index")
-					nuxt-link(:to="{ path: item.path, hash: `${item.hash ? item.hash : ''}`}").menu__link {{item.title}}
+				li.menu__item(v-for="(item, index) in newMenu" :key="index")
+					nuxt-link(:to="{ path: item.url.href, hash: `${item.hash ? item.hash : ''}`}").menu__link {{item.title}}
 		nav.menu__dropdown.dropdown-menu(:class="{active: isDropdownMenuActive}")
 			.dropdown-menu__button(@click="openDropdownMenu")
 			.dropdown-menu__list-wrap
 				ul.dropdown-menu__list
-					li.menu__item(v-for="(item, index) in menu" :key="index")
-						nuxt-link(:to="{ path: item.path, hash: `${item.hash ? item.hash : ''}`}").menu__link {{item.title}}
+					li.menu__item(v-for="(item, index) in newMenu" :key="index")
+						nuxt-link(:to="{ path: item.url.href, hash: `${item.hash ? item.hash : ''}`}").menu__link {{item.title}}
 </template>
 <script setup>
+import { useMainInfoStore } from "@/stores/maininfo";
+
+const mainInfoStore = useMainInfoStore();
+
+const { menu } = mainInfoStore;
+
+const newMenu = computed(() => {
+   return menu.map((item) => {
+      return {
+         ...item,
+         hash: item.url.href === "/#news" ? "#news" : false,
+      };
+   });
+});
+
 const props = defineProps({
    isOpenMenu: {
       type: Boolean,
       required: true,
    },
 });
-const menu = inject("menu");
 
 const isDropdownMenuActive = ref(false);
 
@@ -99,6 +113,7 @@ onMounted(() => {
 .menu {
    display: flex;
    align-items: center;
+   justify-content: center;
    gap: 20px;
    max-width: 930px;
    width: 100%;

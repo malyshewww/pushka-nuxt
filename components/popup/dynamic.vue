@@ -14,10 +14,6 @@ const props = defineProps({
       type: Object,
       required: true,
    },
-   initialSlide: {
-      type: Number,
-      required: true,
-   },
 });
 const emit = defineEmits(["closePopup"]);
 // eslint-disable-next-line

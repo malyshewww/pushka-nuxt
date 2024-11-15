@@ -1,8 +1,8 @@
 <template lang="pug">
 	.social(:class="color")
 		ul.social__list
-			li.social__item
-				a(href="https://vk.com/" target="_blank").social__link
+			li.social__item(v-if="info.vk")
+				a(:href="info.vk" target="_blank").social__link
 					svg(width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg")
 						path(d="M12.7663 17C7.24904 17 4.12261 13.2805 4 7H6.75862C6.81992 11.5732 8.90421 13.5244 10.4981 13.8902V7H13.0728V10.9634C14.6667 10.7805 16.3218 9.01219 16.8736 7H19.4483C19.0192 9.43902 17.1801 11.2683 15.8927 12C17.1801 12.6098 19.2644 14.1951 20 17H17.1188C16.5057 15.1098 14.9732 13.6463 12.9502 13.4024V17H12.7663Z" fill="#2B2F3B")
 			//- li.social__item
@@ -20,6 +20,10 @@
 </template>
 
 <script setup>
+import { useMainInfoStore } from "~/stores/maininfo";
+const mainInfoStore = useMainInfoStore();
+const { info } = mainInfoStore;
+
 const props = defineProps({
    color: {
       type: String,

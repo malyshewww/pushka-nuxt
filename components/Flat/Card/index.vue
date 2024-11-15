@@ -1,15 +1,17 @@
 <template lang="pug">
 	.flat-card
 		.flat-card__body
-			FlatCardImageSlider(:images="flat.images")
+			FlatCardImageSlider(:plan="flat.field_plan" :floor="flat.floor_image" :url="flat.url")
 			.flat-card__main
-				.flat-card__area Апартаменты {{flat.area}} м#[sup 2]
-				.flat-card__price {{formatNumber(flat.price)}}
+				.flat-card__area Апартаменты {{flat.field_space}} м#[sup 2]
+				.flat-card__price {{formatNumber(flat.field_price)}}
 				.flat-card__features.features-card
 					ul.features-card__list
-						li.features-card__item(v-for="(feature, idx) in flat.features" :key="idx") {{feature}}
-			.flat-card__parameters.parameters-card(v-if="flat.parameters")
-				.parameters-card__item {{flat.parameters[0]}}
+						li.features-card__item(v-if="flat.field_number") № {{flat.field_number}}
+						li.features-card__item(v-if="flat.field_floor") {{flat.field_floor}} этаж из 20
+						li.features-card__item(v-if="flat.field_price_sq") {{formatNumber(flat.field_price_sq)}}/м²
+			.flat-card__parameters.parameters-card(v-if="flat.options && flat.options.length")
+				.parameters-card__item {{flat.options[0]}}
 				.parameters-card__wrapper(@click="toggleDropdown(flatIndex)" :class="{active: activeCard === flatIndex}")
 					.parameters-card__button(v-if="parametersLength") 
 						| +{{parametersLength}}
@@ -20,6 +22,7 @@
 </template>
 
 <script setup>
+// features: ["№ 12", "17 этаж из 20", "450 000 ₽/м2"],
 const props = defineProps({
    flat: {
       type: Object,
@@ -35,8 +38,11 @@ const props = defineProps({
    },
 });
 
-const open = ref(false);
+const images = ref([]);
+images.value.push(props.flat.field_plan);
+images.value.push(props.flat.floor_image);
 
+const open = ref(false);
 const emit = defineEmits(["toggleDropdown"]);
 
 const toggleDropdown = (idx) => {
@@ -44,10 +50,10 @@ const toggleDropdown = (idx) => {
 };
 
 const parametersLength = computed(() => {
-   return props.flat.parameters.length - 1;
+   return props.flat.options.length - 1;
 });
 const newParametersList = computed(() => {
-   return props.flat.parameters.filter((item, index) => index !== 0);
+   return props.flat.options.filter((item, index) => index !== 0);
 });
 
 onMounted(() => {

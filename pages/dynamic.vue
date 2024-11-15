@@ -12,16 +12,14 @@
 								span Сдаём проект в 2027
 				.dynamic__wrapper
 					.dynamic__body
-						ProgressCard(v-for="(item, index) in dynamic.data" :key="index" @click="openPopupDynamic($event, item)" :card="item")
-					.dynamic__bottom
-						UiButton(text="Показать ещё" class-names="btn-transparent")
-	PopupDynamic(:is-open.sync="storePopupDynamic.isOpenPopupDynamic" @close-popup="closePopupDynamic" :popup-data="initialState" :initial-slide="initialSlide")
+						ProgressCard(v-for="(item, index) in cards" :key="index" @click="openPopupDynamic($event, item)" :card="item")
+					.dynamic__bottom(v-if="hasMore")
+						UiButton(text="Показать ещё" class-names="btn-transparent" @button-click="loadData")
+	PopupDynamic(:is-open.sync="storePopupDynamic.isOpenPopupDynamic" @close-popup="closePopupDynamic" :popup-data="initialState")
 </template>
 
 <script setup>
 import { usePopupDynamicStore } from "~/stores/popup/dynamic";
-
-const initialSlide = ref(0);
 
 const storePopupDynamic = usePopupDynamicStore();
 
@@ -31,8 +29,8 @@ const initialState = reactive({
 });
 
 const openPopupDynamic = ($event, item) => {
-   initialState.caption = item.caption;
-   initialState.images = item.images;
+   initialState.caption = item.date_text;
+   initialState.images = item.field_images;
    storePopupDynamic.openPopupDynamic();
 };
 const closePopupDynamic = () => {
@@ -43,88 +41,96 @@ const closePopupDynamic = () => {
    }, 100);
 };
 
-// const nuxtApp = useNuxtApp();
-// nuxtApp.hook("page:start", () => {
-//    console.log("start");
-// });
-// nuxtApp.hook("page:finish", () => {
-//    console.log("finish");
-// });
+const route = useRoute();
+const router = useRouter();
+const currentPage = ref(0);
 
-const crumbs = [
-   {
-      title: "Главная",
-      path: "/",
-   },
-   {
-      title: "Динамика строительства",
-      path: "/",
-   },
-];
-const dynamic = reactive({
-   data: [
+const cards = ref([]);
+
+const hasMore = ref(true);
+const crumbs = ref([]);
+
+const runtimeConfig = useRuntimeConfig();
+
+// Доработать гидратацию
+const fetchData = async (page) => {
+   const {
+      data: dynamicData,
+      status,
+      error,
+   } = await useAsyncData(
+      "dynamicData",
+      () =>
+         $fetch(`${runtimeConfig.public.apiBase}/dynamic?_format=json`, {
+            query: {
+               page,
+            },
+         }),
       {
-         img: "1",
-         caption: "Август 2024",
-         images: ["1", "2", "3"],
-      },
-      {
-         img: "2",
-         caption: "Сентябрь 2024",
-         images: ["2", "3", "1"],
-      },
-      {
-         img: "3",
-         caption: "Октябрь 2024",
-         images: ["3", "1", "3"],
-      },
-      {
-         img: "4",
-         caption: "Ноябрь 2024",
-         images: ["1", "2", "3", "4"],
-      },
-      {
-         img: "1",
-         caption: "Август 2024",
-         images: ["1", "2", "3"],
-      },
-      {
-         img: "2",
-         caption: "Сентябрь 2024",
-         images: ["2", "3", "1"],
-      },
-      {
-         img: "3",
-         caption: "Октябрь 2024",
-         images: ["3", "1", "3"],
-      },
-      {
-         img: "4",
-         caption: "Ноябрь 2024",
-         images: ["1", "2", "3", "4"],
-      },
-      {
-         img: "1",
-         caption: "Август 2024",
-         images: ["1", "2", "3"],
-      },
-      {
-         img: "2",
-         caption: "Сентябрь 2024",
-         images: ["2", "3", "1"],
-      },
-      {
-         img: "3",
-         caption: "Октябрь 2024",
-         images: ["3", "1", "3"],
-      },
-      {
-         img: "4",
-         caption: "Ноябрь 2024",
-         images: ["1", "2", "3", "4"],
-      },
-   ],
-});
+         transform: ({ breadcrumb, data, links, meta, metatag }) => {
+            return {
+               breadcrumb,
+               main: {
+                  list: data,
+               },
+               pagination: {
+                  perPage: meta.per_page,
+                  count: meta.count,
+                  totalItems: Math.ceil(meta.count / meta.per_page),
+                  currPage: page,
+               },
+            };
+         },
+      }
+   );
+   return {
+      data: dynamicData.value.main.list,
+      pagination: dynamicData.value.pagination,
+      breadcrumb: dynamicData.value.breadcrumb,
+   };
+};
+
+const loadData = async () => {
+   const { data, pagination, breadcrumb } = await fetchData(currentPage.value);
+   if (data.length > 0) {
+      cards.value.push(...data);
+   }
+   hasMore.value = pagination.count > cards.value.length;
+   crumbs.value = breadcrumb;
+   currentPage.value++;
+};
+await loadData();
+// const {
+//    data: dynamicData,
+//    status,
+//    error,
+// } = await useAsyncData(
+//    "dynamicData",
+//    () =>
+//       $fetch(`${runtimeConfig.public.apiBase}/dynamic?_format=json`, {
+//          immediate: false,
+//          query: {
+//             page: currentPage.value,
+//          },
+//       }),
+//    {
+//       transform: ({ breadcrumb, data, links, meta, metatag }) => {
+//          return {
+//             breadcrumb,
+//             main: {
+//                list: data,
+//             },
+//             pagination: {
+//                perPage: meta.per_page,
+//                count: meta.count,
+//                totalItems: Math.ceil(meta.count / meta.per_page),
+//                currPage: currentPage.value,
+//             },
+//          };
+//       },
+//       watch: [currentPage.value],
+//    }
+// );
 </script>
 
 <style lang="scss" scoped>

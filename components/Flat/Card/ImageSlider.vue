@@ -1,16 +1,14 @@
 <template lang="pug">
-	nuxt-link(to="/apartments/1").flat-card__slider
-		div(ref="imageSlider").flat-slider__images
+	nuxt-link(:to="url").flat-card__slider
+		div(ref="imageSlider").flat-slider__images(v-if="plan || floor")
 			.image-switch
-				.image-switch__item(v-for="(image, idx) in images" :key="idx" @mouseenter="switchImages(idx)" @mouseleave="initialState" :class="{active: currentImage === idx}")
-					.image-switch__picture
-						picture
-							source(type="image/webp" :srcset="`/images/flat-card/flat-${idx+1}.webp`")
-							source(:srcset="`/images/flat-card/flat-${idx+1}.png`")
-							img(:src="`/images/flat-card/flat-${idx+1}.png`" alt="alt")
+				.image-switch__item(v-if="plan" @mouseenter="switchImages(0)" @mouseleave="initialState" :class="{active: currentImage === 0}")
+					.image-switch__picture(v-html="plan[0].markup")
+				.image-switch__item(v-if="floor" @mouseenter="switchImages(1)" @mouseleave="initialState" :class="{active: currentImage === 1}")
+					.image-switch__picture(v-html="floor[0].markup")
 		.flat-slider__pagination.image-pagination
 			ul.image-pagination__list
-				li.image-pagination__item(v-for="(image, idx) in images" :key="idx" :class="{active: currentImage === idx}" @click="switchImages(idx)")
+				li.image-pagination__item(v-for="(image, idx) in 2" :key="idx" :class="{active: currentImage === idx}" @click="switchImages(idx)")
 		.swiper-pagination(ref="imagePagination")
 </template>
 
@@ -20,11 +18,18 @@ import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-defineProps({
-   images: {
-      type: Object,
+const props = defineProps({
+   plan: {
+      required: false,
+      default: () => "",
+   },
+   floor: {
+      required: false,
+      default: () => "",
+   },
+   url: {
+      type: String,
       required: true,
-      default: () => {},
    },
 });
 
@@ -169,6 +174,9 @@ onUnmounted(() => {
       top: 0;
       transform: translateX(-50%);
       z-index: var(--bg-midnight-100);
+      & img {
+         object-fit: contain;
+      }
       @media screen and (max-width: $xl) {
          opacity: 1;
          position: static;

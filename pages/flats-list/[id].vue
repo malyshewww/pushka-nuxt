@@ -1,12 +1,12 @@
 <template lang="pug">
 	div
-		BreadCrumbs(:list="crumbs")
+		BreadCrumbs(:list="apartment.breadcrumb")
 		main.main.apartment-card
 			.container
 				.apartment-card__wrapper
 					.apartment-card__body
-						SectionApartmentScheme
-						SectionApartmentInfo(:info="apartmentData")
+						SectionApartmentScheme(:plan="apartment.main.scheme.planImage" :floor="apartment.main.scheme.floorImage")
+						SectionApartmentInfo(:info="apartment.main.info")
 					SliderGallery(:slider="slider" slider-caption="Варианты дизайнерской отделки" :isDescr="true")
 		PopupConsultation(:is-open="storePopupConsultation.isOpenPopupConsultation" @close-popup="closePopupConsultation" :popupData="popupData.consultation")
 		PopupBook(:is-open="storePopupBook.isOpenPopupBook" @close-popup="closePopupBook" :popupData="popupData.book")
@@ -21,6 +21,12 @@ import { usePopupBookStore } from "~/stores/popup/book";
 import { usePopupNoticeBookStore } from "~/stores/popup/noticeBook";
 import { usePopupNoticeConsultationStore } from "~/stores/popup/noticeConsultation";
 // import { usePopupRequestStore } from "~/stores/popup/request";
+
+useHead({
+   bodyAttrs: {
+      class: "page--apartment",
+   },
+});
 
 const storePopupConsultation = usePopupConsultationStore();
 const storePopupBook = usePopupBookStore();
@@ -72,26 +78,6 @@ const popupData = reactive({
          "В ближайшее время с вами свяжется менеджер и поможет оформить бронь",
    },
 });
-
-useHead({
-   bodyAttrs: {
-      class: "page--apartment",
-   },
-});
-const crumbs = [
-   {
-      title: "Главная",
-      path: "/",
-   },
-   {
-      title: "Апартаменты в продаже",
-      path: "/flats/list",
-   },
-   {
-      title: "Апартаменты 31,2 м²",
-      path: "/",
-   },
-];
 const slider = [
    {
       img: "1",
@@ -114,25 +100,46 @@ const slider = [
       alt: "описание",
    },
 ];
-const apartmentData = reactive({
-   area: "31,2",
-   floor: "17",
-   rooms: "студия",
-   number: "№ 12",
-   price: "4500000",
-   priceArea: "450 000 ₽/м²",
-   features: [
-      {
-         title: "Дизайнерская отделка",
+
+const { id } = useRoute().params;
+const runtimeConfig = useRuntimeConfig();
+const {
+   data: apartment,
+   status,
+   error,
+} = await useAsyncData(
+   "apartment",
+   () =>
+      $fetch(
+         `${runtimeConfig.public.apiBase}/flats-list/${id}?_format=json`,
+         {}
+      ),
+   {
+      transform: (res) => {
+         const { breadcrumb, data, metatag } = res;
+         return {
+            breadcrumb,
+            main: {
+               info: {
+                  title: data.title,
+                  floor: data.field_floor[0],
+                  number: data.field_number[0],
+                  price: data.field_price[0],
+                  price_square: data.field_price_sq[0],
+                  room: data.field_room_count[0],
+                  space: data.field_space[0],
+                  status: data.field_status[0],
+                  options: data.options,
+               },
+               scheme: {
+                  planImage: data.field_plan[0],
+                  floorImage: data.floor_image,
+               },
+            },
+         };
       },
-      {
-         title: "Видовая квартира",
-      },
-      {
-         title: "Выгодное предложение",
-      },
-   ],
-});
+   }
+);
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template lang="pug">
-	a(v-if="isScope === 'outer'" :href="path" target="_blank").link-gray #[span ]{{text}}
+	a(v-if="isScope === 'outer'" :href="path" target="_blank").link-gray #[span {{text}}]
 	nuxt-link(v-if="isScope === 'inner'" :to="path" target="_blank").link-gray #[span {{text}}]
 </template>
 

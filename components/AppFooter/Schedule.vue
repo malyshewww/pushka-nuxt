@@ -1,11 +1,14 @@
 <template lang="pug">
-	.contacts-footer__schedule.schedule-footer
+	.contacts-footer__schedule.schedule-footer(v-if="info.workHours")
 		ul.schedule-footer__list
-			li.schedule-footer__item ПН-ЧТ: 9:00–19:00
-			li.schedule-footer__item ПТ: 9:00–18:00
-			li.schedule-footer__item СБ: 10:00–16:00
-			li.schedule-footer__item ВС: Выходной
+			li.schedule-footer__item(v-for="(item, index) in info.workHours" :key="index") {{item}}
 </template>
+
+<script setup>
+import { useMainInfoStore } from "~/stores/maininfo";
+const mainInfoStore = useMainInfoStore();
+const { info } = mainInfoStore;
+</script>
 
 <style lang="scss" scoped>
 .schedule-footer {

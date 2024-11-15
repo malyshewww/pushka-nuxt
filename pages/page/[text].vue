@@ -1,85 +1,41 @@
 <template lang="pug">
 	.text-page
-		BreadCrumbs(:list="crumbs")
+		BreadCrumbs(:list="pageText.breadcrumb")
 		.container
-			.content
-				h1 Заголовок H1
-				h2 Заголовок H2
-				h3 Заголовок H3
-				h4 Заголовок H4
-				h5 Заголовок H5
-				p Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut unde rerum ratione odio magnam pariatur, vel iusto in veritatis possimus autem fugit voluptate, porro reprehenderit consequatur ad provident minima et!
-				ul
-					li Сантехника и электрофурнитура высокого класса
-					li Lorem ipsum dolor, sit amet consectetur adipisicing elit. Recusandae accusamus error enim aliquid excepturi a fugiat modi, maiores ipsam minus at ut laborum iste magnam amet tempora consectetur nostrum. Quasi!Vel asperiores nesciunt porro libero beatae similique fugit cumque saepe nam fugiat ex in, minus fuga quo dolor! Impedit fugit fugiat suscipit exercitationem in? Cupiditate similique magnam non optio quia.
-					li Lorem ipsum dolor, sit amet consectetur adipisicing elit. Recusandae accusamus error enim aliquid excepturi a fugiat modi, maiores ipsam minus at ut laborum iste magnam amet tempora consectetur nostrum. Quasi!Vel asperiores nesciunt porro libero beatae similique fugit cumque saepe nam fugiat ex in, minus fuga quo dolor! Impedit fugit fugiat suscipit exercitationem in? Cupiditate similique magnam non optio quia.
-					li Lorem ipsum dolor, sit amet consectetur adipisicing elit. Recusandae accusamus error enim aliquid excepturi a fugiat modi, maiores ipsam minus at ut laborum iste magnam amet tempora consectetur nostrum. Quasi!Vel asperiores nesciunt porro libero beatae similique fugit cumque saepe nam fugiat ex in, minus fuga quo dolor! Impedit fugit fugiat suscipit exercitationem in? Cupiditate similique magnam non optio quia.
-					li Lorem ipsum dolor, sit amet consectetur adipisicing elit. Recusandae accusamus error enim aliquid excepturi a fugiat modi, maiores ipsam minus at ut laborum iste magnam amet tempora consectetur nostrum. Quasi!Vel asperiores nesciunt porro libero beatae similique fugit cumque saepe nam fugiat ex in, minus fuga quo dolor! Impedit fugit fugiat suscipit exercitationem in? Cupiditate similique magnam non optio quia.
-				ol
-					li Апартаменты с отделкой под ключ
-					li Апартаменты с отделкой под ключ
-					li Апартаменты с отделкой под ключ
-					li Апартаменты с отделкой под ключ
-					li Апартаменты с отделкой под ключ
-				a(href="/") kaskad2601500@yandex.ru
-				.table-wrap
-					table
-						thead
-							tr
-								th Характеристики
-								th Описание
-								th Описание
-						tbody
-							tr
-								td Жилая площадь апартаментов
-								td 40,3 м²
-								td 40,3 м²
-							tr
-								td Жилая площадь апартаментов
-								td 40,3 м²
-								td 40,3 м²
-							tr
-								td Жилая площадь апартаментов
-								td 40,3 м²
-								td 40,3 м²
-			.galleries
-				SliderGallery(:slider="slider" slider-caption="Варианты дизайнерской отделки" :isDescr="true")
-				StaticGallery
+			.main__heading.heading-main
+				h1.heading-main__title {{pageText.main.title}}
+			.content(v-html="pageText.main.content")
+			.galleries(v-if="pageText.main.gallery")
+				//- SliderGallery(:slider="slider" slider-caption="Варианты дизайнерской отделки" :isDescr="true")
+				StaticGallery(:gallery="pageText.main.gallery")
 </template>
 
 <script setup>
-const crumbs = [
+const { text } = useRoute().params;
+
+const runtimeConfig = useRuntimeConfig();
+const {
+   data: pageText,
+   status,
+   error,
+} = await useAsyncData(
+   "pageText",
+   () =>
+      $fetch(`${runtimeConfig.public.apiBase}/page/${text}?_format=json`, {}),
    {
-      title: "Главная",
-      path: "/",
-   },
-   {
-      title: "Текстовая страница",
-      path: "/",
-   },
-];
-const slider = [
-   {
-      img: "1",
-      alt: "описание",
-   },
-   {
-      img: "2",
-      alt: "описание",
-   },
-   {
-      img: "3",
-      alt: "описание",
-   },
-   {
-      img: "4",
-      alt: "описание",
-   },
-   {
-      img: "4",
-      alt: "описание",
-   },
-];
+      transform: (res) => {
+         const { breadcrumb, data, links, metatag } = res;
+         return {
+            breadcrumb,
+            main: {
+               title: data.title,
+               content: data.body[0],
+               gallery: data.field_images,
+            },
+         };
+      },
+   }
+);
 </script>
 
 <style lang="scss" scoped>
@@ -87,5 +43,15 @@ const slider = [
    display: grid;
    grid-template-columns: 100%;
    gap: 156px;
+   padding-top: 110px;
+   @media screen and (max-width: $xxxl) {
+      padding-top: 100px;
+   }
+   @media screen and (max-width: $xl) {
+      padding-top: 60px;
+   }
+   @media screen and (max-width: $md) {
+      padding-top: 40px;
+   }
 }
 </style>

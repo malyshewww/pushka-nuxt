@@ -35,9 +35,6 @@ const {
       ),
    {
       transform: ({ data, links, meta, metatag }) => {
-         console.log(data);
-         // const metadata = useGenerateMeta(metatag.html_head);
-         // const { acc: meta, title } = metadata;
          return {
             main: {
                dynamicList: data.dynamic_front,

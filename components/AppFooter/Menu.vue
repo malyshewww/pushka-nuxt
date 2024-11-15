@@ -2,12 +2,25 @@
 	.footer__menu.menu-footer
 		nav.menu-footer__body
 			ul.menu-footer__list
-				li(v-for="(item, index) in menu").menu-footer__item
-					nuxt-link(:to="{ path: item.path, hash: `${item.hash ? item.hash : ''}`}").menu-footer__link {{item.title}}
+				li(v-for="(item, index) in newMenu").menu-footer__item
+					nuxt-link(:to="{ path: item.url.href, hash: `${item.hash ? item.hash : ''}`}").menu-footer__link {{item.title}}
 </template>
 
 <script setup>
-const menu = inject("menu");
+import { useMainInfoStore } from "@/stores/maininfo";
+
+const mainInfoStore = useMainInfoStore();
+
+const { menu } = mainInfoStore;
+
+const newMenu = computed(() => {
+   return menu.map((item) => {
+      return {
+         ...item,
+         hash: item.url.href === "/#news" ? "#news" : false,
+      };
+   });
+});
 </script>
 
 <style lang="scss" scoped>

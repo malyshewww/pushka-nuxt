@@ -1,8 +1,14 @@
 <template lang="pug">
 	.header__actions.actions-header
-		nuxt-link(to="/flats/list").actions-header__btn апартаменты
-		a(href="tel:88003448888").header__phone 8 800 344-88-88
+		nuxt-link(to="/flats-list").actions-header__btn апартаменты
+		a(v-if="info.phone" :href="`tel:${formatPhone(info.phone)}`").header__phone {{info.phone}}
 </template>
+
+<script setup>
+import { useMainInfoStore } from "~/stores/maininfo";
+const mainInfoStore = useMainInfoStore();
+const { info } = mainInfoStore;
+</script>
 
 <style lang="scss">
 .actions-header {

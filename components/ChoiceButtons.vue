@@ -1,7 +1,7 @@
 <template lang="pug">
 	.heading-main__buttons
-		nuxt-link(to="/flats/list").btn-choice.btn-choice--list Списком
-		nuxt-link(to="/flats/scheme").btn-choice.btn-choice--scheme На схеме
+		nuxt-link(to="/flats-list").btn-choice.btn-choice--list Списком
+		nuxt-link(to="/flats-scheme").btn-choice.btn-choice--scheme На схеме
 </template>
 
 <style lang="scss" scoped>

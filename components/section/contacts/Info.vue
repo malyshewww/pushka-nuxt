@@ -2,23 +2,31 @@
 	.contacts__info.info-contacts
 		.info-contacts__header
 			h3.info-contacts__title Офис продаж
-			a(href="tel:+78312662195").info-contacts__phone +7 831 266-21-95
-			.info-contacts__place
-				address.info-contacts__address г. Нижний Новгород,ул. Ковалихинская, 8 Б (ориентир Центр Международной торговли)
-				UiEmailLink(email="kaskad2601500@yandex.ru")
+			a(v-if="info.phone" :href="`tel:${formatPhone(info.phone)}`").info-contacts__phone {{info.phone}}
+			.info-contacts__place(v-if="info.address || info.email")
+				address.info-contacts__address(v-if="info.address") {{info.address}}
+				UiEmailLink(v-if="info.email" :email="info.email")
 			.info-contacts__social
 				UiSocial(color="gray")
 		.info-contacts__schedule.schedule-contacts
 			h5.schedule-contacts__title Время работы
 			ul.schedule-contacts__list
-				li.schedule-contacts__item(v-for="item, index in schedule" :key="index")
+				li.schedule-contacts__item(v-for="item, index in workHours" :key="index")
 					.schedule-contacts__label 
-						span {{item.label}}
-					.schedule-contacts__value {{item.value}}
+						span {{item[0]}}
+					.schedule-contacts__value {{item[1]}}
 		SectionContactsActions
 </template>
 
 <script setup>
+import { useMainInfoStore } from "~/stores/maininfo";
+const mainInfoStore = useMainInfoStore();
+const { info } = mainInfoStore;
+
+const workHours = info.workHours.map((item) => {
+   return item.split(": ");
+});
+
 defineProps({
    schedule: {
       type: Array,

@@ -1,12 +1,18 @@
 <template lang="pug">
 	.main-footer__info.info-footer
-		UiLinkGray(is-scope="inner" text="Информация о проекте и проектная документация" path="/page/text")
+		UiLinkGray(v-if="info.projectDocs" is-scope="outer" text="Информация о проекте и проектная документация" :path="info.projectDocs")
 		//- nuxt-link(to="/").info-footer__link #[span Информация о проекте и проектная документация]
 		.info-footer__company.company-footer
 			.company-footer__label Создание сайта
 			a(href="https://webshop.ru/" target="_blank").company-footer__logo
 				img(:src="`/images/company-logo.svg`" alt="логотип компании")
 </template>
+
+<script setup>
+import { useMainInfoStore } from "~/stores/maininfo";
+const mainInfoStore = useMainInfoStore();
+const { info } = mainInfoStore;
+</script>
 
 <style lang="scss" scoped>
 .info-footer {

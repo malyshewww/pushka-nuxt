@@ -1,44 +1,36 @@
 <template lang="pug">
 	div
-		BreadCrumbs(:list="crumbs")
+		BreadCrumbs(:list="contacts.breadcrumb")
 		main.main.contacts
 			.container 
 				.main__heading.heading-main
-					h1.heading-main__title Контакты
+					h1.heading-main__title {{contacts.main.title}}
 				.contacts__body
 					SectionContactsMap
-					SectionContactsInfo(:schedule="schedule")
+					SectionContactsInfo
 </template>
 
 <script setup>
-const crumbs = [
+const runtimeConfig = useRuntimeConfig();
+const {
+   data: contacts,
+   status,
+   error,
+} = await useAsyncData(
+   "contacts",
+   () => $fetch(`${runtimeConfig.public.apiBase}/contacts?_format=json`, {}),
    {
-      title: "Главная",
-      path: "/",
-   },
-   {
-      title: "Контакты",
-      path: "/contacts",
-   },
-];
-const schedule = [
-   {
-      label: "ПН-ЧТ",
-      value: "09:00–19:00",
-   },
-   {
-      label: "ПТ",
-      value: "09:00–18:00",
-   },
-   {
-      label: "СБ",
-      value: "10:00–16:00",
-   },
-   {
-      label: "ВС",
-      value: "Выходной",
-   },
-];
+      transform: (res) => {
+         const { breadcrumb, data, metatag } = res;
+         return {
+            breadcrumb,
+            main: {
+               title: data.title,
+            },
+         };
+      },
+   }
+);
 </script>
 
 <style lang="scss" scoped>

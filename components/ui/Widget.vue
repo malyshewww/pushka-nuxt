@@ -1,5 +1,5 @@
 <template lang="pug">
-	nuxt-link(to="/flats/list").widget-circle.lock-padding
+	nuxt-link(to="/flats-list").widget-circle.lock-padding
 		.widget-circle__image
 			//- NuxtImg(:src="`/images/main-hero/circle-img.png`" format="avif" alt="изображение жк")
 			picture

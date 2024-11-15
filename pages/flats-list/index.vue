@@ -1,6 +1,6 @@
 <template lang="pug">
 	div
-		BreadCrumbs(:list="crumbs")
+		BreadCrumbs(:list="flatsList.breadcrumb")
 		main.main.flats.flats-list
 			.container
 				FlatHeading
@@ -8,11 +8,11 @@
 				.flats__wrapper
 					.flats__body
 						FlatCard(
-                     v-for="(item, index) in apartments" 
-                     :key="index" :flat="item" 
-                     :flat-index="index"
-                     :active-card="activeCard"
-                     @toggle-dropdown="toggleDropdown")
+							v-for="(item, index) in flatsList.data"
+							:key="index" :flat="item" 
+							:flat-index="index"
+							:active-card="activeCard"
+							@toggle-dropdown="toggleDropdown")
 					.flats__bottom
 						UiButton(text="показать ещё" class-names="btn-transparent")
 </template>
@@ -23,16 +23,26 @@ useHead({
       class: "page--flats-list",
    },
 });
-const crumbs = [
+
+const runtimeConfig = useRuntimeConfig();
+const {
+   data: flatsList,
+   status,
+   error,
+} = await useAsyncData(
+   "flatsList",
+   () => $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {}),
    {
-      title: "Главная",
-      path: "/",
-   },
-   {
-      title: "Апартаменты в продаже",
-      path: "/",
-   },
-];
+      transform: (res) => {
+         const { breadcrumb, data } = res;
+         return {
+            breadcrumb,
+            data,
+         };
+      },
+   }
+);
+
 const apartments = reactive([
    {
       images: ["1", "2", "4"],

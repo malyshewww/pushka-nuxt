@@ -276,6 +276,9 @@ h5 {
   }
   .gallery & {
     margin-bottom: 64px;
+    @media screen and (max-width: $xl) {
+      margin-bottom: 40px;
+    }
   }
   &__title {
     margin: 0;
@@ -324,6 +327,9 @@ h5 {
 picture {
   display: flex;
   align-items: center;
+  .scheme-apartment & {
+    height: 100%;
+  }
 }
 
 .heading-main {
@@ -340,6 +346,7 @@ picture {
     @media screen and (max-width: $md) {
       font-size: 28px;
       line-height: 31px;
+      hyphens: auto;
     }
 
   }
