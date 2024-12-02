@@ -32,15 +32,15 @@
 				UiButton(class-names="btn-green" text="применить" @button-click="closeFilter")
 			.filter-group.filter-group--options
 				.filter-options
-					.filter-group__option.filter-option(v-for="item, index in checkBoxes")
-						input(type="checkbox" name="additional" :id="item.key" v-bind:value="item" v-model="option")
-						label(:for="item.key")
+					.filter-group__option.filter-option(v-for="item, index in params.options" :class="`filter-option--${item.id}`")
+						input(type="checkbox" name="additional" :id="item.id" v-bind:value="item" v-model="option")
+						label(:for="item.id")
 							| {{item.title}}
 							button(type="button").filter-option__delete-btn
 			.filter-group.filter-group--last
 				.filter-group__buttons
 					button(type="button" @click="resetFilter").filter-group__reset-btn Сбросить фильтры
-					button(type="button" @click="resetFilter").filter-group__reset-btn.filter-group__reset-btn--mobile Сбросить 
+					button(type="button" @click="resetFilter").filter-group__reset-btn.filter-group__reset-btn--mobile Сбросить
 </template>
 
 <script setup>
@@ -57,6 +57,13 @@ const closeFilter = () => {
    }
    store.closeFitler();
 };
+
+const props = defineProps({
+   params: {
+      type: Object,
+      required: true,
+   },
+});
 
 const checkBoxes = reactive([
    {
@@ -82,26 +89,32 @@ const sliderPrice = ref("");
 const sliderArea = ref("");
 const sliderFloor = ref("");
 
+const priceMin = ref(+props.params.price.min);
+const priceMax = ref(+props.params.price.max);
+
+// const priceMin = ref(20);
+// const priceMax = ref(300000);
+
 const filter = reactive({
    price: {
-      min: 3,
-      max: 42.2,
-      minRange: 3,
-      maxRange: 42.2,
+      min: +props.params.price.min,
+      max: +props.params.price.max,
+      minRange: +props.params.price.min,
+      maxRange: +props.params.price.max,
       step: 0.1,
    },
    area: {
-      min: 17,
-      max: 120,
-      minRange: 17,
-      maxRange: 120,
+      min: +props.params.space.min,
+      max: +props.params.space.max,
+      minRange: +props.params.space.min,
+      maxRange: +props.params.space.max,
       step: 0.1,
    },
    floor: {
-      min: 1,
-      max: 20,
-      minRange: 1,
-      maxRange: 20,
+      min: +props.params.floor.min,
+      max: +props.params.floor.max,
+      minRange: +props.params.floor.min,
+      maxRange: +props.params.floor.max,
       step: 1,
    },
 });
@@ -150,6 +163,52 @@ const updateSliderFloor = (element, obj) => {
       }
    });
 };
+
+const runtimeConfig = useRuntimeConfig();
+
+// const fetchData = async () => {
+//    const {
+//       data: flats,
+//       status,
+//       error,
+//    } = await useAsyncData(
+//       "flats",
+//       () =>
+//          $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {
+//             params: {
+//                "price[min]": priceMin.value,
+//                "price[max]": priceMax.value,
+//             },
+//          }),
+//       {
+//          transform: (res) => {
+//             console.log(res);
+//          },
+//          watch: [priceMin.value, priceMax.value],
+//       }
+//    );
+// };
+const { data, refresh } = useAsyncData("flats", async () => {
+   const res = await fetch(
+      `${runtimeConfig.public.apiBase}/flats-list?_format=json&price[min]=${priceMin.value}&price[max]=${priceMax.value}`
+   );
+   if (!res.ok) throw new Error("Ошибка загрузки данных");
+   return await res.json();
+});
+
+watch([priceMin.value, priceMax.value], refresh);
+
+// const fetchData = async () => {
+//    // Формируем ключ с параметрами запроса
+//    const { data } = await useAsyncData("flats", async () => {
+//       const res = await $fetch(
+//          `${runtimeConfig.public.apiBase}/flats-list?_format=json&price[min]=${priceMin.value}&price[max]=${priceMax.value}`
+//       );
+//       return await res.json();
+//    });
+//    console.log("fetch", data);
+//    return data;
+// };
 
 const updateRangeSliders = () => {
    updateSliderPrice(sliderPrice.value, filter.price);
@@ -461,21 +520,21 @@ onMounted(() => {
          min-height: 34px;
       }
    }
-   &:nth-child(1) {
+   &--design {
       & label {
          &::before {
             mask-image: url("/images/icons/option-design.svg");
          }
       }
    }
-   &:nth-child(2) {
+   &--view {
       & label {
          &::before {
             mask-image: url("/images/icons/option-room.svg");
          }
       }
    }
-   &:nth-child(3) {
+   &--offer {
       & label {
          &::before {
             mask-image: url("/images/icons/option-offer.svg");

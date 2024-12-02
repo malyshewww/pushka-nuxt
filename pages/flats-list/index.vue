@@ -4,12 +4,12 @@
 		main.main.flats.flats-list
 			.container
 				FlatHeading
-				FlatFilter
+				FlatFilter(:params="flatsList.params")
 				.flats__wrapper
 					.flats__body
 						FlatCard(
 							v-for="(item, index) in flatsList.data"
-							:key="index" :flat="item" 
+							:key="index" :flat="item"
 							:flat-index="index"
 							:active-card="activeCard"
 							@toggle-dropdown="toggleDropdown")
@@ -24,6 +24,22 @@ useHead({
    },
 });
 
+const route = useRoute();
+// const currentPage = ref(route.query.page ? route.query.page : 0);
+// const currentPriceMin = ref(route.query.price_min ? route.query.price_min : 0);
+// const currentPriceMax = ref(route.query.price_max ? route.query.price_max : 0);
+// const currentAreaMin = ref(route.query.area_min ? route.query.area_min : 0);
+// const currentAreaMax = ref(route.query.area_max ? route.query.area_max : 0);
+// const currentFloorMin = ref(route.query.floor_min ? route.query.floor_min : 0);
+// const currentFloorMax = ref(route.query.floor_max ? route.query.floor_max : 0);
+
+// const filters = reactive({
+//    floor: {},
+//    price: {},
+//    space: {},
+//    options: {},
+// });
+
 const runtimeConfig = useRuntimeConfig();
 const {
    data: flatsList,
@@ -31,17 +47,36 @@ const {
    error,
 } = await useAsyncData(
    "flatsList",
-   () => $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {}),
+   () =>
+      $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {
+         // params: {
+         //    page: currentPage.value,
+         //    "price[min]": currentPriceMin.value,
+         //    "price[max]": currentPriceMax.value,
+         //    "space[min]": currentAreaMin.value,
+         //    "space[max]": currentAreaMax.value,
+         //    "floor[min]": currentFloorMin.value,
+         //    "floor[max]": currentFloorMax.value,
+         // },
+      }),
    {
       transform: (res) => {
-         const { breadcrumb, data } = res;
+         const { breadcrumb, data, filter } = res;
          return {
             breadcrumb,
             data,
+            params: {
+               floor: filter.slider.floor,
+               price: filter.slider.price,
+               space: filter.slider.space,
+               options: filter.options,
+            },
          };
       },
    }
 );
+
+// const params = [];
 
 const apartments = reactive([
    {
