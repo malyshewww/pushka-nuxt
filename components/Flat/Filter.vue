@@ -188,15 +188,15 @@ const runtimeConfig = useRuntimeConfig();
 //       }
 //    );
 // };
-const { data, refresh } = useAsyncData("flats", async () => {
-   const res = await fetch(
-      `${runtimeConfig.public.apiBase}/flats-list?_format=json&price[min]=${priceMin.value}&price[max]=${priceMax.value}`
-   );
-   if (!res.ok) throw new Error("Ошибка загрузки данных");
-   return await res.json();
-});
+// const { data, refresh } = useAsyncData("flats", async () => {
+//    const res = await fetch(
+//       `${runtimeConfig.public.apiBase}/flats-list?_format=json&price[min]=${priceMin.value}&price[max]=${priceMax.value}`
+//    );
+//    if (!res.ok) throw new Error("Ошибка загрузки данных");
+//    return await res.json();
+// });
 
-watch([priceMin.value, priceMax.value], refresh);
+// watch([priceMin.value, priceMax.value], refresh);
 
 // const fetchData = async () => {
 //    // Формируем ключ с параметрами запроса

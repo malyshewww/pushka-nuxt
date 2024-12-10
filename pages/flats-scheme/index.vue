@@ -4,13 +4,13 @@
 		main.main.flats.flats-scheme
 			.container
 				FlatHeading
-				FlatFilter
+				FlatFilter(:params="flatsScheme.params")
 				.flats-scheme__wrapper
 					FlatSchemeLegend(:is-scroll-scheme="isScrollScheme")
 					.flats-scheme__places-wrap
 						.flats-scheme__places(ref="scheme" :class="{active: isScrollScheme}")
 							.flats-scheme__body
-								FlatScheme(:corpus="corpus" @openTooltip="openTooltip" @closeTooltip="closeTooltip")
+								FlatScheme(:corpus="flatsScheme.corpus" @openTooltip="openTooltip" @closeTooltip="closeTooltip")
 						.flats-scheme__tooltip.tooltip-scheme(ref="tooltip" :class="{active: data.tooltip.isActive}")
 							.tooltip-scheme__body
 								.tooltip-scheme__image
@@ -53,22 +53,28 @@ const {
    {
       transform: (res) => {
          console.log(res);
-         const { breadcrumb, data } = res;
+         const { breadcrumb, data, filter } = res;
          return {
             breadcrumb,
-            // data,
+            corpus: data,
+            params: {
+               floor: filter.slider.floor,
+               price: filter.slider.price,
+               space: filter.slider.space,
+               options: filter.options,
+            },
          };
       },
    }
 );
 
-const corpus = reactive({
-   floorsNumber: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-   floors: {
-      floorNumber: "1",
-      floorFlats: json,
-   },
-});
+// const corpus = reactive({
+//    floorsNumber: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+//    floors: {
+//       floorNumber: "1",
+//       floorFlats: json,
+//    },
+// });
 
 const data = reactive({
    tooltip: {
@@ -88,12 +94,13 @@ const isScrollScheme = ref(false);
 
 const showMaskScheme = ref(true);
 
-const openTooltip = (event, room) => {
-   data.tooltip.number = `${room.number}`;
-   data.tooltip.img = room.plan;
-   data.tooltip.square = `${room.square} м²`;
-   data.tooltip.number = `№ ${room.number}`;
-   data.tooltip.price = `${formatNumber(room.price)}`;
+const openTooltip = (event, room, item) => {
+   const target = event.target;
+   data.tooltip.number = `${target.dataset.number}`;
+   data.tooltip.img = `${target.dataset.image}`;
+   data.tooltip.square = `${target.dataset.area} м²`;
+   data.tooltip.number = `№ ${target.dataset.number}`;
+   data.tooltip.price = `${formatNumber(target.dataset.price)}`;
    data.tooltip.status =
       room.status === "in-sell" ? "в продаже" : "забронирована";
    if (window.innerWidth > 1024) {

@@ -1,17 +1,19 @@
 <template lang="pug">
 	.flats-scheme__floors
-		.flats-scheme__floor(v-for="(item, index) in reverseFloors" :key="index")
-			.flats-scheme__number {{item}}
+		.flats-scheme__floor(v-for="(item, index) in corpus" :key="index")
+			.flats-scheme__number {{index}}
 			.flats-scheme__inner
-				nuxt-link(to="/apartments/1").flats-scheme__room(
-					v-for="(room, idx) in corpus.floors.floorFlats"
+				nuxt-link(:to="room.url").flats-scheme__room(
+					v-for="(room, idx) in item.apartments"
 					:key="idx" :data-status="room.status"
-					:data-price="room.price"
-					:data-area="room.area"
+					:data-price="room.field_price"
+					:data-area="room.field_space"
+               :data-number="room.field_number"
+               :data-image="item.floor_image[0].markup"
 					:class="room.status"
-					@mouseenter="showDetailRoom($event, room)"
-					@mouseleave="hideDetailRoom") 100
-			a(:href="`/images/flat-scheme/plan.png`" :data-fancybox="`plan-${item}`").flats-scheme__link План этажа
+					@mouseenter="showDetailRoom($event, room, item)"
+					@mouseleave="hideDetailRoom") 
+			a(:href="item.floor_image[0].markup" :data-fancybox="`plan-${index}`").flats-scheme__link План этажа
 		.flats-scheme__bottom
 			.flats-scheme__bottom-top
 				.flats-scheme__caption Нежилые помещения
@@ -32,9 +34,7 @@ const props = defineProps({
    },
 });
 
-const reverseFloors = computed(() => {
-   return props.corpus.floorsNumber.reverse();
-});
+console.log(props.corpus);
 
 const emit = defineEmits(["openTooltip", "closeTooltip"]);
 
@@ -78,6 +78,10 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       margin-top: 41px;
+      & .flats-scheme__inner {
+         flex-grow: 0;
+         overflow: hidden;
+      }
       @media screen and (max-width: $md) {
          margin-top: 24px;
       }
@@ -171,6 +175,7 @@ onMounted(() => {
       padding: 14px 0;
       position: relative;
       isolation: isolate;
+      flex-grow: 1;
       @media (any-hover: hover) {
          &:hover {
             cursor: pointer;
