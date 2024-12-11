@@ -4,13 +4,13 @@
 		main.main.flats.flats-scheme
 			.container
 				FlatHeading
-				FlatFilter(:params="flatsScheme.params")
+				FlatFilter(:params="flatsScheme.params" @newSliderValues="newSliderValues")
 				.flats-scheme__wrapper
 					FlatSchemeLegend(:is-scroll-scheme="isScrollScheme")
 					.flats-scheme__places-wrap
 						.flats-scheme__places(ref="scheme" :class="{active: isScrollScheme}")
 							.flats-scheme__body
-								FlatScheme(:corpus="flatsScheme.corpus" @openTooltip="openTooltip" @closeTooltip="closeTooltip")
+								FlatScheme(:corpus="flatsScheme.corpus" :floors="flatsScheme.floors" @openTooltip="openTooltip" @closeTooltip="closeTooltip")
 						.flats-scheme__tooltip.tooltip-scheme(ref="tooltip" :class="{active: data.tooltip.isActive}")
 							.tooltip-scheme__body
 								.tooltip-scheme__image
@@ -41,6 +41,14 @@ useHead({
    },
 });
 
+const route = useRoute();
+const router = useRouter();
+
+const priceMin = ref("all");
+const priceMax = ref("all");
+
+const num = ref(0);
+
 const runtimeConfig = useRuntimeConfig();
 const {
    data: flatsScheme,
@@ -49,13 +57,25 @@ const {
 } = await useAsyncData(
    "flatsScheme",
    () =>
-      $fetch(`${runtimeConfig.public.apiBase}/flats-scheme?_format=json`, {}),
+      $fetch(`${runtimeConfig.public.apiBase}/flats-scheme?_format=json`, {
+         query: {
+            "price[min]": priceMin.value,
+            "price[max]": priceMax.value,
+         },
+      }),
    {
       transform: (res) => {
          console.log(res);
          const { breadcrumb, data, filter } = res;
+         let newData = [];
+         for (let variable in data) {
+            newData.push(data[variable]);
+         }
+         console.log("new", newData.reverse());
+         const floors = Object.values(data);
          return {
             breadcrumb,
+            floors,
             corpus: data,
             params: {
                floor: filter.slider.floor,
@@ -65,8 +85,27 @@ const {
             },
          };
       },
+      // watch: [priceMin, priceMax],
    }
 );
+
+// priceMin.value = flatsScheme.value.params.price.min;
+// priceMax.value = flatsScheme.value.params.price.max;
+
+const newSliderValues = (min, max) => {
+   priceMin.value = min;
+   priceMax.value = max;
+   routerReplace();
+};
+
+function routerReplace() {
+   router.replace({
+      query: {
+         "price[min]": priceMin.value,
+         "price[max]": priceMax.value,
+      },
+   });
+}
 
 // const corpus = reactive({
 //    floorsNumber: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
@@ -102,7 +141,7 @@ const openTooltip = (event, room, item) => {
    data.tooltip.number = `№ ${target.dataset.number}`;
    data.tooltip.price = `${formatNumber(target.dataset.price)}`;
    data.tooltip.status =
-      room.status === "in-sell" ? "в продаже" : "забронирована";
+      target.dataset.status === "available" ? "в продаже" : "забронирована";
    if (window.innerWidth > 1024) {
       tooltip.value.style.left = `${
          event.target.getBoundingClientRect().left -

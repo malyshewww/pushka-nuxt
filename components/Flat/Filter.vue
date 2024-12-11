@@ -65,6 +65,8 @@ const props = defineProps({
    },
 });
 
+const emit = defineEmits(["newSliderValues"]);
+
 const checkBoxes = reactive([
    {
       id: 0,
@@ -141,6 +143,28 @@ const updateSliderPrice = (element, obj) => {
       }
    });
 };
+
+const changeSliderValues = () => {
+   sliderPrice.value.noUiSlider.on("change", (e, values, handle) => {
+      let min = e[0];
+      let max = e[1];
+      newSliderValues(min, max);
+   });
+   sliderArea.value.noUiSlider.on("change", (e, values, handle) => {
+      let min = Math.round(e[0]);
+      let max = Math.round(e[1]);
+      newSliderValues(min, max);
+   });
+   sliderFloor.value.noUiSlider.on("change", (e, values, handle) => {
+      let min = Math.round(e[0]);
+      let max = Math.round(e[1]);
+      newSliderValues(min, max);
+   });
+};
+
+function newSliderValues(min, max) {
+   emit("newSliderValues", min, max);
+}
 
 const updateSliderArea = (element, obj) => {
    element.noUiSlider.on("update", (e, values, handle) => {
@@ -240,6 +264,8 @@ const resetFilter = () => {
 onMounted(() => {
    initRangeSliders();
    updateRangeSliders();
+
+   changeSliderValues();
 });
 </script>
 

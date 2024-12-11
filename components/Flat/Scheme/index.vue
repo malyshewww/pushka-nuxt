@@ -1,26 +1,26 @@
 <template lang="pug">
 	.flats-scheme__floors
 		.flats-scheme__floor(v-for="(item, index) in corpus" :key="index")
-			.flats-scheme__number {{index}}
+			.flats-scheme__number {{item.apartments[0].field_floor[0]}}
 			.flats-scheme__inner
 				nuxt-link(:to="room.url").flats-scheme__room(
 					v-for="(room, idx) in item.apartments"
-					:key="idx" :data-status="room.status"
+					:key="idx" :data-status="room.field_status"
 					:data-price="room.field_price"
 					:data-area="room.field_space"
-               :data-number="room.field_number"
-               :data-image="item.floor_image[0].markup"
-					:class="room.status"
+					:data-number="room.field_number"
+					:data-image="item.floor_image[0].markup"
+					:class="room.field_status"
 					@mouseenter="showDetailRoom($event, room, item)"
-					@mouseleave="hideDetailRoom") 
+					@mouseleave="hideDetailRoom") {{room.field_number}}
 			a(:href="item.floor_image[0].markup" :data-fancybox="`plan-${index}`").flats-scheme__link План этажа
-		.flats-scheme__bottom
-			.flats-scheme__bottom-top
-				.flats-scheme__caption Нежилые помещения
-			.flats-scheme__floor.empty
-				.flats-scheme__number 1-5
-				ul.flats-scheme__inner
-					li.flats-scheme__room(v-for="(item, index) in 31")
+	.flats-scheme__bottom
+		.flats-scheme__bottom-top
+			.flats-scheme__caption Нежилые помещения
+		.flats-scheme__floor.empty
+			.flats-scheme__number 1-5
+			ul.flats-scheme__inner
+				li.flats-scheme__room(v-for="(item, index) in 31")
 </template>
 
 <script setup>
@@ -34,6 +34,7 @@ const props = defineProps({
    },
 });
 
+// console.log("reverse", props.corpus.reverse());
 console.log(props.corpus);
 
 const emit = defineEmits(["openTooltip", "closeTooltip"]);
@@ -102,6 +103,10 @@ onMounted(() => {
          margin-left: 0;
          left: 40px;
       }
+   }
+   &__floors {
+      display: flex;
+      flex-direction: column-reverse;
    }
    &__floor {
       display: flex;
@@ -232,17 +237,17 @@ onMounted(() => {
       line-height: 18px;
       color: var(--text-gray);
       transition: background-color $time, color $time;
-      &.booked {
+      &.broned {
          pointer-events: none;
          user-select: none;
          background-color: var(--bg-gray);
          color: var(--text-gray);
       }
-      &.in-sell {
+      &.available {
          color: var(--text-white);
          background-color: var(--text-avocado);
       }
-      &.sold {
+      &.saled {
          background-color: transparent;
          pointer-events: none;
          user-select: none;

@@ -4,14 +4,14 @@
 		.scheme-apartment__body
 			.scheme-apartment__schemes
 				.scheme-apartment__preview(v-if="plan" :class="{active: isSelected == 1}")
-					a(:href="plan.raw" data-fancybox="gallery-1").scheme-apartment__image(v-html="plan.markup")
+					a(:href="plan.raw" data-fancybox="gallery-1" v-html="plan.markup").scheme-apartment__image
 						//- NuxtImg(:src="`/images/apartments/apartment-1.png`" format="avif" alt="Планировка")
 						//- picture
 						//- 	source(type="image/webp" :srcset="`/images/apartments/apartment-1.webp`")
 						//- 	source(:srcset="`/images/apartments/apartment-1.png`")
 						//- 	img(:src="`/images/apartments/apartment-1.png`" alt="Планировка")
 				.scheme-apartment__preview(v-if="floor" :class="{active: isSelected == 2}")
-					a(:href="floor.raw" data-fancybox="gallery-2").scheme-apartment__image(v-html="floor.markup")
+					a(:href="floor.raw" data-fancybox="gallery-2" v-html="floor.markup").scheme-apartment__image
 						//- NuxtImg(:src="`/images/apartments/apartment-2.jpg`" format="avif" alt="Планировка")
 						//- picture
 						//- 	source(type="image/webp" :srcset="`/images/apartments/apartment-2.webp`")
