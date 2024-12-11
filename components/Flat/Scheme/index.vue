@@ -1,7 +1,7 @@
 <template lang="pug">
 	.flats-scheme__floors
 		.flats-scheme__floor(v-for="(item, index) in corpus" :key="index")
-			.flats-scheme__number {{item.apartments[0].field_floor[0]}}
+			.flats-scheme__number {{floors[index-1]}}
 			.flats-scheme__inner
 				nuxt-link(:to="room.url").flats-scheme__room(
 					v-for="(room, idx) in item.apartments"
@@ -34,8 +34,20 @@ const props = defineProps({
    },
 });
 
-// console.log("reverse", props.corpus.reverse());
-console.log(props.corpus);
+const floors = [
+   "6",
+   "7",
+   "8",
+   "9",
+   "10",
+   "11",
+   "12",
+   "13",
+   "14",
+   "15",
+   "16",
+   "17",
+];
 
 const emit = defineEmits(["openTooltip", "closeTooltip"]);
 
@@ -180,7 +192,7 @@ onMounted(() => {
       padding: 14px 0;
       position: relative;
       isolation: isolate;
-      flex-grow: 1;
+      // flex-grow: 1;
       @media (any-hover: hover) {
          &:hover {
             cursor: pointer;

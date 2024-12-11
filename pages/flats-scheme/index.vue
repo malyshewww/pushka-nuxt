@@ -67,15 +67,9 @@ const {
       transform: (res) => {
          console.log(res);
          const { breadcrumb, data, filter } = res;
-         let newData = [];
-         for (let variable in data) {
-            newData.push(data[variable]);
-         }
-         console.log("new", newData.reverse());
-         const floors = Object.values(data);
+         console.log(filter);
          return {
             breadcrumb,
-            floors,
             corpus: data,
             params: {
                floor: filter.slider.floor,
@@ -202,7 +196,7 @@ onMounted(() => {
       margin-top: 40px;
       border-radius: 10px;
       padding: 36px;
-      padding-right: 10px;
+      padding-right: 8px;
       padding-bottom: 22px;
       background: var(--bg-white);
       display: grid;
