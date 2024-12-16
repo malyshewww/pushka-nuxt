@@ -10,7 +10,7 @@
 					.flats-scheme__places-wrap
 						.flats-scheme__places(ref="scheme" :class="{active: isScrollScheme}")
 							.flats-scheme__body
-								FlatScheme(:corpus="flatsScheme.corpus" :floors="flatsScheme.floors" @openTooltip="openTooltip" @closeTooltip="closeTooltip")
+								FlatScheme(:corpus="flatsScheme.newList" @openTooltip="openTooltip" @closeTooltip="closeTooltip" :is-filter-changed="isFilterChanged")
 						.flats-scheme__tooltip.tooltip-scheme(ref="tooltip" :class="{active: data.tooltip.isActive}")
 							.tooltip-scheme__body
 								.tooltip-scheme__image
@@ -29,9 +29,7 @@
 </template>
 <script setup>
 import json from "~/static/data.json";
-
 import SimpleBar from "simplebar";
-
 // You will need a ResizeObserver polyfill for browsers that don't support it! (iOS Safari, Edge, ...)
 import ResizeObserver from "resize-observer-polyfill";
 
@@ -44,10 +42,16 @@ useHead({
 const route = useRoute();
 const router = useRouter();
 
-const priceMin = ref("all");
-const priceMax = ref("all");
-
 const num = ref(0);
+
+const priceMin = ref(0);
+const priceMax = ref(0);
+
+const filteredData = ref([]);
+
+const newListRoom = ref([]);
+
+const isFilterChanged = ref(false);
 
 const runtimeConfig = useRuntimeConfig();
 const {
@@ -58,19 +62,17 @@ const {
    "flatsScheme",
    () =>
       $fetch(`${runtimeConfig.public.apiBase}/flats-scheme?_format=json`, {
-         query: {
-            "price[min]": priceMin.value,
-            "price[max]": priceMax.value,
-         },
+         query: {},
       }),
    {
       transform: (res) => {
          console.log(res);
          const { breadcrumb, data, filter } = res;
-         console.log(filter);
+         newListRoom.value = generateNewData(data);
          return {
             breadcrumb,
             corpus: data,
+            newList: newListRoom.value,
             params: {
                floor: filter.slider.floor,
                price: filter.slider.price,
@@ -86,10 +88,46 @@ const {
 // priceMin.value = flatsScheme.value.params.price.min;
 // priceMax.value = flatsScheme.value.params.price.max;
 
+watch(
+   () => priceMin.value,
+   () => {
+      console.log("change min value");
+   }
+);
+
+function generateNewData(data) {
+   const arr = [];
+   for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+         const element = data[key];
+         arr.push(element);
+      }
+   }
+   return arr;
+}
+
 const newSliderValues = (min, max) => {
+   // isFilterChanged - Фильтр активен
+   isFilterChanged.value = true;
    priceMin.value = min;
    priceMax.value = max;
-   routerReplace();
+   // routerReplace();
+   filteredData.value = [];
+   flatsScheme.value.newList.map((floor) => {
+      floor.apartments.map((room, i) => {
+         if (room.field_status == "available") {
+            if (
+               parseInt(room.field_price) >= min &&
+               parseInt(room.field_price) <= max
+            ) {
+               room.isActive = true;
+            } else {
+               room.isActive = false;
+            }
+         }
+      });
+   });
+   console.log(flatsScheme.value.newList);
 };
 
 function routerReplace() {

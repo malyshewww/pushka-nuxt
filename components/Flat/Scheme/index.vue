@@ -1,7 +1,7 @@
 <template lang="pug">
 	.flats-scheme__floors
 		.flats-scheme__floor(v-for="(item, index) in corpus" :key="index")
-			.flats-scheme__number {{floors[index-1]}}
+			.flats-scheme__number {{floors[index]}}
 			.flats-scheme__inner
 				nuxt-link(:to="room.url").flats-scheme__room(
 					v-for="(room, idx) in item.apartments"
@@ -10,9 +10,10 @@
 					:data-area="room.field_space"
 					:data-number="room.field_number"
 					:data-image="item.floor_image[0].markup"
-					:class="room.field_status"
+					:class="[{'active': room.isActive == true}, {'disabled': room.isActive == false}, room.field_status]"
 					@mouseenter="showDetailRoom($event, room, item)"
 					@mouseleave="hideDetailRoom") {{room.field_number}}
+					span {{room.isActive}}
 			a(:href="item.floor_image[0].markup" :data-fancybox="`plan-${index}`").flats-scheme__link План этажа
 	.flats-scheme__bottom
 		.flats-scheme__bottom-top
@@ -31,6 +32,10 @@ const props = defineProps({
    corpus: {
       type: Object,
       required: true,
+   },
+   isFilterChanged: {
+      required: true,
+      type: Boolean,
    },
 });
 
@@ -247,8 +252,9 @@ onMounted(() => {
       place-items: center;
       font-size: 14px;
       line-height: 18px;
-      color: var(--text-gray);
       transition: background-color $time, color $time;
+      color: var(--text-white);
+      background-color: var(--text-avocado);
       &.broned {
          pointer-events: none;
          user-select: none;
@@ -267,6 +273,10 @@ onMounted(() => {
       &.disabled {
          background-color: #d3dfb7;
          pointer-events: none;
+      }
+      &.active {
+         color: var(--text-white);
+         background-color: var(--text-avocado);
       }
       @media (any-hover: hover) {
          &:hover {

@@ -146,8 +146,8 @@ const updateSliderPrice = (element, obj) => {
 
 const changeSliderValues = () => {
    sliderPrice.value.noUiSlider.on("change", (e, values, handle) => {
-      let min = e[0];
-      let max = e[1];
+      let min = parseInt(e[0]);
+      let max = parseInt(e[1]);
       newSliderValues(min, max);
    });
    sliderArea.value.noUiSlider.on("change", (e, values, handle) => {
