@@ -106,19 +106,27 @@ function generateNewData(data) {
    return arr;
 }
 
-const newSliderValues = (min, max) => {
+const newSliderValues = (
+   minPrice,
+   maxPrice,
+   minFloor,
+   maxFloor,
+   minArea,
+   maxArea
+) => {
    // isFilterChanged - Фильтр активен
    isFilterChanged.value = true;
-   priceMin.value = min;
-   priceMax.value = max;
-   // routerReplace();
    filteredData.value = [];
    flatsScheme.value.newList.map((floor) => {
       floor.apartments.map((room, i) => {
          if (room.field_status == "available") {
             if (
-               parseInt(room.field_price) >= min &&
-               parseInt(room.field_price) <= max
+               parseInt(room.field_price) >= minPrice &&
+               parseInt(room.field_price) <= maxPrice &&
+               parseInt(room.field_floor[0]) >= minFloor &&
+               parseInt(room.field_floor[0]) <= maxFloor &&
+               parseInt(room.field_space) >= minArea &&
+               parseInt(room.field_space) <= maxArea
             ) {
                room.isActive = true;
             } else {
@@ -127,8 +135,49 @@ const newSliderValues = (min, max) => {
          }
       });
    });
-   console.log(flatsScheme.value.newList);
+   // switch (type) {
+   //    case "price":
+   //       // newListRoom.value.map((floor) => {
+   //       //    floor.apartments.map((room, i) => {
+   //       //       if (room.field_status == "available") {
+   //       //          if (
+   //       //             parseInt(room.field_price) >= min &&
+   //       //             parseInt(room.field_price) <= max
+   //       //          ) {
+   //       //             room.isActive = true;
+   //       //          } else {
+   //       //             room.isActive = false;
+   //       //          }
+   //       //       }
+   //       //    });
+   //       // });
+   //       break;
+   //    case "floor":
+   //       // newListRoom.value.map((floor) => {
+   //       //    floor.apartments.map((room, i) => {
+   //       //       if (room.field_status == "available") {
+   //       //          if (
+   //       //             parseInt(room.field_floor[0]) >= min &&
+   //       //             parseInt(room.field_floor[0]) <= max
+   //       //          ) {
+   //       //             room.isActive = true;
+   //       //          } else {
+   //       //             room.isActive = false;
+   //       //          }
+   //       //       }
+   //       //    });
+   //       // });
+   //       break;
+   //    default:
+   //       break;
+   // }
 };
+// newSliderValues(
+//    flatsScheme.value.params.price.min,
+//    flatsScheme.value.params.price.max,
+//    flatsScheme.value.params.floor.min,
+//    flatsScheme.value.params.floor.max
+// );
 
 function routerReplace() {
    router.replace({

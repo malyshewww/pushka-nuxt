@@ -148,22 +148,64 @@ const changeSliderValues = () => {
    sliderPrice.value.noUiSlider.on("change", (e, values, handle) => {
       let min = parseInt(e[0]);
       let max = parseInt(e[1]);
-      newSliderValues(min, max);
+      filter.price.min = min;
+      filter.price.max = max;
+      newSliderValues(
+         filter.price.min,
+         filter.price.max,
+         filter.floor.min,
+         filter.floor.max,
+         filter.area.min,
+         filter.area.max
+      );
    });
    sliderArea.value.noUiSlider.on("change", (e, values, handle) => {
-      let min = Math.round(e[0]);
-      let max = Math.round(e[1]);
-      newSliderValues(min, max);
+      let min = parseInt(e[0]);
+      let max = parseInt(e[1]);
+      filter.area.min = min;
+      filter.area.max = max;
+      newSliderValues(
+         filter.price.min,
+         filter.price.max,
+         filter.floor.min,
+         filter.floor.max,
+         filter.area.min,
+         filter.area.max
+      );
    });
    sliderFloor.value.noUiSlider.on("change", (e, values, handle) => {
-      let min = Math.round(e[0]);
-      let max = Math.round(e[1]);
-      newSliderValues(min, max);
+      let min = parseInt(e[0]);
+      let max = parseInt(e[1]);
+      filter.floor.min = min;
+      filter.floor.max = max;
+      newSliderValues(
+         filter.price.min,
+         filter.price.max,
+         filter.floor.min,
+         filter.floor.max,
+         filter.area.min,
+         filter.area.max
+      );
    });
 };
 
-function newSliderValues(min, max) {
-   emit("newSliderValues", min, max);
+function newSliderValues(
+   minPrice,
+   maxPrice,
+   minFloor,
+   maxFloor,
+   minArea,
+   maxArea
+) {
+   emit(
+      "newSliderValues",
+      minPrice,
+      maxPrice,
+      minFloor,
+      maxFloor,
+      minArea,
+      maxArea
+   );
 }
 
 const updateSliderArea = (element, obj) => {

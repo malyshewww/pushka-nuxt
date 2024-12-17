@@ -1,7 +1,7 @@
 <template lang="pug">
 	.flats-scheme__floors
 		.flats-scheme__floor(v-for="(item, index) in corpus" :key="index")
-			.flats-scheme__number {{floors[index]}}
+			.flats-scheme__number {{index+1}}
 			.flats-scheme__inner
 				nuxt-link(:to="room.url").flats-scheme__room(
 					v-for="(room, idx) in item.apartments"
