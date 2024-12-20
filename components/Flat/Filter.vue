@@ -33,7 +33,7 @@
 			.filter-group.filter-group--options
 				.filter-options
 					.filter-group__option.filter-option(v-for="item, index in params.options" :class="`filter-option--${item.id}`")
-						input(type="checkbox" name="additional" :id="item.id" v-bind:value="item" v-model="option")
+						input(type="checkbox" name="additional" :id="item.id" v-bind:value="item.title" v-model="option")
 						label(:for="item.id")
 							| {{item.title}}
 							button(type="button").filter-option__delete-btn
@@ -66,24 +66,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["newSliderValues"]);
-
-const checkBoxes = reactive([
-   {
-      id: 0,
-      title: "Дизайнерская отделка",
-      key: "design",
-   },
-   {
-      id: 1,
-      title: "Видовая квартира",
-      key: "room",
-   },
-   {
-      id: 2,
-      title: "Выгодное предложение",
-      key: "offer",
-   },
-]);
 
 const option = ref([]);
 
@@ -133,30 +115,21 @@ const initRange = (element, { ...obj }) => {
    });
 };
 
-const updateSliderPrice = (element, obj) => {
-   element.noUiSlider.on("update", (e, values, handle) => {
-      let min = e[0];
-      let max = e[1];
-      if (!isNaN(min) && !isNaN(max)) {
-         obj.min = new Intl.NumberFormat("ru-RU").format(min);
-         obj.max = new Intl.NumberFormat("ru-RU").format(max);
-      }
-   });
-};
-
 const changeSliderValues = () => {
    sliderPrice.value.noUiSlider.on("change", (e, values, handle) => {
       let min = parseInt(e[0]);
       let max = parseInt(e[1]);
       filter.price.min = min;
       filter.price.max = max;
+      const { minArea, maxArea } = getRangeArea();
+      const { minFloor, maxFloor } = getRangeFloor();
       newSliderValues(
          filter.price.min,
          filter.price.max,
-         filter.floor.min,
-         filter.floor.max,
-         filter.area.min,
-         filter.area.max
+         minFloor,
+         maxFloor,
+         minArea,
+         maxArea
       );
    });
    sliderArea.value.noUiSlider.on("change", (e, values, handle) => {
@@ -164,11 +137,13 @@ const changeSliderValues = () => {
       let max = parseInt(e[1]);
       filter.area.min = min;
       filter.area.max = max;
+      const { minPrice, maxPrice } = getRangePrice();
+      const { minFloor, maxFloor } = getRangeFloor();
       newSliderValues(
-         filter.price.min,
-         filter.price.max,
-         filter.floor.min,
-         filter.floor.max,
+         minPrice,
+         maxPrice,
+         minFloor,
+         maxFloor,
          filter.area.min,
          filter.area.max
       );
@@ -178,16 +153,46 @@ const changeSliderValues = () => {
       let max = parseInt(e[1]);
       filter.floor.min = min;
       filter.floor.max = max;
+      const { minPrice, maxPrice } = getRangePrice();
+      const { minArea, maxArea } = getRangeArea();
       newSliderValues(
-         filter.price.min,
-         filter.price.max,
+         minPrice,
+         maxPrice,
          filter.floor.min,
          filter.floor.max,
-         filter.area.min,
-         filter.area.max
+         minArea,
+         maxArea
       );
    });
 };
+
+function getRangePrice() {
+   const priceRange = sliderPrice.value.noUiSlider.get();
+   let minPrice = parseFloat(priceRange[0]);
+   let maxPrice = parseFloat(priceRange[1]);
+   return {
+      minPrice,
+      maxPrice,
+   };
+}
+function getRangeArea() {
+   const areaRange = sliderArea.value.noUiSlider.get();
+   let minArea = parseFloat(areaRange[0]);
+   let maxArea = parseFloat(areaRange[1]);
+   return {
+      minArea,
+      maxArea,
+   };
+}
+function getRangeFloor() {
+   const floorRange = sliderFloor.value.noUiSlider.get();
+   let minFloor = parseFloat(floorRange[0]);
+   let maxFloor = parseFloat(floorRange[1]);
+   return {
+      minFloor,
+      maxFloor,
+   };
+}
 
 function newSliderValues(
    minPrice,
@@ -208,6 +213,17 @@ function newSliderValues(
    );
 }
 
+const updateSliderPrice = (element, obj) => {
+   element.noUiSlider.on("update", (e, values, handle) => {
+      let min = e[0];
+      let max = e[1];
+      if (!isNaN(min) && !isNaN(max)) {
+         obj.min = new Intl.NumberFormat("ru-RU").format(min);
+         obj.max = new Intl.NumberFormat("ru-RU").format(max);
+      }
+   });
+};
+
 const updateSliderArea = (element, obj) => {
    element.noUiSlider.on("update", (e, values, handle) => {
       let min = Math.round(e[0]);
@@ -216,6 +232,7 @@ const updateSliderArea = (element, obj) => {
          obj.min = min;
          obj.max = max;
       }
+      console.log("update");
    });
 };
 

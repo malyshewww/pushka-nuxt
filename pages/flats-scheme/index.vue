@@ -123,10 +123,10 @@ const newSliderValues = (
             if (
                parseInt(room.field_price) >= minPrice &&
                parseInt(room.field_price) <= maxPrice &&
-               parseInt(room.field_floor[0]) >= minFloor &&
-               parseInt(room.field_floor[0]) <= maxFloor &&
                parseInt(room.field_space) >= minArea &&
-               parseInt(room.field_space) <= maxArea
+               parseInt(room.field_space) <= maxArea &&
+               parseInt(room.field_floor[0]) >= minFloor &&
+               parseInt(room.field_floor[0]) <= maxFloor
             ) {
                room.isActive = true;
             } else {
