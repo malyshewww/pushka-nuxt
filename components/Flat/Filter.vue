@@ -32,8 +32,8 @@
 				UiButton(class-names="btn-green" text="применить" @button-click="closeFilter")
 			.filter-group.filter-group--options
 				.filter-options
-					.filter-group__option.filter-option(v-for="item, index in params.options" :class="`filter-option--${item.id}`")
-						input(type="checkbox" name="additional" :id="item.id" v-bind:value="item.title" v-model="option")
+					.filter-group__option.filter-option(v-for="item, index in filter.options" :class="`filter-option--${item.id}`")
+						input(type="checkbox" name="additional" :id="item.id" :value="item.id" v-model="option" @change="selectedOptions")
 						label(:for="item.id")
 							| {{item.title}}
 							button(type="button").filter-option__delete-btn
@@ -41,6 +41,7 @@
 				.filter-group__buttons
 					button(type="button" @click="resetFilter").filter-group__reset-btn Сбросить фильтры
 					button(type="button" @click="resetFilter").filter-group__reset-btn.filter-group__reset-btn--mobile Сбросить
+			| {{option}}
 </template>
 
 <script setup>
@@ -65,9 +66,24 @@ const props = defineProps({
    },
 });
 
+const option = ref([]);
+
 const emit = defineEmits(["newSliderValues"]);
 
-const option = ref([]);
+const selectedOptions = () => {
+   const { minArea, maxArea } = getRangeArea();
+   const { minFloor, maxFloor } = getRangeFloor();
+   const { minPrice, maxPrice } = getRangePrice();
+   newSliderValues(
+      minPrice,
+      maxPrice,
+      minFloor,
+      maxFloor,
+      minArea,
+      maxArea,
+      option.value
+   );
+};
 
 const sliderPrice = ref("");
 const sliderArea = ref("");
@@ -101,6 +117,7 @@ const filter = reactive({
       maxRange: +props.params.floor.max,
       step: 1,
    },
+   options: props.params.options,
 });
 
 const initRange = (element, { ...obj }) => {
@@ -129,7 +146,8 @@ const changeSliderValues = () => {
          minFloor,
          maxFloor,
          minArea,
-         maxArea
+         maxArea,
+         option.value
       );
    });
    sliderArea.value.noUiSlider.on("change", (e, values, handle) => {
@@ -145,7 +163,8 @@ const changeSliderValues = () => {
          minFloor,
          maxFloor,
          filter.area.min,
-         filter.area.max
+         filter.area.max,
+         option.value
       );
    });
    sliderFloor.value.noUiSlider.on("change", (e, values, handle) => {
@@ -161,7 +180,8 @@ const changeSliderValues = () => {
          filter.floor.min,
          filter.floor.max,
          minArea,
-         maxArea
+         maxArea,
+         option.value
       );
    });
 };
@@ -200,7 +220,8 @@ function newSliderValues(
    minFloor,
    maxFloor,
    minArea,
-   maxArea
+   maxArea,
+   options
 ) {
    emit(
       "newSliderValues",
@@ -209,7 +230,8 @@ function newSliderValues(
       minFloor,
       maxFloor,
       minArea,
-      maxArea
+      maxArea,
+      options
    );
 }
 
@@ -232,7 +254,6 @@ const updateSliderArea = (element, obj) => {
          obj.min = min;
          obj.max = max;
       }
-      console.log("update");
    });
 };
 

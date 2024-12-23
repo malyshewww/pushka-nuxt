@@ -4,7 +4,7 @@
 		main.main.flats.flats-scheme
 			.container
 				FlatHeading
-				FlatFilter(:params="flatsScheme.params" @newSliderValues="newSliderValues")
+				FlatFilter(:params.sync="flatsScheme.params" @newSliderValues="newSliderValues")
 				.flats-scheme__wrapper
 					FlatSchemeLegend(:is-scroll-scheme="isScrollScheme")
 					.flats-scheme__places-wrap
@@ -52,6 +52,8 @@ const filteredData = ref([]);
 const newListRoom = ref([]);
 
 const isFilterChanged = ref(false);
+
+const selectedOptions = ref([]);
 
 const runtimeConfig = useRuntimeConfig();
 const {
@@ -103,6 +105,14 @@ function generateNewData(data) {
          arr.push(element);
       }
    }
+   // arr.map((floor) => {
+   //    floor.map((room) => {
+   //       return {
+   //          ...room,
+   //          isActive: true,
+   //       };
+   //    });
+   // });
    return arr;
 }
 
@@ -112,14 +122,38 @@ const newSliderValues = (
    minFloor,
    maxFloor,
    minArea,
-   maxArea
+   maxArea,
+   options
 ) => {
    // isFilterChanged - Фильтр активен
    isFilterChanged.value = true;
    filteredData.value = [];
+   const checkOptions = (optionOne, optionTwo, optionThree) => {
+      if (
+         (options.length && options.includes(optionOne)) ||
+         (options.length && options.includes(optionTwo)) ||
+         (options.length && options.includes(optionThree))
+      ) {
+         return true;
+      } else {
+         return false;
+      }
+   };
    flatsScheme.value.newList.map((floor) => {
       floor.apartments.map((room, i) => {
+         const isHasOptions = checkOptions(
+            room.options[0],
+            room.options[1],
+            room.options[2]
+         );
+
+         // console.log(isHasOptions);
          if (room.field_status == "available") {
+            if (isHasOptions) {
+               room.isAdded = true;
+            } else {
+               room.isAdded = false;
+            }
             if (
                parseInt(room.field_price) >= minPrice &&
                parseInt(room.field_price) <= maxPrice &&

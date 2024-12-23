@@ -3,14 +3,16 @@
 		.flats-scheme__floor(v-for="(item, index) in corpus" :key="index")
 			.flats-scheme__number {{index+1}}
 			.flats-scheme__inner
-				nuxt-link(:to="room.url").flats-scheme__room(
+				nuxt-link.flats-scheme__room(
+					:to="room.url"
 					v-for="(room, idx) in item.apartments"
 					:key="idx" :data-status="room.field_status"
 					:data-price="room.field_price"
 					:data-area="room.field_space"
 					:data-number="room.field_number"
 					:data-image="item.floor_image[0].markup"
-					:class="[{'active': room.isActive == true}, {'disabled': room.isActive == false}, room.field_status]"
+					:class="[`${room.isActive || room.isAdded ? 'active' : 'disabled'}`, {'active': !isFilterChanged}, room.field_status]"
+					:data-options="`${room.options}`"
 					@mouseenter="showDetailRoom($event, room, item)"
 					@mouseleave="hideDetailRoom") {{room.field_number}}
 					span {{room.isActive}}
