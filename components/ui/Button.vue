@@ -1,5 +1,5 @@
 <template lang="pug">
-	button(:type="type ? type : 'button'" :class="[classNames]" @click="buttonClick").btn {{ text }}
+	button(:type="type" :class="[classNames]" @click="buttonClick").btn {{ text }}
 </template>
 
 <script setup>
@@ -15,6 +15,7 @@ defineProps({
    type: {
       type: String,
       required: false,
+      default: "button",
    },
 });
 

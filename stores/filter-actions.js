@@ -1,6 +1,7 @@
 export const useFilterStore = defineStore("filter", {
    state: () => ({
       isOpenFilter: false,
+      isResetFilter: false,
    }),
    actions: {
       openFilter() {
@@ -11,6 +12,9 @@ export const useFilterStore = defineStore("filter", {
       },
       closeFitler() {
          this.isOpenFilter = !this.isOpenFilter;
+      },
+      resetFilter() {
+         this.isResetFilter = true;
       },
    },
 });

@@ -1,5 +1,5 @@
 <template lang="pug">
-	.flats-filter(:class="{active: store.isOpenFilter}")
+	div(:class="{active: store.isOpenFilter}").flats-filter
 		.flats-filter__top
 			button(type="button" @click="closeFilter").flats-filter__close
 			.flats-filter__title Фильтры
@@ -29,11 +29,11 @@
 					.filter-group__slider-wrap
 						.filter-group__slider(ref="sliderFloor")
 			.filter-group.filter-group--apply
-				UiButton(class-names="btn-green" text="применить" @button-click="closeFilter")
+				UiButton(class-names="btn-green" type="button" text="применить" @button-click="loadData")
 			.filter-group.filter-group--options
 				.filter-options
-					.filter-group__option.filter-option(v-for="item, index in filter.options" :class="`filter-option--${item.id}`")
-						input(type="checkbox" name="additional" :id="item.id" :value="item.id" v-model="option" @change="selectedOptions")
+					.filter-group__option.filter-option(v-for="item, index in params.options" :class="`filter-option--${item.id}`")
+						input(type="checkbox" name="additional" :id="item.id" :value="item.id" v-model="option")
 						label(:for="item.id")
 							| {{item.title}}
 							button(type="button").filter-option__delete-btn
@@ -68,32 +68,11 @@ const props = defineProps({
 
 const option = ref([]);
 
-const emit = defineEmits(["newSliderValues"]);
-
-const selectedOptions = () => {
-   const { minArea, maxArea } = getRangeArea();
-   const { minFloor, maxFloor } = getRangeFloor();
-   const { minPrice, maxPrice } = getRangePrice();
-   newSliderValues(
-      minPrice,
-      maxPrice,
-      minFloor,
-      maxFloor,
-      minArea,
-      maxArea,
-      option.value
-   );
-};
+const emit = defineEmits(["newSliderValues", "loadData", "resetFilter"]);
 
 const sliderPrice = ref("");
 const sliderArea = ref("");
 const sliderFloor = ref("");
-
-const priceMin = ref(+props.params.price.min);
-const priceMax = ref(+props.params.price.max);
-
-// const priceMin = ref(20);
-// const priceMax = ref(300000);
 
 const filter = reactive({
    price: {
@@ -101,6 +80,8 @@ const filter = reactive({
       max: +props.params.price.max,
       minRange: +props.params.price.min,
       maxRange: +props.params.price.max,
+      startMin: +props.params.price.min,
+      startMax: +props.params.price.max,
       step: 0.1,
    },
    area: {
@@ -108,6 +89,8 @@ const filter = reactive({
       max: +props.params.space.max,
       minRange: +props.params.space.min,
       maxRange: +props.params.space.max,
+      startMin: +props.params.space.min,
+      startMax: +props.params.space.max,
       step: 0.1,
    },
    floor: {
@@ -115,10 +98,37 @@ const filter = reactive({
       max: +props.params.floor.max,
       minRange: +props.params.floor.min,
       maxRange: +props.params.floor.max,
+      startMin: +props.params.floor.min,
+      startMax: +props.params.floor.max,
       step: 1,
    },
-   options: props.params.options,
+   option: option.value,
 });
+
+watch(
+   () => option.value,
+   (val) => {
+      console.log(val);
+      filter.option = val;
+   },
+   {
+      deep: true,
+   }
+);
+
+const loadData = () => {
+   emit(
+      "loadData",
+      filter.price.minRange,
+      filter.price.maxRange,
+      filter.floor.minRange,
+      filter.floor.maxRange,
+      filter.area.minRange,
+      filter.area.maxRange,
+      filter.option
+   );
+   closeFilter();
+};
 
 const initRange = (element, { ...obj }) => {
    noUiSlider.create(element, {
@@ -140,15 +150,15 @@ const changeSliderValues = () => {
       filter.price.max = max;
       const { minArea, maxArea } = getRangeArea();
       const { minFloor, maxFloor } = getRangeFloor();
-      newSliderValues(
-         filter.price.min,
-         filter.price.max,
-         minFloor,
-         maxFloor,
-         minArea,
-         maxArea,
-         option.value
-      );
+      // newSliderValues(
+      //    filter.price.min,
+      //    filter.price.max,
+      //    minFloor,
+      //    maxFloor,
+      //    minArea,
+      //    maxArea,
+      //    option.value
+      // );
    });
    sliderArea.value.noUiSlider.on("change", (e, values, handle) => {
       let min = parseInt(e[0]);
@@ -157,15 +167,15 @@ const changeSliderValues = () => {
       filter.area.max = max;
       const { minPrice, maxPrice } = getRangePrice();
       const { minFloor, maxFloor } = getRangeFloor();
-      newSliderValues(
-         minPrice,
-         maxPrice,
-         minFloor,
-         maxFloor,
-         filter.area.min,
-         filter.area.max,
-         option.value
-      );
+      // newSliderValues(
+      //    minPrice,
+      //    maxPrice,
+      //    minFloor,
+      //    maxFloor,
+      //    filter.area.min,
+      //    filter.area.max,
+      //    option.value
+      // );
    });
    sliderFloor.value.noUiSlider.on("change", (e, values, handle) => {
       let min = parseInt(e[0]);
@@ -174,15 +184,15 @@ const changeSliderValues = () => {
       filter.floor.max = max;
       const { minPrice, maxPrice } = getRangePrice();
       const { minArea, maxArea } = getRangeArea();
-      newSliderValues(
-         minPrice,
-         maxPrice,
-         filter.floor.min,
-         filter.floor.max,
-         minArea,
-         maxArea,
-         option.value
-      );
+      // newSliderValues(
+      //    minPrice,
+      //    maxPrice,
+      //    filter.floor.min,
+      //    filter.floor.max,
+      //    minArea,
+      //    maxArea,
+      //    option.value
+      // );
    });
 };
 
@@ -214,26 +224,26 @@ function getRangeFloor() {
    };
 }
 
-function newSliderValues(
-   minPrice,
-   maxPrice,
-   minFloor,
-   maxFloor,
-   minArea,
-   maxArea,
-   options
-) {
-   emit(
-      "newSliderValues",
-      minPrice,
-      maxPrice,
-      minFloor,
-      maxFloor,
-      minArea,
-      maxArea,
-      options
-   );
-}
+// function newSliderValues(
+//    minPrice,
+//    maxPrice,
+//    minFloor,
+//    maxFloor,
+//    minArea,
+//    maxArea,
+//    options
+// ) {
+//    emit(
+//       "newSliderValues",
+//       minPrice,
+//       maxPrice,
+//       minFloor,
+//       maxFloor,
+//       minArea,
+//       maxArea,
+//       options
+//    );
+// }
 
 const updateSliderPrice = (element, obj) => {
    element.noUiSlider.on("update", (e, values, handle) => {
@@ -242,6 +252,8 @@ const updateSliderPrice = (element, obj) => {
       if (!isNaN(min) && !isNaN(max)) {
          obj.min = new Intl.NumberFormat("ru-RU").format(min);
          obj.max = new Intl.NumberFormat("ru-RU").format(max);
+         obj.minRange = parseFloat(min);
+         obj.maxRange = parseFloat(max);
       }
    });
 };
@@ -253,6 +265,8 @@ const updateSliderArea = (element, obj) => {
       if (!isNaN(min) && !isNaN(max)) {
          obj.min = min;
          obj.max = max;
+         obj.minRange = parseFloat(min);
+         obj.maxRange = parseFloat(max);
       }
    });
 };
@@ -264,55 +278,13 @@ const updateSliderFloor = (element, obj) => {
       if (!isNaN(min) && !isNaN(max)) {
          obj.min = new Intl.NumberFormat("ru-RU").format(min);
          obj.max = new Intl.NumberFormat("ru-RU").format(max);
+         obj.minRange = parseFloat(min);
+         obj.maxRange = parseFloat(max);
       }
    });
 };
 
 const runtimeConfig = useRuntimeConfig();
-
-// const fetchData = async () => {
-//    const {
-//       data: flats,
-//       status,
-//       error,
-//    } = await useAsyncData(
-//       "flats",
-//       () =>
-//          $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {
-//             params: {
-//                "price[min]": priceMin.value,
-//                "price[max]": priceMax.value,
-//             },
-//          }),
-//       {
-//          transform: (res) => {
-//             console.log(res);
-//          },
-//          watch: [priceMin.value, priceMax.value],
-//       }
-//    );
-// };
-// const { data, refresh } = useAsyncData("flats", async () => {
-//    const res = await fetch(
-//       `${runtimeConfig.public.apiBase}/flats-list?_format=json&price[min]=${priceMin.value}&price[max]=${priceMax.value}`
-//    );
-//    if (!res.ok) throw new Error("Ошибка загрузки данных");
-//    return await res.json();
-// });
-
-// watch([priceMin.value, priceMax.value], refresh);
-
-// const fetchData = async () => {
-//    // Формируем ключ с параметрами запроса
-//    const { data } = await useAsyncData("flats", async () => {
-//       const res = await $fetch(
-//          `${runtimeConfig.public.apiBase}/flats-list?_format=json&price[min]=${priceMin.value}&price[max]=${priceMax.value}`
-//       );
-//       return await res.json();
-//    });
-//    console.log("fetch", data);
-//    return data;
-// };
 
 const updateRangeSliders = () => {
    updateSliderPrice(sliderPrice.value, filter.price);
@@ -327,7 +299,7 @@ const initRangeSliders = () => {
 };
 
 const resetRangeSlider = (slider, obj) => {
-   slider.noUiSlider.set([obj.minRange, obj.maxRange]);
+   slider.noUiSlider.set([obj.startMin, obj.startMax]);
 };
 
 const resetRangeSliders = () => {
@@ -337,14 +309,14 @@ const resetRangeSliders = () => {
 };
 
 const resetFilter = () => {
-   option.value = [];
    resetRangeSliders();
+   option.value = [];
+   emit("resetFilter");
 };
 
 onMounted(() => {
    initRangeSliders();
    updateRangeSliders();
-
    changeSliderValues();
 });
 </script>

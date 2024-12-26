@@ -1,10 +1,11 @@
 <template lang="pug">
 	div
+		div.loading(v-if="isLoading") loading...
 		BreadCrumbs(:list="flatsScheme.breadcrumb")
 		main.main.flats.flats-scheme
 			.container
 				FlatHeading
-				FlatFilter(:params.sync="flatsScheme.params" @newSliderValues="newSliderValues")
+				FlatFilter(:params.sync="flatsScheme.params" @newSliderValues="newSliderValues" @load-data="loadData" @reset-filter="resetFilter")
 				.flats-scheme__wrapper
 					FlatSchemeLegend(:is-scroll-scheme="isScrollScheme")
 					.flats-scheme__places-wrap
@@ -42,18 +43,20 @@ useHead({
 const route = useRoute();
 const router = useRouter();
 
-const num = ref(0);
-
 const priceMin = ref(0);
 const priceMax = ref(0);
+
+const areaMin = ref(0);
+const areaMax = ref(0);
+
+const floorMin = ref(0);
+const floorMax = ref(0);
 
 const filteredData = ref([]);
 
 const newListRoom = ref([]);
 
 const isFilterChanged = ref(false);
-
-const selectedOptions = ref([]);
 
 const runtimeConfig = useRuntimeConfig();
 const {
@@ -87,15 +90,7 @@ const {
    }
 );
 
-// priceMin.value = flatsScheme.value.params.price.min;
-// priceMax.value = flatsScheme.value.params.price.max;
-
-watch(
-   () => priceMin.value,
-   () => {
-      console.log("change min value");
-   }
-);
+const isLoading = ref(false);
 
 function generateNewData(data) {
    const arr = [];
@@ -105,18 +100,28 @@ function generateNewData(data) {
          arr.push(element);
       }
    }
-   // arr.map((floor) => {
-   //    floor.map((room) => {
-   //       return {
-   //          ...room,
-   //          isActive: true,
-   //       };
-   //    });
-   // });
    return arr;
 }
 
-const newSliderValues = (
+const scrollToScheme = () => {
+   scheme.value.scrollIntoView({ block: "start", behavior: "smooth" });
+};
+
+const resetFilter = () => {
+   console.log("reset");
+   isLoading.value = !isLoading.value;
+   flatsScheme.value.newList.map((floor) => {
+      floor.apartments.map((room, i) => {
+         room.isActive = true;
+      });
+   });
+   setTimeout(() => {
+      isLoading.value = !isLoading.value;
+   }, 2000);
+};
+
+// loadData = update function newSliderValues
+const loadData = (
    minPrice,
    maxPrice,
    minFloor,
@@ -127,16 +132,15 @@ const newSliderValues = (
 ) => {
    // isFilterChanged - Фильтр активен
    isFilterChanged.value = true;
-   filteredData.value = [];
+   isLoading.value = !isLoading.value;
    const checkOptions = (optionOne, optionTwo, optionThree) => {
+      if (options.length === 0) return;
       if (
-         (options.length && options.includes(optionOne)) ||
-         (options.length && options.includes(optionTwo)) ||
-         (options.length && options.includes(optionThree))
+         (options.length > 0 && options.includes(optionOne)) ||
+         (options.length > 0 && options.includes(optionTwo)) ||
+         (options.length > 0 && options.includes(optionThree))
       ) {
          return true;
-      } else {
-         return false;
       }
    };
    flatsScheme.value.newList.map((floor) => {
@@ -146,72 +150,45 @@ const newSliderValues = (
             room.options[1],
             room.options[2]
          );
-
-         // console.log(isHasOptions);
          if (room.field_status == "available") {
-            if (isHasOptions) {
-               room.isAdded = true;
+            // Если есть дополнительные опции
+            if (options.length) {
+               if (
+                  parseInt(room.field_price) >= minPrice &&
+                  parseInt(room.field_price) <= maxPrice &&
+                  parseInt(room.field_space) >= minArea &&
+                  parseInt(room.field_space) <= maxArea &&
+                  parseInt(room.field_floor[0]) >= minFloor &&
+                  parseInt(room.field_floor[0]) <= maxFloor &&
+                  isHasOptions
+               ) {
+                  room.isActive = true;
+               } else {
+                  room.isActive = false;
+               }
+               // Если ни одна дополнительная опция не выбрана, то исключаем isHasOptions из условия
             } else {
-               room.isAdded = false;
-            }
-            if (
-               parseInt(room.field_price) >= minPrice &&
-               parseInt(room.field_price) <= maxPrice &&
-               parseInt(room.field_space) >= minArea &&
-               parseInt(room.field_space) <= maxArea &&
-               parseInt(room.field_floor[0]) >= minFloor &&
-               parseInt(room.field_floor[0]) <= maxFloor
-            ) {
-               room.isActive = true;
-            } else {
-               room.isActive = false;
+               if (
+                  parseInt(room.field_price) >= minPrice &&
+                  parseInt(room.field_price) <= maxPrice &&
+                  parseInt(room.field_space) >= minArea &&
+                  parseInt(room.field_space) <= maxArea &&
+                  parseInt(room.field_floor[0]) >= minFloor &&
+                  parseInt(room.field_floor[0]) <= maxFloor
+               ) {
+                  room.isActive = true;
+               } else {
+                  room.isActive = false;
+               }
             }
          }
       });
    });
-   // switch (type) {
-   //    case "price":
-   //       // newListRoom.value.map((floor) => {
-   //       //    floor.apartments.map((room, i) => {
-   //       //       if (room.field_status == "available") {
-   //       //          if (
-   //       //             parseInt(room.field_price) >= min &&
-   //       //             parseInt(room.field_price) <= max
-   //       //          ) {
-   //       //             room.isActive = true;
-   //       //          } else {
-   //       //             room.isActive = false;
-   //       //          }
-   //       //       }
-   //       //    });
-   //       // });
-   //       break;
-   //    case "floor":
-   //       // newListRoom.value.map((floor) => {
-   //       //    floor.apartments.map((room, i) => {
-   //       //       if (room.field_status == "available") {
-   //       //          if (
-   //       //             parseInt(room.field_floor[0]) >= min &&
-   //       //             parseInt(room.field_floor[0]) <= max
-   //       //          ) {
-   //       //             room.isActive = true;
-   //       //          } else {
-   //       //             room.isActive = false;
-   //       //          }
-   //       //       }
-   //       //    });
-   //       // });
-   //       break;
-   //    default:
-   //       break;
-   // }
+   setTimeout(() => {
+      isLoading.value = !isLoading.value;
+   }, 2000);
+   scrollToScheme();
 };
-// newSliderValues(
-//    flatsScheme.value.params.price.min,
-//    flatsScheme.value.params.price.max,
-//    flatsScheme.value.params.floor.min,
-//    flatsScheme.value.params.floor.max
-// );
 
 function routerReplace() {
    router.replace({
@@ -221,14 +198,6 @@ function routerReplace() {
       },
    });
 }
-
-// const corpus = reactive({
-//    floorsNumber: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-//    floors: {
-//       floorNumber: "1",
-//       floorFlats: json,
-//    },
-// });
 
 const data = reactive({
    tooltip: {

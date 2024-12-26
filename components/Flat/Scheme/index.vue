@@ -11,11 +11,10 @@
 					:data-area="room.field_space"
 					:data-number="room.field_number"
 					:data-image="item.floor_image[0].markup"
-					:class="[`${room.isActive || room.isAdded ? 'active' : 'disabled'}`, {'active': !isFilterChanged}, room.field_status]"
+					:class="[`${room.isActive || !isFilterChanged ? 'active' : 'disabled'}`, room.field_status]"
 					:data-options="`${room.options}`"
 					@mouseenter="showDetailRoom($event, room, item)"
 					@mouseleave="hideDetailRoom") {{room.field_number}}
-					span {{room.isActive}}
 			a(:href="item.floor_image[0].markup" :data-fancybox="`plan-${index}`").flats-scheme__link План этажа
 	.flats-scheme__bottom
 		.flats-scheme__bottom-top
