@@ -4,7 +4,7 @@
 		main.main.flats.flats-list
 			.container
 				FlatHeading
-				FlatFilter(:params="flatsList.params")
+				FlatFilter(:params="flatsList.params" @load-data="loadData")
 				.flats__wrapper
 					.flats__body
 						FlatCard(
@@ -25,43 +25,52 @@ useHead({
 });
 
 const route = useRoute();
-// const currentPage = ref(route.query.page ? route.query.page : 0);
-// const currentPriceMin = ref(route.query.price_min ? route.query.price_min : 0);
-// const currentPriceMax = ref(route.query.price_max ? route.query.price_max : 0);
-// const currentAreaMin = ref(route.query.area_min ? route.query.area_min : 0);
-// const currentAreaMax = ref(route.query.area_max ? route.query.area_max : 0);
-// const currentFloorMin = ref(route.query.floor_min ? route.query.floor_min : 0);
-// const currentFloorMax = ref(route.query.floor_max ? route.query.floor_max : 0);
 
-// const filters = reactive({
-//    floor: {},
-//    price: {},
-//    space: {},
-//    options: {},
-// });
+const currentPage = ref(route.query.page ? route.query.page : 0);
+const currentPriceMin = ref(
+   route.query["price[min]"] ? route.query["price[min]"] : "all"
+);
+const currentPriceMax = ref(
+   route.query["price[max]"] ? route.query["price[max]"] : "all"
+);
+const currentAreaMin = ref(
+   route.query["space[min]"] ? route.query["space[min]"] : "all"
+);
+const currentAreaMax = ref(
+   route.query["space[max]"] ? route.query["space[max]"] : "all"
+);
+const currentFloorMin = ref(
+   route.query["floor[min]"] ? route.query["floor[min]"] : "all"
+);
+const currentFloorMax = ref(
+   route.query["floor[max]"] ? route.query["floor[max]"] : "all"
+);
+
+// watch(
+//    () => route.query,
+//    (val) => {
+//       currentPriceMin.value = val["price[min]"];
+//       currentPriceMax.value = val["price[max]"];
+//       currentAreaMin.value = val["space[min]"];
+//       currentAreaMax.value = val["space[max]"];
+//       currentFloorMin.value = val["floor[min]"];
+//       currentFloorMax.value = val["floor[max]"];
+//    }
+// );
 
 const runtimeConfig = useRuntimeConfig();
 const {
    data: flatsList,
    status,
+   refresh,
    error,
 } = await useAsyncData(
    "flatsList",
-   () =>
-      $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {
-         // params: {
-         //    page: currentPage.value,
-         //    "price[min]": currentPriceMin.value,
-         //    "price[max]": currentPriceMax.value,
-         //    "space[min]": currentAreaMin.value,
-         //    "space[max]": currentAreaMax.value,
-         //    "floor[min]": currentFloorMin.value,
-         //    "floor[max]": currentFloorMax.value,
-         // },
-      }),
+   () => $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {}),
    {
       transform: (res) => {
          const { breadcrumb, data, filter } = res;
+         console.log(data);
          return {
             breadcrumb,
             data,
@@ -76,110 +85,102 @@ const {
    }
 );
 
-// const params = [];
+const router = useRouter();
 
-const apartments = reactive([
-   {
-      images: ["1", "2", "4"],
-      area: " 31,2",
-      price: 4500000,
-      features: ["№ 12", "17 этаж из 20", "450 000 ₽/м2"],
-      parameters: [
-         "Дизайнерская отделка",
-         "Видовая квартира",
-         "Выгодное предложение",
-      ],
-   },
-   {
-      images: ["1", "2", "3"],
-      area: " 31,2",
-      price: 4500000,
-      features: ["№ 12", "17 этаж из 20", "450 000 ₽/м2"],
-      parameters: ["Дизайнерская отделка", "Видовая квартира"],
-   },
-   // {
-   //    images: ["1", "2"],
-   //    area: " 31,2",
-   //    price: 4500000,
-   //    features: ["№ 12", "17 этаж из 20", "450 000 ₽/м2"],
-   //    parameters: ["Дизайнерская отделка"],
-   // },
-   // {
-   //    images: ["1", "2", "4"],
-   //    area: " 31,2",
-   //    price: 4500000,
-   //    features: ["№ 12", "17 этаж из 20", "450 000 ₽/м2"],
-   //    parameters: [
-   //       "Дизайнерская отделка",
-   //       "Видовая квартира",
-   //       "Выгодное предложение",
-   //    ],
-   // },
-   // {
-   //    images: ["1", "2", "3"],
-   //    area: " 31,2",
-   //    price: 4500000,
-   //    features: ["№ 12", "17 этаж из 20", "450 000 ₽/м2"],
-   //    parameters: ["Дизайнерская отделка", "Видовая квартира"],
-   // },
-   // {
-   //    images: ["1", "2"],
-   //    area: " 31,2",
-   //    price: 4500000,
-   //    features: ["№ 12", "17 этаж из 20", "450 000 ₽/м2"],
-   //    parameters: ["Дизайнерская отделка"],
-   // },
-   // {
-   //    images: ["1", "2", "4"],
-   //    area: " 31,2",
-   //    price: 4500000,
-   //    features: ["№ 12", "17 этаж из 20", "450 000 ₽/м2"],
-   //    parameters: [
-   //       "Дизайнерская отделка",
-   //       "Видовая квартира",
-   //       "Выгодное предложение",
-   //    ],
-   // },
-   // {
-   //    images: ["1", "2", "3"],
-   //    area: " 31,2",
-   //    price: 4500000,
-   //    features: ["№ 12", "17 этаж из 20", "450 000 ₽/м2"],
-   //    parameters: ["Дизайнерская отделка", "Видовая квартира"],
-   // },
-   // {
-   //    images: ["1", "2"],
-   //    area: " 31,2",
-   //    price: 4500000,
-   //    features: ["№ 12", "17 этаж из 20", "450 000 ₽/м2"],
-   //    parameters: ["Дизайнерская отделка"],
-   // },
-   // {
-   //    images: ["1", "2", "4"],
-   //    area: " 31,2",
-   //    price: 4500000,
-   //    features: ["№ 12", "17 этаж из 20", "450 000 ₽/м2"],
-   //    parameters: [
-   //       "Дизайнерская отделка",
-   //       "Видовая квартира",
-   //       "Выгодное предложение",
-   //    ],
-   // },
-   // {
-   //    images: ["1", "2", "3"],
-   //    area: " 31,2",
-   //    price: 4500000,
-   //    features: ["№ 12", "17 этаж из 20", "450 000 ₽/м2"],
-   //    parameters: ["Дизайнерская отделка", "Видовая квартира"],
-   // },
-   // {
-   //    images: ["1", "2"],
-   //    area: " 31,2",
-   //    price: 4500000,
-   //    features: ["№ 12", "17 этаж из 20", "450 000 ₽/м2"],
-   //    parameters: ["Дизайнерская отделка"],
-   // },
-]);
+const products = ref([]);
+
+const fetchData = async (
+   page,
+   priceMin,
+   priceMax,
+   areaMin,
+   areaMax,
+   floorMin,
+   floorMax,
+   options
+) => {
+   const {
+      data: dynamicData,
+      status,
+      error,
+   } = await useAsyncData(
+      "dynamicData",
+      () =>
+         $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {
+            params: {
+               page,
+               "price[min]": priceMin,
+               "price[max]": priceMax,
+               "space[min]": areaMin,
+               "space[max]": areaMax,
+               "floor[min]": floorMin,
+               "floor[max]": floorMax,
+            },
+         }),
+      {
+         transform: (res) => {
+            const { data } = res;
+            return {
+               main: {
+                  list: data,
+               },
+            };
+         },
+      }
+   );
+   return {
+      data: dynamicData.value.main.list,
+   };
+};
+
+// const loadData = async () => {
+//    const { data } = await fetchData(currentPage.value);
+//    if (data.length > 0) {
+//       cards.value.push(...data);
+//    }
+// };
+
+const loadData = async (
+   minPrice,
+   maxPrice,
+   minArea,
+   maxArea,
+   minFloor,
+   maxFloor,
+   options
+) => {
+   // console.log("query", route.query["price[min]"]);
+   // console.log("min", currentPriceMin.value);
+
+   currentPriceMin.value = minPrice;
+   currentPriceMax.value = maxPrice;
+   currentAreaMin.value = minArea;
+   currentAreaMax.value = maxArea;
+   currentFloorMin.value = minFloor;
+   currentFloorMax.value = maxFloor;
+   router.push({
+      path: route.path,
+      query: {
+         page: currentPage.value,
+         "price[min]": minPrice,
+         "price[max]": maxPrice,
+         "space[min]": minArea,
+         "space[max]": maxArea,
+         "floor[min]": minFloor,
+         "floor[max]": maxFloor,
+      },
+   });
+   const { data } = await fetchData(
+      currentPage.value,
+      currentPriceMin.value,
+      currentPriceMax.value,
+      currentAreaMin.value,
+      currentAreaMax.value,
+      currentFloorMin.value,
+      currentFloorMax.value
+   );
+   refresh();
+};
 
 const activeCard = ref(-1);
 

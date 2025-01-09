@@ -68,7 +68,12 @@ const props = defineProps({
 
 const option = ref([]);
 
-const emit = defineEmits(["newSliderValues", "loadData", "resetFilter"]);
+const emit = defineEmits([
+   "newSliderValues",
+   "loadData",
+   "resetFilter",
+   "updateData",
+]);
 
 const sliderPrice = ref("");
 const sliderArea = ref("");
@@ -391,7 +396,7 @@ onMounted(() => {
       grid-template-columns: repeat(3, 1fr) 162px;
       align-items: end;
       gap: 36px 24px;
-      @media screen and (max-width: $xl) {
+      @media screen and (max-width: $xxl) {
          grid-template-columns: 100%;
          gap: 20px;
       }
