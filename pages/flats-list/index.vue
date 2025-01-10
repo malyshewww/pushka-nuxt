@@ -4,6 +4,7 @@
 		main.main.flats.flats-list
 			.container
 				FlatHeading
+				| {{status}}
 				FlatFilter(:params="flatsList.params" @load-data="loadData")
 				.flats__wrapper
 					.flats__body
@@ -46,6 +47,12 @@ const currentFloorMax = ref(
    route.query["floor[max]"] ? route.query["floor[max]"] : "all"
 );
 
+const options = ref(
+   route.query["options[]"] ? route.query["options[]"] : "all"
+);
+
+const optionView = ref("all");
+
 // watch(
 //    () => route.query,
 //    (val) => {
@@ -66,7 +73,17 @@ const {
    error,
 } = await useAsyncData(
    "flatsList",
-   () => $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {}),
+   () =>
+      $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {
+         params: {
+            "price[min]": currentPriceMin.value,
+            "price[max]": currentPriceMax.value,
+            "space[min]": currentAreaMin.value,
+            "space[max]": currentAreaMax.value,
+            "floor[min]": currentFloorMin.value,
+            "floor[max]": currentFloorMax.value,
+         },
+      }),
    {
       transform: (res) => {
          const { breadcrumb, data, filter } = res;
@@ -115,6 +132,7 @@ const fetchData = async (
                "space[max]": areaMax,
                "floor[min]": floorMin,
                "floor[max]": floorMax,
+               "options[]": options,
             },
          }),
       {
@@ -140,24 +158,40 @@ const fetchData = async (
 //    }
 // };
 
+const arrValues = ref([]);
+
+watch(
+   () => route.query,
+   (newVal, oldVal) => {
+      console.log("old", oldVal);
+      console.log("new", newVal);
+      router.push({
+         path: route.path,
+         query: {
+            page: currentPage.value,
+            ...newVal,
+         },
+      });
+   }
+);
+
 const loadData = async (
    minPrice,
    maxPrice,
-   minArea,
-   maxArea,
    minFloor,
    maxFloor,
+   minArea,
+   maxArea,
    options
 ) => {
-   // console.log("query", route.query["price[min]"]);
-   // console.log("min", currentPriceMin.value);
-
+   console.log("options", options);
    currentPriceMin.value = minPrice;
    currentPriceMax.value = maxPrice;
    currentAreaMin.value = minArea;
    currentAreaMax.value = maxArea;
    currentFloorMin.value = minFloor;
    currentFloorMax.value = maxFloor;
+   options.value = options;
    router.push({
       path: route.path,
       query: {
@@ -170,15 +204,11 @@ const loadData = async (
          "floor[max]": maxFloor,
       },
    });
-   const { data } = await fetchData(
-      currentPage.value,
-      currentPriceMin.value,
-      currentPriceMax.value,
-      currentAreaMin.value,
-      currentAreaMax.value,
-      currentFloorMin.value,
-      currentFloorMax.value
-   );
+   if (options.length > 0) {
+      router.push({
+         query: { ...route.query, "options[]": options.value },
+      });
+   }
    refresh();
 };
 
