@@ -52,6 +52,11 @@ const params = ref({});
 
 const cards = ref([]);
 
+const initialState = () => {
+  cards.value = [];
+  currentPage.value = 0;
+};
+
 const runtimeConfig = useRuntimeConfig();
 const {
   data: flatsList,
@@ -65,12 +70,6 @@ const {
       query: {
         page: currentPage.value,
         ...params.value,
-        //   "price[min]": currentPriceMin.value,
-        //   "price[max]": currentPriceMax.value,
-        //   "space[min]": currentAreaMin.value,
-        //   "space[max]": currentAreaMax.value,
-        //   "floor[min]": currentFloorMin.value,
-        //   "floor[max]": currentFloorMax.value,
       },
     }),
   {
@@ -117,6 +116,13 @@ watch(
   }
 );
 
+watch(
+  () => currentPage.value,
+  () => {
+    console.log("current page changed");
+  }
+);
+
 const fetchData = async (page) => {
   const {
     data: flatsListData,
@@ -142,18 +148,20 @@ const fetchData = async (page) => {
           },
         };
       },
+      watch: [page],
     }
   );
   return {
-    data: flatsListData.value.main.list,
+    data: flatsListData.value.data,
     pagination: flatsListData.value.pagination,
   };
 };
 
 const loadNewData = async () => {
   const { data } = await fetchData(currentPage.value);
+  initialState();
   if (data.length > 0) {
-    cards.value.push(...data);
+    flatsList.value.newData = data;
   }
 };
 
@@ -191,10 +199,7 @@ const loadData = async (
     "floor[min]": currentFloorMin.value,
     "floor[max]": currentFloorMax.value,
   };
-  cards.value = [];
-  currentPage.value = 0;
-  //   cards.value.push(...flatsList.value.data);
-
+  initialState();
   router.push({
     path: route.path,
     query: {
@@ -219,6 +224,7 @@ const resetFilter = async () => {
     path: route.path,
     query: {},
   });
+  await loadNewData();
 };
 
 const activeCard = ref(-1);

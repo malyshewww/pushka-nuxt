@@ -8,24 +8,24 @@
 				.filter-group__caption Стоимость (₽)
 				.filter-group__wrapper
 					.filter-group__values
-						.filter-group__value #[span от] {{filter.price.min}} млн
-						.filter-group__value #[span до] {{filter.price.max}} млн
+						.filter-group__value #[span от] {{filter.price.startMin}} млн
+						.filter-group__value #[span до] {{filter.price.startMax}} млн
 					.filter-group__slider-wrap
 						.filter-group__slider(ref="sliderPrice")
 			.filter-group
 				.filter-group__caption Площадь (м#[sup 2])
 				.filter-group__wrapper
 					.filter-group__values
-						.filter-group__value #[span от] {{filter.area.min}}
-						.filter-group__value #[span до] {{filter.area.max}}
+						.filter-group__value #[span от] {{filter.area.startMin}}
+						.filter-group__value #[span до] {{filter.area.startMax}}
 					.filter-group__slider-wrap
 						.filter-group__slider(ref="sliderArea")
 			.filter-group
 				.filter-group__caption Этаж
 				.filter-group__wrapper
 					.filter-group__values
-						.filter-group__value #[span от] {{filter.floor.min}}
-						.filter-group__value #[span до] {{filter.floor.max}}
+						.filter-group__value #[span от] {{filter.floor.startMin}}
+						.filter-group__value #[span до] {{filter.floor.startMax}}
 					.filter-group__slider-wrap
 						.filter-group__slider(ref="sliderFloor")
 			.filter-group.filter-group--apply
@@ -81,6 +81,8 @@ const sliderFloor = ref("");
 
 const filter = reactive({
   price: {
+    initMin: props.params.price.min,
+    initMax: props.params.price.max,
     min: +props.params.price.min,
     max: +props.params.price.max,
     minRange: +props.params.price.min,
@@ -90,6 +92,8 @@ const filter = reactive({
     step: 0.1,
   },
   area: {
+    initMin: props.params.space.min,
+    initMax: props.params.space.max,
     min: +props.params.space.min,
     max: +props.params.space.max,
     minRange: +props.params.space.min,
@@ -99,6 +103,8 @@ const filter = reactive({
     step: 0.1,
   },
   floor: {
+    initMin: props.params.floor.min,
+    initMax: props.params.floor.max,
     min: +props.params.floor.min,
     max: +props.params.floor.max,
     minRange: +props.params.floor.min,
@@ -259,6 +265,8 @@ const updateSliderPrice = (element, obj) => {
       obj.max = new Intl.NumberFormat("ru-RU").format(max);
       obj.minRange = parseFloat(min);
       obj.maxRange = parseFloat(max);
+      obj.startMin = new Intl.NumberFormat("ru-RU").format(min);
+      obj.startMax = new Intl.NumberFormat("ru-RU").format(max);
     }
   });
 };
@@ -272,6 +280,8 @@ const updateSliderArea = (element, obj) => {
       obj.max = max;
       obj.minRange = parseFloat(min);
       obj.maxRange = parseFloat(max);
+      obj.startMin = new Intl.NumberFormat("ru-RU").format(min);
+      obj.startMax = new Intl.NumberFormat("ru-RU").format(max);
     }
   });
 };
@@ -285,6 +295,8 @@ const updateSliderFloor = (element, obj) => {
       obj.max = new Intl.NumberFormat("ru-RU").format(max);
       obj.minRange = parseFloat(min);
       obj.maxRange = parseFloat(max);
+      obj.startMin = new Intl.NumberFormat("ru-RU").format(min);
+      obj.startMax = new Intl.NumberFormat("ru-RU").format(max);
     }
   });
 };
@@ -304,7 +316,7 @@ const initRangeSliders = () => {
 };
 
 const resetRangeSlider = (slider, obj) => {
-  slider.noUiSlider.set([obj.startMin, obj.startMax]);
+  slider.noUiSlider.set([obj.initMin, obj.initMax]);
 };
 
 const resetRangeSliders = () => {
