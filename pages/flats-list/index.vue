@@ -4,18 +4,18 @@
 		main.main.flats.flats-list
 			.container
 				FlatHeading
-				| {{status}}
-				FlatFilter(:params="flatsList.params" @load-data="loadData")
+				| status: {{status}}
+				FlatFilter(:params="flatsList.params" @load-data="loadData" @reset-filter="resetFilter")
 				.flats__wrapper
 					.flats__body
 						FlatCard(
-							v-for="(item, index) in flatsList.data"
+							v-for="(item, index) in flatsList.newData"
 							:key="index" :flat="item"
 							:flat-index="index"
 							:active-card="activeCard"
 							@toggle-dropdown="toggleDropdown")
 					.flats__bottom
-						UiButton(text="показать ещё" class-names="btn-transparent")
+						UiButton(v-if="flatsList.pagination.count > cards.length" text="показать ещё" class-names="btn-transparent" @button-click="changePage")
 </template>
 
 <script setup>
@@ -28,6 +28,7 @@ useHead({
 const route = useRoute();
 
 const currentPage = ref(route.query.page ? route.query.page : 0);
+
 const currentPriceMin = ref(
   route.query["price[min]"] ? route.query["price[min]"] : "all"
 );
@@ -47,25 +48,9 @@ const currentFloorMax = ref(
   route.query["floor[max]"] ? route.query["floor[max]"] : "all"
 );
 
-// const options = ref(
-//   route.query["options[]"] ? route.query["options[]"] : "all"
-// );
-
-// const optionView = ref("all");
-
-// watch(
-//    () => route.query,
-//    (val) => {
-//       currentPriceMin.value = val["price[min]"];
-//       currentPriceMax.value = val["price[max]"];
-//       currentAreaMin.value = val["space[min]"];
-//       currentAreaMax.value = val["space[max]"];
-//       currentFloorMin.value = val["floor[min]"];
-//       currentFloorMax.value = val["floor[max]"];
-//    }
-// );
-
 const params = ref({});
+
+const cards = ref([]);
 
 const runtimeConfig = useRuntimeConfig();
 const {
@@ -77,7 +62,8 @@ const {
   "flatsList",
   () =>
     $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {
-      params: {
+      query: {
+        page: currentPage.value,
         ...params.value,
         //   "price[min]": currentPriceMin.value,
         //   "price[max]": currentPriceMax.value,
@@ -89,79 +75,33 @@ const {
     }),
   {
     transform: (res) => {
-      const { breadcrumb, data, filter } = res;
-      console.log(data);
+      const { breadcrumb, data, filter, meta } = res;
+      cards.value.push(...data);
       return {
         breadcrumb,
         data,
+        newData: cards.value,
         params: {
           floor: filter.slider.floor,
           price: filter.slider.price,
           space: filter.slider.space,
           options: filter.options,
         },
+        pagination: {
+          perPage: meta.per_page,
+          count: meta.count,
+          countPages: Math.ceil(meta.count / meta.per_page),
+          currPage: +currentPage.value,
+        },
       };
     },
+    watch: [currentPage],
   }
 );
 
 const router = useRouter();
 
-const products = ref([]);
-
-const fetchData = async (
-  page,
-  priceMin,
-  priceMax,
-  areaMin,
-  areaMax,
-  floorMin,
-  floorMax,
-  options
-) => {
-  const {
-    data: dynamicData,
-    status,
-    error,
-  } = await useAsyncData(
-    "dynamicData",
-    () =>
-      $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {
-        params: {
-          page,
-          "price[min]": priceMin,
-          "price[max]": priceMax,
-          "space[min]": areaMin,
-          "space[max]": areaMax,
-          "floor[min]": floorMin,
-          "floor[max]": floorMax,
-        },
-      }),
-    {
-      transform: (res) => {
-        const { data } = res;
-        return {
-          main: {
-            list: data,
-          },
-        };
-      },
-    }
-  );
-  return {
-    data: dynamicData.value.main.list,
-  };
-};
-
-// const loadData = async () => {
-//    const { data } = await fetchData(currentPage.value);
-//    if (data.length > 0) {
-//       cards.value.push(...data);
-//    }
-// };
-
-const arrValues = ref([]);
-
+// Следим за изменением гет параметров в адресной строке
 watch(
   () => route.query,
   (newVal, oldVal) => {
@@ -174,9 +114,58 @@ watch(
         ...newVal,
       },
     });
-    console.log("route", route);
   }
 );
+
+const fetchData = async (page) => {
+  const {
+    data: flatsListData,
+    status,
+    error,
+  } = await useAsyncData(
+    "dynamicData",
+    () =>
+      $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {
+        query: {
+          page,
+        },
+      }),
+    {
+      transform: ({ data, meta }) => {
+        return {
+          data,
+          pagination: {
+            perPage: meta.per_page,
+            count: meta.count,
+            totalItems: Math.ceil(meta.count / meta.per_page),
+            currPage: page,
+          },
+        };
+      },
+    }
+  );
+  return {
+    data: flatsListData.value.main.list,
+    pagination: flatsListData.value.pagination,
+  };
+};
+
+const loadNewData = async () => {
+  const { data } = await fetchData(currentPage.value);
+  if (data.length > 0) {
+    cards.value.push(...data);
+  }
+};
+
+const changePage = async () => {
+  currentPage.value++;
+  router.push({
+    query: {
+      ...route.query,
+      page: currentPage.value,
+    },
+  });
+};
 
 const loadData = async (
   minPrice,
@@ -187,7 +176,6 @@ const loadData = async (
   maxArea,
   options
 ) => {
-  console.log("options", options);
   currentPriceMin.value = minPrice;
   currentPriceMax.value = maxPrice;
   currentAreaMin.value = minArea;
@@ -195,18 +183,6 @@ const loadData = async (
   currentFloorMin.value = minFloor;
   currentFloorMax.value = maxFloor;
   options.value = options;
-  router.push({
-    path: route.path,
-    query: {
-      page: currentPage.value,
-      "price[min]": minPrice,
-      "price[max]": maxPrice,
-      "space[min]": minArea,
-      "space[max]": maxArea,
-      "floor[min]": minFloor,
-      "floor[max]": maxFloor,
-    },
-  });
   params.value = {
     "price[min]": currentPriceMin.value,
     "price[max]": currentPriceMax.value,
@@ -215,17 +191,34 @@ const loadData = async (
     "floor[min]": currentFloorMin.value,
     "floor[max]": currentFloorMax.value,
   };
+  cards.value = [];
+  currentPage.value = 0;
+  //   cards.value.push(...flatsList.value.data);
 
+  router.push({
+    path: route.path,
+    query: {
+      ...params.value,
+    },
+  });
   if (options.length > 0) {
+    params.value = {
+      ...route.query,
+      "options[]": options.value,
+    };
     router.push({
       query: { ...route.query, "options[]": options.value },
     });
-    params.value = {
-      ...params.value,
-      "options[]": options.value,
-    };
   }
   refresh();
+};
+
+const resetFilter = async () => {
+  params.value = "";
+  router.push({
+    path: route.path,
+    query: {},
+  });
 };
 
 const activeCard = ref(-1);
