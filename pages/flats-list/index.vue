@@ -68,8 +68,8 @@ const {
   () =>
     $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {
       query: {
-        page: currentPage.value,
         ...params.value,
+        page: currentPage.value,
       },
     }),
   {
@@ -116,13 +116,6 @@ watch(
   }
 );
 
-watch(
-  () => currentPage.value,
-  () => {
-    console.log("current page changed");
-  }
-);
-
 const fetchData = async (page) => {
   const {
     data: flatsListData,
@@ -165,15 +158,12 @@ const loadNewData = async () => {
   }
 };
 
-const changePage = async () => {
-  currentPage.value++;
-  router.push({
-    query: {
-      ...route.query,
-      page: currentPage.value,
-    },
-  });
-};
+watch(
+  () => currentPage.value,
+  (val) => {
+    currentPage.value = val;
+  }
+);
 
 const loadData = async (
   minPrice,
@@ -208,14 +198,24 @@ const loadData = async (
   });
   if (options.length > 0) {
     params.value = {
-      ...route.query,
+      ...params.value,
       "options[]": options.value,
     };
     router.push({
-      query: { ...route.query, "options[]": options.value },
+      query: { ...params.value, "options[]": options.value },
     });
   }
   refresh();
+};
+
+const changePage = async () => {
+  currentPage.value++;
+  router.push({
+    query: {
+      page: currentPage.value,
+      ...route.query,
+    },
+  });
 };
 
 const resetFilter = async () => {

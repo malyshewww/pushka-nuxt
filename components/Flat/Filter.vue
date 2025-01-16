@@ -325,6 +325,8 @@ const resetRangeSliders = () => {
   resetRangeSlider(sliderFloor.value, filter.floor);
 };
 
+const changePage = () => {};
+
 const resetFilter = () => {
   resetRangeSliders();
   option.value = [];
