@@ -1,13 +1,14 @@
 export const usePopupNoticeStore = defineStore("popup-notice", {
   state: () => ({
-    isOpenPopup: false,
+    isOpenPopupNotice: false,
+    isValid: true,
   }),
   actions: {
     openPopup() {
-      this.isOpenPopup = !this.isOpenPopup;
+      this.isOpenPopupNotice = true;
     },
     closePopup() {
-      this.isOpenPopup = !this.isOpenPopup;
+      this.isOpenPopupNotice = false;
     },
   },
 });

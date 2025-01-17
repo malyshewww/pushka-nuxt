@@ -1,14 +1,14 @@
 <template lang="pug">
-   .main-footer__form
-      form(ref="form" @submit.prevent="formSend($event)").subscribe-form
-         .subscribe-form__body
-            .subscribe-form__title Оставьте свои контактные данные — и наш менеджер свяжется с вами
-            .subscribe-form__items 
-               FormField(type="text" name="name" placeholder="Имя" :modelValue="model.name.val" @update:modelValue="$event => (formData.name = $event)" :is-valid="formStatus.name.isValid" :error-message="formStatus.name.message")
-               FormField(type="tel" name="phone" placeholder="Телефон" :modelValue="model.phone.val" @update:modelValue="$event => (formData.phone = $event)" :is-valid="formStatus.name.isValid" :error-message="formStatus.phone.message")
-            .subscribe-form__bottom
-               UiButton(text="отправить" type="submit" class-names="btn-green")
-               .subscribe-form__text Отправляя заявку, вы подтверждаете, что ознакомлены и согласны с условиями политики обработки персональных данных
+	.main-footer__form
+		form(ref="form" @submit.prevent="formSend($event)").subscribe-form
+				.subscribe-form__body
+					.subscribe-form__title Оставьте свои контактные данные — и наш менеджер свяжется с вами
+					.subscribe-form__items 
+							FormField(type="text" name="name" placeholder="Имя" :modelValue="model.name.val" @update:modelValue="$event => (formData.name = $event)" :is-valid="formStatus.name.isValid" :error-message="formStatus.name.message" @remove-error="removeError")
+							FormField(type="tel" name="phone" placeholder="Телефон" :modelValue="model.phone.val" @update:modelValue="$event => (formData.phone = $event)" :is-valid="formStatus.phone.isValid" :error-message="formStatus.phone.message" @remove-error="removeError")
+					.subscribe-form__bottom
+							UiButton(text="отправить" type="submit" class-names="btn-green")
+							.subscribe-form__text Отправляя заявку, вы подтверждаете, что ознакомлены и согласны с условиями политики обработки персональных данных
 </template>
 
 <script setup>
@@ -46,6 +46,8 @@ const form = ref("");
 
 const errors = ref(0);
 
+const timer = ref("");
+
 const initialFormStatus = () => {
   formStatus.name.isValid = true;
   formStatus.name.message = "";
@@ -58,13 +60,30 @@ const resetValues = () => {
   formData.phone = "";
 };
 
+// eslint-disable-next-line
+const removeError = (key) => {
+  console.log(key);
+  if (key == "name") {
+    formStatus.name.isValid = true;
+    formStatus.name.message = "";
+    formData.name = "";
+  }
+  if (key == "phone") {
+    formStatus.phone.isValid = true;
+    formStatus.phone.message = "";
+    formData.phone = "";
+    console.log(formStatus.name, "name");
+    console.log(formStatus.phone, "phone");
+  }
+};
+
 /* eslint-disable no-useless-escape */
 const formValidate = () => {
   errors.value = 0;
   initialFormStatus();
   if (formData.name.length === 0) {
     formStatus.name.isValid = false;
-    formStatus.name.message = `поле Имя обязательно для заполнения`;
+    formStatus.name.message = `Поле Имя обязательно для заполнения`;
     errors.value++;
   }
   if (formData.phone.length === 0 || formData.phone.length < 18) {
@@ -72,6 +91,7 @@ const formValidate = () => {
     formStatus.phone.message = "неверно введен телефон";
     errors.value++;
   }
+  console.log(errors.value);
   return {
     error: errors.value,
   };
@@ -81,16 +101,28 @@ const formSuccess = () => {
   initialFormStatus();
   resetValues();
   form.value.reset();
+  poupupNoticeStore.isValid = true;
   poupupNoticeStore.openPopup();
   setTimeout(() => {
     poupupNoticeStore.closePopup();
   }, 3000);
 };
 
+const formError = () => {
+  poupupNoticeStore.openPopup();
+  poupupNoticeStore.isValid = false;
+  clearTimeout(timer.value);
+  timer.value = setTimeout(() => {
+    poupupNoticeStore.closePopup();
+  }, 3000);
+};
+
 const runtimeConfig = useRuntimeConfig();
 
+// eslint-disable-next-line
 const formSend = async () => {
   const { error } = formValidate();
+
   if (error === 0) {
     const tokenResponse = await fetch(
       `${runtimeConfig.public.apiBase}/session/token`,
@@ -117,10 +149,10 @@ const formSend = async () => {
     if (formResponse.ok) {
       formSuccess();
     } else {
-      console.log("response ne ok");
+      formError();
     }
   } else {
-    alert("В форме содержатся ошибки");
+    formError();
   }
 };
 </script>

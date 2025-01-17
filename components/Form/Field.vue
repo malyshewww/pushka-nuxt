@@ -1,10 +1,10 @@
 <template lang="pug">
-	.form-item(:class="{error: isError}")
+	.form-item(:class="{error: !isValid}")
 		.form-item__field(:class="[{focus: isFocusField}, {disabled: isDisabledField}]")
-			input(v-if="name === 'phone'" :type="type" :name="name" v-maska="'+7 (###) ### ## ##'" v-model="selectedValue" :placeholder="placeholder" @input="emit('update:modelValue', $event.target.value)")
+			input(v-if="name === 'phone'" :type="type" :name="name" v-maska="'+7 (###) ### ## ##'" v-model="selectedValue" :placeholder="placeholder" @input="emit('update:modelValue', $event.target.value)" @focus="onFocusField" @blur="onBlurField")
 			input(v-else :type="type" :name="name" :placeholder="placeholder" v-model="selectedValue" @input="emit('update:modelValue', $event.target.value)" @focus="onFocusField" @blur="onBlurField")
-			button(v-if="isError" type="button" @click="clearField").form-item__close
-		.error-message(v-if="isError") Сообщение об ошибке
+			button(v-if="!isValid" type="button" @click="removeError").form-item__close
+		FormErrorMessage(v-if="!isValid" :message="errorMessage")
 </template>
 
 <script setup>
@@ -57,27 +57,11 @@ const onBlurField = () => {
   isFocusField.value = false;
 };
 
-const emit = defineEmits([
-  "update:modelValue",
-  "removeErrorName",
-  "removeErrorPhone",
-]);
+const emit = defineEmits(["removeError", "update:modelValue"]);
 
-const text = ref(null);
-
-const removeErrorName = () => {
-  emit("removeErrorName");
-};
-const removeErrorPhone = () => {
-  emit("removeErrorPhone");
-};
-
-const clearField = () => {
-  // console.log("clear");
-  text.value = "";
-  removeErrorName();
-  removeErrorPhone();
-  // currentFiledError.value = false;
+// // eslint-disable-next-line
+const removeError = () => {
+  emit("removeError", props.name);
 };
 
 const selectedValue = ref(props.modelValue);
@@ -164,11 +148,5 @@ const selectedValue = ref(props.modelValue);
       height: 16px;
     }
   }
-}
-.error-message {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 18px;
-  color: var(--system-alert);
 }
 </style>
