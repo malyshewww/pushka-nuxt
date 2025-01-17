@@ -1,6 +1,6 @@
 <template lang="pug">
-		//- PopupConsultation(:is-open="storePopupConsultation.isOpenPopupConsultation" @close-popup="closePopupConsultation" :popupData="popupData.consultation")
-		//- PopupBook(:is-open="storePopupBook.isOpenPopupBook" @close-popup="closePopupBook" :popupData="popupData.book")
+		PopupConsultation(:is-open="storePopupConsultation.isOpenPopupConsultation" @close-popup="closePopupConsultation" :popupData="popupData.consultation")
+		PopupBook(:is-open="storePopupBook.isOpenPopupBook" @close-popup="closePopupBook" :popupData="popupData.book")
 		PopupNotice(:is-open="storePopupNotice.isOpenPopupNotice" @close-popup="closePopupNotice" :popupData="popupData.notice")
 		//- PopupNotice(:is-open="storePopupNoticeBook.isOpenPopupNotice" @close-popup="closePopupNoticeBook" :popupData="popupData.noticeBook")
 		//- PopupNotice(:is-open="storePopupNoticeConsultation.isOpenPopupNotice" @close-popup="closePopupNoticeConsultation" :popupData="popupData.noticeConsultation")

@@ -10,8 +10,8 @@
 			.form-popup__title {{popupData.title}}
 			.form-popup__sub-title(v-html="popupData.subTitle")
 			.form-popup__items
-				FormField(type="text" placeholder="Имя" name="name" :isError="formErrors.name" @remove-error-name="removeErrorName")
-				FormField(type="tel" placeholder="Телефон" name="phone" :isError="formErrors.phone" @remove-error-phone="removeErrorPhone")
+				FormField(type="text" placeholder="Имя" name="name")
+				FormField(type="tel" placeholder="Телефон" name="phone")
 			.form-popup__text Отправляя заявку, вы подтверждаете, что ознакомлены и согласны с условиями #[nuxt-link(to="/page/politic").form-popup__link политики обработки персональных данных]
 			UiButton(text="отправить" class-names="btn-green" type="submit")
 </template>

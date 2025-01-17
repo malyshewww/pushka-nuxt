@@ -32,7 +32,7 @@ const props = defineProps({
   isValid: {
     type: Boolean,
     required: false,
-    default: () => false,
+    default: () => true,
   },
   errorMessage: {
     type: String,
