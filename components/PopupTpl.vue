@@ -6,41 +6,145 @@
 		.popup__image.ibg(v-if="popupData.isImageProject")
 			//- NuxtImg(:src="`/images/popup/popup-img-project.jpg`" format="avif" alt="изображение")
 			img(:src="`/images/popup/popup-img-project.jpg`")
-		form.popup__form.form-popup
-			.form-popup__title {{popupData.title}}
-			.form-popup__sub-title(v-html="popupData.subTitle")
+		form(ref="formRef" @submit.prevent="formSend").popup__form.form-popup
+			.form-popup__title(v-if="popupData.title") {{popupData.title}}
+			.form-popup__sub-title(v-if="popupData.subTitle" v-html="popupData.subTitle")
 			.form-popup__items
-				FormField(type="text" placeholder="Имя" name="name")
-				FormField(type="tel" placeholder="Телефон" name="phone")
+				FormField(type="text" placeholder="Имя" name="name" :modelValue="data.name"  @update:modelValue="$event => (data.name = $event)" :is-valid="status.name.isValid" :error-message="status.name.message" @remove-error="removeError")
+				FormField(type="tel" placeholder="Телефон" name="phone" :modelValue="data.phone" @update:modelValue="$event => (data.phone = $event)" :is-valid="status.phone.isValid" :error-message="status.phone.message" @remove-error="removeError")
 			.form-popup__text Отправляя заявку, вы подтверждаете, что ознакомлены и согласны с условиями #[nuxt-link(to="/page/politic").form-popup__link политики обработки персональных данных]
 			UiButton(text="отправить" class-names="btn-green" type="submit")
 </template>
 
 <script setup>
+import { useFormValidate } from "~/composables/form/useFormValidate";
+import { useRemoveError } from "~/composables/form/useRemoveError";
+// import { useInitialFormStatus } from "~/composables/form/useInitialFormStatus";
+// import { useResetValues } from "~/composables/form/useResetValues";
+import { usePopupNoticeStore } from "~/stores/popup/notice";
+
+const popupNoticeStore = usePopupNoticeStore();
+
+const emit = defineEmits(["closePopup"]);
+
 const props = defineProps({
   popupData: {
+    type: Object,
+    required: false,
+    default: () => {},
+  },
+  store: {
     type: Object,
     required: true,
     default: () => {},
   },
-  formErrors: {
-    required: false,
-    default: () => false,
-  },
 });
 
-const emit = defineEmits(["removeErrorName", "removeErrorPhone"]);
+const store = ref(props.store);
 
-const removeErrorName = () => {
-  emit("removeErrorName");
-};
-const removeErrorPhone = () => {
-  emit("removeErrorPhone");
+const { data, status } = store.value.form;
+
+// const model = store.value.model;
+
+const { errors } = store.value;
+
+const timer = ref("");
+
+const removeError = (key) => {
+  useRemoveError(key, data, status);
 };
 
-onMounted(() => {
-  // maskPhone();
-});
+const useInitialFormStatus = () => {
+  status.name.isValid = true;
+  status.name.message = "";
+  status.phone.isValid = true;
+  status.phone.message = "";
+};
+
+const useResetValues = () => {
+  data.name = "";
+  data.phone = "";
+};
+
+// watch(
+//   () => status,
+//   (val) => {
+//     useInitialFormStatus(val);
+//     console.log("change status");
+//   },
+//   {
+//     deep: true,
+//   }
+// );
+
+// watch(
+//   () => data,
+//   (val) => {
+//     useResetValues(val);
+//   },
+//   {
+//     deep: true,
+//   }
+// );
+
+const formSuccess = () => {
+  useInitialFormStatus();
+  useResetValues();
+  // popupNoticeStore.isValid = true;
+  // popupNoticeStore.openPopup();
+  // setTimeout(() => {
+  //   popupNoticeStore.closePopup();
+  // }, 3000);
+  // emit("closePopup");
+};
+
+const formError = () => {
+  popupNoticeStore.openPopup();
+  popupNoticeStore.isValid = false;
+  // clearTimeout(timer.value);
+  // timer.value = setTimeout(() => {
+  //   popupNoticeStore.closePopup();
+  // }, 3000);
+};
+
+const formSend = async () => {
+  const { error } = useFormValidate(errors, data, status);
+  if (error === 0) {
+    const tokenResponse = await fetch(
+      `${useRuntimeConfig().public.apiBase}/session/token`,
+      {
+        method: "POST",
+      }
+    );
+    if (!tokenResponse.ok) {
+      throw new Error("Ошибка при получении токена");
+    }
+    const token = await tokenResponse.text();
+    const formResponse = await fetch(
+      `${useRuntimeConfig().public.apiBase}/webform_rest/submit?_format_json`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+          "X-CSRF-Token": token,
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    if (formResponse.ok) {
+      formSuccess();
+      console.log("data", data);
+    } else {
+      formError();
+    }
+  } else {
+    return;
+  }
+  console.log("data", data);
+  console.log("errors", error);
+  // console.log("response", response);
+};
 </script>
 <style lang="scss" scoped>
 .popup {

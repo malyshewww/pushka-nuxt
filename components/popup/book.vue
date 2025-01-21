@@ -1,7 +1,7 @@
 <template lang="pug">
 	Teleport(to="body")
 		Popup(class="popup-book popup-tpl" :is-open="isOpen" @close-popup="closePopup")
-			PopupTpl(:popup-data="popupData" :form-errors="formErrors" @remove-error-name="removeErrorName" @remove-error-phone="removeErrorPhone")
+			PopupTpl(:popup-data="popupData")
 </template>
 
 <script setup>
@@ -10,68 +10,53 @@ import { usePopupBookStore } from "~/stores/popup/book";
 const store = usePopupBookStore();
 
 const props = defineProps({
-   isOpen: {
-      type: Boolean,
-      required: true,
-   },
-   popupData: {
-      type: Object,
-      required: true,
-      default: () => {},
-   },
+  isOpen: {
+    type: Boolean,
+    required: true,
+  },
+  popupData: {
+    type: Object,
+    required: true,
+    default: () => {},
+  },
 });
-
-const formErrors = reactive({
-   name: true,
-   phone: false,
-});
-
-const removeErrorName = () => {
-   formErrors.name = false;
-   // store.removeErrorName();
-};
-
-const removeErrorPhone = () => {
-   formErrors.phone = false;
-   // store.removeErrorPhone();
-};
 
 const emit = defineEmits(["closePopup"]);
 // eslint-disable-next-line
 const closePopup = () => {
-   emit("closePopup");
+  emit("closePopup");
 };
 </script>
 
 <style lang="scss">
 .popup-book {
-   & .popup {
-      &__content {
-         padding: 0;
-         max-width: 600px;
-         @media screen and (max-width: $xl) {
-            max-width: 100%;
-         }
+  & .popup {
+    &__content {
+      padding: 0;
+      max-width: 600px;
+      @media screen and (max-width: $xl) {
+        max-width: 100%;
       }
-      &__body {
-         display: block;
-         @media screen and (max-width: $xl) {
-            display: flex;
-            height: 100%;
-         }
+    }
+    &__body {
+      display: block;
+      @media screen and (max-width: $xl) {
+        display: flex;
+        height: 100%;
       }
-      &__image {
-         display: none;
+    }
+    &__image {
+      display: none;
+    }
+    &__close {
+      @media (any-hover: hover) {
+        &:hover {
+          &::before {
+            background-color: currentColor;
+          }
+        }
       }
-      &__close {
-         @media (any-hover: hover) {
-            &:hover {
-               &::before {
-                  background-color: currentColor;
-               }
-            }
-         }
-      }
-   }
+    }
+  }
 }
 </style>

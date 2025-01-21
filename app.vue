@@ -1,7 +1,6 @@
 <template lang="pug">
 	NuxtLayout
-		NuxtErrorBoundary
-			NuxtPage
+		NuxtPage
 	AppPopups
 </template>
 
@@ -18,40 +17,40 @@ const { data: mainInfoData } = await useFetch("/wsapi/packs/site_info", {
 
 mainInfoStore.setData(mainInfoData.value);
 
-const menu = [
-  {
-    title: "О проекте",
-    path: "/",
-    // hash: "#about",
-  },
-  {
-    title: "Апартаменты в продаже",
-    path: "/flats-list",
-  },
-  {
-    title: "Динамика строительства",
-    path: "/dynamic",
-  },
-  {
-    title: "Новости и акции",
-    path: "/",
-    hash: "#news",
-  },
-  {
-    title: "Паркинг",
-    path: "/parking",
-  },
-  {
-    title: "Ипотека",
-    path: "/page/text",
-  },
-  {
-    title: "Контакты",
-    path: "/contacts",
-  },
-];
+// const menu = [
+//   {
+//     title: "О проекте",
+//     path: "/",
+//     // hash: "#about",
+//   },
+//   {
+//     title: "Апартаменты в продаже",
+//     path: "/flats-list",
+//   },
+//   {
+//     title: "Динамика строительства",
+//     path: "/dynamic",
+//   },
+//   {
+//     title: "Новости и акции",
+//     path: "/",
+//     hash: "#news",
+//   },
+//   {
+//     title: "Паркинг",
+//     path: "/parking",
+//   },
+//   {
+//     title: "Ипотека",
+//     path: "/page/text",
+//   },
+//   {
+//     title: "Контакты",
+//     path: "/contacts",
+//   },
+// ];
 
-provide("menu", menu);
+// provide("menu", menu);
 
 onMounted(() => {
   // console.log(window.navigator.languages);
@@ -71,7 +70,17 @@ onMounted(() => {
 @import "~/assets/scss/keyframes.scss";
 @import "~/assets/scss/fonts.scss";
 @import "~/assets/scss/common.scss";
+
 body.page--home {
   font-family: var(--second-family);
 }
+// .fade-enter-active,
+// .fade-leave-active {
+//   transition: opacity 0.3s ease;
+// }
+
+// .fade-enter-from,
+// .fade-leave-to {
+//   opacity: 0;
+// }
 </style>

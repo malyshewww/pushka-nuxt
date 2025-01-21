@@ -62,7 +62,6 @@ const resetValues = () => {
 
 // eslint-disable-next-line
 const removeError = (key) => {
-  console.log(key);
   if (key == "name") {
     formStatus.name.isValid = true;
     formStatus.name.message = "";
@@ -72,8 +71,6 @@ const removeError = (key) => {
     formStatus.phone.isValid = true;
     formStatus.phone.message = "";
     formData.phone = "";
-    console.log(formStatus.name, "name");
-    console.log(formStatus.phone, "phone");
   }
 };
 
@@ -91,7 +88,6 @@ const formValidate = () => {
     formStatus.phone.message = "неверно введен телефон";
     errors.value++;
   }
-  console.log(errors.value);
   return {
     error: errors.value,
   };
