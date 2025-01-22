@@ -1,10 +1,15 @@
 <template lang="pug">
 	Teleport(to="body")
 		Popup(class="popup-consultation popup-tpl" :is-open="isOpen" @close-popup="closePopup")
-			PopupTpl(:popup-data="popupData")
+			PopupTpl(:popup-data="popupData" :store="popupStore" popup-key="consultation" @close-popup="closePopup")
 </template>
 
 <script setup>
+import { usePopupConsultationStore } from "~/stores/popup/consultation";
+
+// eslint-disable-next-line
+const popupStore = usePopupConsultationStore();
+
 const props = defineProps({
   isOpen: {
     type: Boolean,

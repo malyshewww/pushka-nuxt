@@ -1,10 +1,15 @@
 <template lang="pug">
 	UiButton(text="узнать больше о проекте" class-names="btn-green" @button-click="openPopupProject")
-	//- PopupProject(:is-open="store.isOpenPopup" @closePopup="closePopupProject" :popup-data="popupData.project")
+	PopupProject(:is-open="store.isOpenPopup" @closePopup="closePopupProject" :popup-data="popupData.project")
+	PopupNoticeProject(:is-open="popupNoticeStore.isOpenPopupProject" @close-popup="closePopupProjectNotice")
 </template>
 
 <script setup>
 import { usePopupProjectStore } from "~/stores/popup/project";
+
+import { usePopupNoticeStore } from "~/stores/popup/notice";
+
+const popupNoticeStore = usePopupNoticeStore();
 
 const store = usePopupProjectStore();
 
@@ -13,6 +18,9 @@ const openPopupProject = () => {
 };
 const closePopupProject = () => {
   store.closePopup();
+};
+const closePopupProjectNotice = () => {
+  popupNoticeStore.closePopupProject();
 };
 
 const popupData = reactive({

@@ -1,11 +1,11 @@
 <template lang="pug">
 	.main-footer__form
-		form(ref="form" @submit.prevent="formSend($event)").subscribe-form
+		form(ref="formRef" @submit.prevent="formSend").subscribe-form
 				.subscribe-form__body
 					.subscribe-form__title Оставьте свои контактные данные — и наш менеджер свяжется с вами
 					.subscribe-form__items 
-							FormField(type="text" name="name" placeholder="Имя" :modelValue="model.name.val" @update:modelValue="$event => (formData.name = $event)" :is-valid="formStatus.name.isValid" :error-message="formStatus.name.message" @remove-error="removeError")
-							FormField(type="tel" name="phone" placeholder="Телефон" :modelValue="model.phone.val" @update:modelValue="$event => (formData.phone = $event)" :is-valid="formStatus.phone.isValid" :error-message="formStatus.phone.message" @remove-error="removeError")
+							FormField(type="text" name="name" placeholder="Имя" :modelValue="data.name" @update:modelValue="$event => (data.name = $event)" :is-valid="status.name.isValid" :error-message="status.name.message" @remove-error="removeError")
+							FormField(type="tel" name="phone" placeholder="Телефон" :modelValue="data.phone" @update:modelValue="$event => (data.phone = $event)" :is-valid="status.phone.isValid" :error-message="status.phone.message" @remove-error="removeError")
 					.subscribe-form__bottom
 							UiButton(text="отправить" type="submit" class-names="btn-green")
 							.subscribe-form__text Отправляя заявку, вы подтверждаете, что ознакомлены и согласны с условиями политики обработки персональных данных
@@ -13,90 +13,36 @@
 
 <script setup>
 import { usePopupNoticeStore } from "~/stores/popup/notice";
+import { usePopupProjectStore } from "~/stores/popup/project";
+
+import { useFormValidate } from "~/composables/form/useFormValidate";
+import { useRemoveError } from "~/composables/form/useRemoveError";
+import { useInitialFormStatus } from "~/composables/form/useInitialFormStatus";
+import { useResetValues } from "~/composables/form/useResetValues";
 
 const poupupNoticeStore = usePopupNoticeStore();
 
-const model = reactive({
-  name: {
-    val: "",
-  },
-  phone: {
-    val: "",
-  },
-});
+const popupProjectSore = usePopupProjectStore();
 
-const formData = reactive({
-  name: model.name.val,
-  phone: model.phone.val,
-  webform_id: "more_about",
-});
+const { form, errors } = popupProjectSore;
 
-const formStatus = reactive({
-  name: {
-    isValid: true,
-    message: "",
-  },
-  phone: {
-    isValid: true,
-    message: "",
-  },
-});
+const { data, status } = form;
 
-const form = ref("");
-
-const errors = ref(0);
+const formRef = ref(null);
 
 const timer = ref("");
 
-const initialFormStatus = () => {
-  formStatus.name.isValid = true;
-  formStatus.name.message = "";
-  formStatus.phone.isValid = true;
-  formStatus.phone.message = "";
-};
-
-const resetValues = () => {
-  formData.name = "";
-  formData.phone = "";
-};
-
 // eslint-disable-next-line
 const removeError = (key) => {
-  if (key == "name") {
-    formStatus.name.isValid = true;
-    formStatus.name.message = "";
-    formData.name = "";
-  }
-  if (key == "phone") {
-    formStatus.phone.isValid = true;
-    formStatus.phone.message = "";
-    formData.phone = "";
-  }
-};
-
-/* eslint-disable no-useless-escape */
-const formValidate = () => {
-  errors.value = 0;
-  initialFormStatus();
-  if (formData.name.length === 0) {
-    formStatus.name.isValid = false;
-    formStatus.name.message = `Поле Имя обязательно для заполнения`;
-    errors.value++;
-  }
-  if (formData.phone.length === 0 || formData.phone.length < 18) {
-    formStatus.phone.isValid = false;
-    formStatus.phone.message = "неверно введен телефон";
-    errors.value++;
-  }
-  return {
-    error: errors.value,
-  };
+  useRemoveError(key, data, status);
 };
 
 const formSuccess = () => {
-  initialFormStatus();
-  resetValues();
-  form.value.reset();
+  useInitialFormStatus(status);
+  useResetValues(data);
+  formRef.value.reset();
+  poupupNoticeStore.successText =
+    "Спасибо! Мы свяжемся с вами в ближайшее время";
   poupupNoticeStore.isValid = true;
   poupupNoticeStore.openPopup();
   setTimeout(() => {
@@ -113,15 +59,13 @@ const formError = () => {
   }, 3000);
 };
 
-const runtimeConfig = useRuntimeConfig();
-
 // eslint-disable-next-line
 const formSend = async () => {
-  const { error } = formValidate();
-
+  const { error } = useFormValidate(errors, data, status);
+  console.log("data", data);
   if (error === 0) {
     const tokenResponse = await fetch(
-      `${runtimeConfig.public.apiBase}/session/token`,
+      `${useRuntimeConfig().public.apiBase}/session/token`,
       {
         method: "POST",
       }
@@ -131,7 +75,7 @@ const formSend = async () => {
     }
     const token = await tokenResponse.text();
     const formResponse = await fetch(
-      `${runtimeConfig.public.apiBase}/webform_rest/submit?_format_json`,
+      `${useRuntimeConfig().public.apiBase}/webform_rest/submit?_format_json`,
       {
         method: "POST",
         headers: {
@@ -139,7 +83,7 @@ const formSend = async () => {
           "Content-Type": "application/json",
           "X-CSRF-Token": token,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       }
     );
     if (formResponse.ok) {

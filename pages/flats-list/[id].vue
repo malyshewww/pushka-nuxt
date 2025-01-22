@@ -8,15 +8,56 @@
 						SectionApartmentScheme(:plan="apartment.main.scheme.planImage" :floor="apartment.main.scheme.floorImage")
 						SectionApartmentInfo(:info="apartment.main.info")
 					SliderGallery(:slider="slider" slider-caption="Варианты дизайнерской отделки" :isDescr="true")
+		PopupBook(:is-open="storePopupBook.isOpenPopup" @close-popup="closePopupBook" :popupData="popupData.book")
+		PopupConsultation(:is-open="storePopupConsultation.isOpenPopup" @close-popup="closePopupConsultation" :popupData="popupData.consultation")
 </template>
 
 <script setup>
+import { usePopupBookStore } from "~/stores/popup/book";
+import { usePopupConsultationStore } from "~/stores/popup/consultation";
+
+const storePopupBook = usePopupBookStore();
+const storePopupConsultation = usePopupConsultationStore();
+
+// eslint-disable-next-line
+const closePopupBook = () => {
+  storePopupBook.closePopup();
+};
+// eslint-disable-next-line
+const closePopupConsultation = () => {
+  storePopupConsultation.closePopup();
+};
+
+const popupData = reactive({
+  consultation: {
+    title: "ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ",
+    subTitle:
+      "Оставьте заявку, наш менеджер перезвонит и&nbsp;проконсультирует вас по всем вопросам",
+    isImage: true,
+  },
+  book: {
+    title: "ЗАБРОНИРОВАТЬ КВАРТИРУ",
+    subTitle:
+      "Оставьте заявку, наш менеджер перезвонит вам и поможет забронировать квартиру",
+    isImage: false,
+  },
+  noticeConsultation: {
+    subTitle:
+      "В ближайшее время с вами свяжется менеджер для&nbsp;консультации",
+  },
+  noticeBook: {
+    subTitle:
+      "В ближайшее время с вами свяжется менеджер и поможет оформить бронь",
+  },
+});
+
 useHead({
   bodyAttrs: {
     class: "page--apartment",
   },
 });
 
+// Статичные данные для слайдера
 const slider = [
   {
     img: "1",
@@ -74,6 +115,25 @@ const {
         },
       };
     },
+  }
+);
+/* Добавляем в store номер текущих апартаментов для последующего использования значения при отправке формы 
+	"Забронировать" и "Консультация" в карточке апартаментов
+*/
+watch(
+  () => storePopupBook.isOpenPopup,
+  (open) => {
+    if (open) {
+      storePopupBook.form.data.number = apartment.value.main.info.number;
+    }
+  }
+);
+watch(
+  () => storePopupConsultation.isOpenPopup,
+  (open) => {
+    if (open) {
+      storePopupBook.form.data.number = apartment.value.main.info.number;
+    }
   }
 );
 </script>

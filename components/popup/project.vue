@@ -1,10 +1,14 @@
 <template lang="pug">
 	Teleport(to="body")
 		Popup(class="popup-project popup-tpl" :is-open="isOpen" @close-popup="closePopup")
-			PopupTpl(:popup-data="popupData")
+			PopupTpl(:popup-data="popupData" :store="popupStore" popup-key="project" @close-popup="closePopup")
 </template>
 
 <script setup>
+import { usePopupProjectStore } from "~/stores/popup/project";
+
+const popupStore = usePopupProjectStore();
+
 const props = defineProps({
   isOpen: {
     type: Boolean,

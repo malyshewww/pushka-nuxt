@@ -1,15 +1,40 @@
-export const usePopupConsultationStore = defineStore("popup-consultation", {
-  state: () => ({
-    isOpenPopupConsultation: false,
-  }),
-  actions: {
-    openPopup() {
+export const usePopupConsultationStore = defineStore(
+  "popup-consultation",
+  () => {
+    const isOpenPopup = ref(false);
+    const errors = ref(0);
+    const form = reactive({
+      data: {
+        webform_id: "consultation",
+        name: "",
+        phone: "",
+        number: "",
+      },
+      status: {
+        name: {
+          isValid: true,
+          message: "",
+        },
+        phone: {
+          isValid: true,
+          message: "",
+        },
+      },
+    });
+    const openPopup = () => {
       body_lock_add();
-      this.isOpenPopupConsultation = !this.isOpenPopupConsultation;
-    },
-    closePopup() {
+      isOpenPopup.value = !isOpenPopup.value;
+    };
+    const closePopup = () => {
       body_lock_remove(0);
-      this.isOpenPopupConsultation = !this.isOpenPopupConsultation;
-    },
-  },
-});
+      isOpenPopup.value = !isOpenPopup.value;
+    };
+    return {
+      isOpenPopup,
+      openPopup,
+      closePopup,
+      errors,
+      form,
+    };
+  }
+);

@@ -1,4 +1,8 @@
 export const useResetValues = (data) => {
-  data.name = "";
-  data.phone = "";
+  if (data.name) {
+    data.name = "";
+  }
+  if (data.phone) {
+    data.phone = "";
+  }
 };

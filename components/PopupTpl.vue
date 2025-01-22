@@ -1,16 +1,14 @@
 <template lang="pug">
 	.popup__body
 		.popup__image.ibg(v-if="popupData.isImage")
-			//- NuxtImg(:src="`/images/popup/popup-img.jpg`" format="avif" alt="изображение")
-			img(:src="`/images/popup/popup-img.jpg`")
+			NuxtPicture(:src="`/images/popup/popup-img.jpg`" alt="изображение")
 		.popup__image.ibg(v-if="popupData.isImageProject")
-			//- NuxtImg(:src="`/images/popup/popup-img-project.jpg`" format="avif" alt="изображение")
-			img(:src="`/images/popup/popup-img-project.jpg`")
+			NuxtPicture(:src="`/images/popup/popup-img-project.jpg`" alt="изображение")
 		form(ref="formRef" @submit.prevent="formSend").popup__form.form-popup
 			.form-popup__title(v-if="popupData.title") {{popupData.title}}
 			.form-popup__sub-title(v-if="popupData.subTitle" v-html="popupData.subTitle")
 			.form-popup__items
-				FormField(type="text" placeholder="Имя" name="name" :modelValue="data.name"  @update:modelValue="$event => (data.name = $event)" :is-valid="status.name.isValid" :error-message="status.name.message" @remove-error="removeError")
+				FormField(type="text" placeholder="Имя" name="name" :modelValue="data.name" @update:modelValue="$event => (data.name = $event)" :is-valid="status.name.isValid" :error-message="status.name.message" @remove-error="removeError")
 				FormField(type="tel" placeholder="Телефон" name="phone" :modelValue="data.phone" @update:modelValue="$event => (data.phone = $event)" :is-valid="status.phone.isValid" :error-message="status.phone.message" @remove-error="removeError")
 			.form-popup__text Отправляя заявку, вы подтверждаете, что ознакомлены и согласны с условиями #[nuxt-link(to="/page/politic").form-popup__link политики обработки персональных данных]
 			UiButton(text="отправить" class-names="btn-green" type="submit")
@@ -19,8 +17,8 @@
 <script setup>
 import { useFormValidate } from "~/composables/form/useFormValidate";
 import { useRemoveError } from "~/composables/form/useRemoveError";
-// import { useInitialFormStatus } from "~/composables/form/useInitialFormStatus";
-// import { useResetValues } from "~/composables/form/useResetValues";
+import { useInitialFormStatus } from "~/composables/form/useInitialFormStatus";
+import { useResetValues } from "~/composables/form/useResetValues";
 import { usePopupNoticeStore } from "~/stores/popup/notice";
 
 const popupNoticeStore = usePopupNoticeStore();
@@ -35,8 +33,13 @@ const props = defineProps({
   },
   store: {
     type: Object,
-    required: true,
-    default: () => {},
+    required: false,
+    default: {},
+  },
+  popupKey: {
+    type: String,
+    required: false,
+    default: () => "",
   },
 });
 
@@ -44,71 +47,80 @@ const store = ref(props.store);
 
 const { data, status } = store.value.form;
 
-// const model = store.value.model;
-
 const { errors } = store.value;
 
 const timer = ref("");
 
+// eslint-disable-next-line
 const removeError = (key) => {
   useRemoveError(key, data, status);
 };
 
-const useInitialFormStatus = () => {
-  status.name.isValid = true;
-  status.name.message = "";
-  status.phone.isValid = true;
-  status.phone.message = "";
+const succesPopupKey = (key) => {
+  switch (key) {
+    case "book":
+      popupNoticeStore.successText =
+        "Оставьте заявку, наш менеджер перезвонит вам и поможет забронировать квартиру";
+      break;
+    case "consultation":
+      popupNoticeStore.successText =
+        "Оставьте заявку, наш менеджер перезвонит и&nbsp;проконсультирует вас по всем вопросам";
+      break;
+    case "call":
+      popupNoticeStore.successText =
+        "В ближайшее время с вами свяжется менеджер для консультации";
+      break;
+    default:
+      popupNoticeStore.successText =
+        "Спасибо! Мы свяжемся с вами в ближайшее время";
+      break;
+  }
 };
-
-const useResetValues = () => {
-  data.name = "";
-  data.phone = "";
-};
-
-// watch(
-//   () => status,
-//   (val) => {
-//     useInitialFormStatus(val);
-//     console.log("change status");
-//   },
-//   {
-//     deep: true,
-//   }
-// );
-
-// watch(
-//   () => data,
-//   (val) => {
-//     useResetValues(val);
-//   },
-//   {
-//     deep: true,
-//   }
-// );
 
 const formSuccess = () => {
-  useInitialFormStatus();
-  useResetValues();
-  // popupNoticeStore.isValid = true;
-  // popupNoticeStore.openPopup();
-  // setTimeout(() => {
-  //   popupNoticeStore.closePopup();
-  // }, 3000);
-  // emit("closePopup");
+  useInitialFormStatus(status);
+  useResetValues(data);
+  popupNoticeStore.isValid = true;
+  if (props.popupKey == "project") {
+    popupNoticeStore.successText =
+      "Спасибо! Мы свяжемся с вами в ближайшее время";
+    popupNoticeStore.openPopupProject();
+    setTimeout(() => {
+      popupNoticeStore.closePopupProject();
+      popupNoticeStore.successText = "";
+    }, 3000);
+  } else {
+    succesPopupKey(props.popupKey);
+    popupNoticeStore.openPopup();
+    setTimeout(() => {
+      popupNoticeStore.closePopup();
+      popupNoticeStore.successText = "";
+    }, 3000);
+  }
+  emit("closePopup");
 };
 
 const formError = () => {
-  popupNoticeStore.openPopup();
   popupNoticeStore.isValid = false;
-  // clearTimeout(timer.value);
-  // timer.value = setTimeout(() => {
-  //   popupNoticeStore.closePopup();
-  // }, 3000);
+  if (props.popupKey == "project") {
+    popupNoticeStore.openPopupProject();
+    clearTimeout(timer.value);
+    timer.value = setTimeout(() => {
+      popupNoticeStore.closePopupProject();
+    }, 3000);
+  } else {
+    popupNoticeStore.openPopup();
+    clearTimeout(timer.value);
+    timer.value = setTimeout(() => {
+      popupNoticeStore.closePopup();
+    }, 3000);
+  }
 };
 
 const formSend = async () => {
   const { error } = useFormValidate(errors, data, status);
+  console.log("send", data);
+  console.log("key", props.popupKey);
   if (error === 0) {
     const tokenResponse = await fetch(
       `${useRuntimeConfig().public.apiBase}/session/token`,
@@ -134,35 +146,15 @@ const formSend = async () => {
     );
     if (formResponse.ok) {
       formSuccess();
-      console.log("data", data);
     } else {
       formError();
     }
   } else {
     return;
   }
-  console.log("data", data);
-  console.log("errors", error);
-  // console.log("response", response);
 };
 </script>
 <style lang="scss" scoped>
-.popup {
-  &__image {
-    padding-bottom: math.div(500, 300) * 100%;
-    flex: 0 0 300px;
-    @media screen and (max-width: $md) {
-      display: none;
-    }
-  }
-  &__body {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    @media screen and (max-width: $md) {
-      display: flex;
-    }
-  }
-}
 .form-popup {
   padding: 52px 60px 60px;
   display: grid;

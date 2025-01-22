@@ -7,7 +7,7 @@
 					.popup-notice__sub-title Пожалуйста, проверьте корректность введенных данных и отправьте форму еще раз
 				div(v-else)
 					.popup-notice__title Форма успешно отправлена
-					.popup-notice__sub-title(v-html="popupData.subTitle")
+					.popup-notice__sub-title(v-if="popupNotice.successText" v-html="popupNotice.successText")
 				UiButton(text="закрыть" class-names="btn-green" @button-click="closePopup")
 </template>
 
@@ -43,6 +43,12 @@ const closePopup = () => {
   //     pointer-events: all;
   //   }
   & .popup {
+    &__wrapper {
+      @media screen and (max-width: $xl) {
+        align-items: stretch;
+        padding: 0;
+      }
+    }
     &__content {
       max-width: 590px;
       padding: 52px 60px 60px;
@@ -51,6 +57,25 @@ const closePopup = () => {
       border-radius: 0;
       @media screen and (max-width: $xl) {
         padding: 40px 20px;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    &__close {
+      @media (any-hover: hover) {
+        &:hover {
+          &::before {
+            background-color: currentColor;
+          }
+        }
+      }
+      @media screen and (max-width: $md) {
+        &::before {
+          background-color: var(--bg-white);
+        }
       }
     }
   }
@@ -75,6 +100,7 @@ const closePopup = () => {
     }
   }
   &__sub-title {
+    font-family: var(--font-family);
     font-weight: 600;
     line-height: 22px;
   }

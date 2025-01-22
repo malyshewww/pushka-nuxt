@@ -67,15 +67,16 @@ const removeError = () => {
 const selectedValue = ref(props.modelValue);
 
 // Можно использотвать watch либо событие @input в теге для слежки за изменениями
-// watch(
-//   () => props.modelValue,
-//   (newValue) => {
-//     selectedValue.value = newValue;
-//   }
-// );
-// watch(selectedValue, (newValue) => {
-//   emit("update:modelValue", newValue);
-// });
+// upd: Для динамической очистки полей формы нужно все таки использовать watch
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    selectedValue.value = newValue;
+  }
+);
+watch(selectedValue, (newValue) => {
+  emit("update:modelValue", newValue);
+});
 </script>
 
 <style lang="scss" scoped>

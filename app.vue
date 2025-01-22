@@ -74,6 +74,7 @@ onMounted(() => {
 body.page--home {
   font-family: var(--second-family);
 }
+
 // .fade-enter-active,
 // .fade-leave-active {
 //   transition: opacity 0.3s ease;

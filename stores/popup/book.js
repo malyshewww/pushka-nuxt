@@ -1,29 +1,37 @@
-export const usePopupBookStore = defineStore("popup-book", {
-  state: () => ({
-    isOpenPopupBook: false,
-    isErrorName: true,
-    isErrorPhone: false,
-  }),
-  actions: {
-    openPopup() {
-      body_lock_add();
-      this.isOpenPopupBook = !this.isOpenPopupBook;
+export const usePopupBookStore = defineStore("popup-book", () => {
+  const isOpenPopup = ref(false);
+  const errors = ref(0);
+  const form = reactive({
+    data: {
+      webform_id: "book",
+      name: "",
+      phone: "",
+      number: "",
     },
-    closePopup() {
-      body_lock_remove(0);
-      this.isOpenPopupBook = !this.isOpenPopupBook;
+    status: {
+      name: {
+        isValid: true,
+        message: "",
+      },
+      phone: {
+        isValid: true,
+        message: "",
+      },
     },
-    showErrorName() {
-      this.isErrorName = !this.isErrorName;
-    },
-    removeErrorName() {
-      this.isErrorName = !this.isErrorName;
-    },
-    showErrorPhone() {
-      this.isErrorPhone = true;
-    },
-    removeErrorPhone() {
-      this.isErrorPhone = false;
-    },
-  },
+  });
+  const openPopup = () => {
+    body_lock_add();
+    isOpenPopup.value = !isOpenPopup.value;
+  };
+  const closePopup = () => {
+    body_lock_remove(0);
+    isOpenPopup.value = !isOpenPopup.value;
+  };
+  return {
+    isOpenPopup,
+    openPopup,
+    closePopup,
+    errors,
+    form,
+  };
 });

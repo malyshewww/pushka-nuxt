@@ -1,13 +1,14 @@
 <template lang="pug">
 	Teleport(to="body")
 		Popup(class="popup-book popup-tpl" :is-open="isOpen" @close-popup="closePopup")
-			PopupTpl(:popup-data="popupData")
+			PopupTpl(:popup-data="popupData" :store="popupStore" popup-key="book" @close-popup="closePopup")
 </template>
 
 <script setup>
 import { usePopupBookStore } from "~/stores/popup/book";
 
-const store = usePopupBookStore();
+// eslint-disable-next-line
+const popupStore = usePopupBookStore();
 
 const props = defineProps({
   isOpen: {

@@ -1,7 +1,7 @@
 <template lang="pug">
 	Teleport(to="body")
 		Popup(class="popup-call popup-tpl" :is-open="isOpen" @close-popup="closePopup")
-			PopupTpl(:popup-data="popupData" :store="popupStore" @close-popup="closePopup")
+			PopupTpl(:popup-data="popupData" :store="popupStore" popup-key="call" @close-popup="closePopup")
 </template>
 
 <script setup>

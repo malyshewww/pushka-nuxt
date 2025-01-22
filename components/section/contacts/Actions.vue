@@ -2,15 +2,12 @@
 	.info-contacts__actions
 		UiButton(text="заказать звонок" class-names="btn-green" @button-click="openPopupCall")
 		PopupCall(:is-open="store.isOpenPopup" @close-popup="closePopupCall" :popup-data="popupData.call")
-		PopupNotice(:is-open="storeNotice.isOpenPopupNotice" @close-popup="closePopupNotice" :popup-data="popupData.callNotice")
 </template>
 
 <script setup>
 import { usePopupCallStore } from "~/stores/popup/call";
-import { usePopupNoticeConsultationStore } from "~/stores/popup/noticeConsultation";
 
 const store = usePopupCallStore();
-const storeNotice = usePopupNoticeConsultationStore();
 
 const openPopupCall = () => {
   store.openPopup();
