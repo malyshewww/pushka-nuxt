@@ -23,15 +23,21 @@ const {
   {
     transform: (res) => {
       const { breadcrumb, data, metatag } = res;
+      const metadata = useMetatags(metatag.html_head);
       return {
         breadcrumb,
         main: {
           title: data.title,
         },
+        metadata,
       };
     },
   }
 );
+
+useHead({
+  ...contacts.value.metadata,
+});
 </script>
 
 <style lang="scss" scoped>

@@ -1,15 +1,16 @@
-export const usePopupDynamicStore = defineStore("popup-dynamic", {
-   state: () => ({
-      isOpenPopupDynamic: false,
-   }),
-   actions: {
-      openPopupDynamic() {
-         body_lock_add();
-         this.isOpenPopupDynamic = !this.isOpenPopupDynamic;
-      },
-      closePopupDynamic() {
-         body_lock_remove();
-         this.isOpenPopupDynamic = !this.isOpenPopupDynamic;
-      },
-   },
+export const usePopupDynamicStore = defineStore("popup-dynamic", () => {
+  const isOpenPopupDynamic = ref(false);
+  const openPopupDynamic = () => {
+    body_lock_add();
+    isOpenPopupDynamic.value = !isOpenPopupDynamic.value;
+  };
+  const closePopupDynamic = () => {
+    body_lock_remove();
+    isOpenPopupDynamic.value = !isOpenPopupDynamic.value;
+  };
+  return {
+    isOpenPopupDynamic,
+    openPopupDynamic,
+    closePopupDynamic,
+  };
 });

@@ -49,6 +49,8 @@ import { useFilterStore } from "~/stores/filter-actions";
 import { useMenuStore } from "~/stores/menu";
 import noUiSlider from "nouislider";
 
+const route = useRoute();
+
 const store = useFilterStore();
 const storeMenu = useMenuStore();
 
@@ -337,6 +339,36 @@ onMounted(() => {
   initRangeSliders();
   updateRangeSliders();
   changeSliderValues();
+  // if (route.query["price[min]"] && route.query["price[max]"]) {
+  //   const min = Math.round(route.query["price[min]"]);
+  //   const max = Math.round(route.query["price[max]"]);
+  //   filter.price.minRange = min;
+  //   filter.price.maxRange = max;
+  //   sliderPrice.value.noUiSlider.set([
+  //     filter.price.minRange,
+  //     filter.price.maxRange,
+  //   ]);
+  // }
+  // if (route.query["space[min]"] && route.query["space[max]"]) {
+  //   const min = Math.round(route.query["space[min]"]);
+  //   const max = Math.round(route.query["space[max]"]);
+  //   filter.area.minRange = min;
+  //   filter.area.maxRange = max;
+  //   sliderArea.value.noUiSlider.set([
+  //     filter.area.minRange,
+  //     filter.area.maxRange,
+  //   ]);
+  // }
+  // if (route.query["floor[min]"] && route.query["floor[max]"]) {
+  //   const min = Math.round(route.query["floor[min]"]);
+  //   const max = Math.round(route.query["floor[max]"]);
+  //   filter.floor.minRange = min;
+  //   filter.floor.maxRange = max;
+  //   sliderFloor.value.noUiSlider.set([
+  //     filter.floor.minRange,
+  //     filter.floor.maxRange,
+  //   ]);
+  // }
 });
 </script>
 
@@ -368,12 +400,12 @@ onMounted(() => {
       pointer-events: all;
     }
   }
-  .page--flats-scheme & {
-    padding: 33px 36px;
-    @media screen and (max-width: $md) {
-      padding: 15px 15px 42px;
-    }
-  }
+  // .page--flats-scheme & {
+  //   padding: 33px 36px;
+  //   @media screen and (max-width: $md) {
+  //     padding: 15px 15px 42px;
+  //   }
+  // }
   &__top {
     justify-content: space-between;
     align-items: center;

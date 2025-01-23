@@ -94,6 +94,7 @@ const {
   {
     transform: (res) => {
       const { breadcrumb, data, metatag } = res;
+      const metadata = useMetatags(metatag.html_head);
       return {
         breadcrumb,
         main: {
@@ -113,10 +114,16 @@ const {
             floorImage: data.floor_image,
           },
         },
+        metadata,
       };
     },
   }
 );
+
+useHead({
+  ...apartment.value.metadata,
+});
+
 /* Добавляем в store номер текущих апартаментов для последующего использования значения при отправке формы 
 	"Забронировать" и "Консультация" в карточке апартаментов
 */

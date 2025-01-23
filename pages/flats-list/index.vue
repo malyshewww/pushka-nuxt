@@ -4,8 +4,8 @@
 		main.main.flats.flats-list
 			.container
 				FlatHeading
-				| status: {{status}}
 				FlatFilter(:params="flatsList.params" @load-data="loadData" @reset-filter="resetFilter")
+				LoadingContainer(:status.sync="status" :error.sync="error")
 				.flats__wrapper
 					.flats__body
 						FlatCard(
@@ -19,6 +19,7 @@
 </template>
 
 <script setup>
+// !!! Фильтрация реализована на строне сервера через гет параметры
 useHead({
   bodyAttrs: {
     class: "page--flats-list",
@@ -50,6 +51,16 @@ const currentFloorMax = ref(
 
 const params = ref({});
 
+params.value = {
+  page: currentPage.value,
+  "price[min]": currentPriceMin.value,
+  "price[max]": currentPriceMax.value,
+  "space[min]": currentAreaMin.value,
+  "space[max]": currentAreaMax.value,
+  "floor[min]": currentFloorMin.value,
+  "floor[max]": currentFloorMax.value,
+};
+
 const cards = ref([]);
 
 const initialState = () => {
@@ -69,13 +80,14 @@ const {
     $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {
       query: {
         ...params.value,
-        page: currentPage.value,
       },
     }),
   {
     transform: (res) => {
-      const { breadcrumb, data, filter, meta } = res;
+      const { breadcrumb, data, filter, meta, metatag } = res;
       cards.value.push(...data);
+      console.log("data", res);
+      const metadata = useMetatags(metatag.html_head);
       return {
         breadcrumb,
         data,
@@ -92,41 +104,35 @@ const {
           countPages: Math.ceil(meta.count / meta.per_page),
           currPage: +currentPage.value,
         },
+        metadata,
       };
     },
     watch: [currentPage],
   }
 );
 
-const router = useRouter();
+useHead({
+  ...flatsList.value.metadata,
+});
 
-// Следим за изменением гет параметров в адресной строке
-watch(
-  () => route.query,
-  (newVal, oldVal) => {
-    console.log("old", oldVal);
-    console.log("new", newVal);
-    router.push({
-      path: route.path,
-      query: {
-        page: currentPage.value,
-        ...newVal,
-      },
-    });
-  }
+cards.value = flatsList.value.newData;
+
+console.log("pagination", flatsList.value.pagination.countPages);
+console.log("cards", cards.value.length);
+
+const isShowMore = ref(
+  flatsList.value.pagination.countPages > cards.value.length ? true : false
 );
 
+const router = useRouter();
+
 const fetchData = async (page) => {
-  const {
-    data: flatsListData,
-    status,
-    error,
-  } = await useAsyncData(
+  const { data: flatsListData } = await useAsyncData(
     "dynamicData",
     () =>
       $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {
         query: {
-          page,
+          ...params.value,
         },
       }),
     {
@@ -141,7 +147,6 @@ const fetchData = async (page) => {
           },
         };
       },
-      watch: [page],
     }
   );
   return {
@@ -157,6 +162,20 @@ const loadNewData = async () => {
     flatsList.value.newData = data;
   }
 };
+
+// Следим за изменением гет параметров в адресной строке
+watch(
+  () => route.query,
+  (newVal) => {
+    router.push({
+      path: route.path,
+      query: {
+        ...newVal,
+        page: currentPage.value,
+      },
+    });
+  }
+);
 
 watch(
   () => currentPage.value,
@@ -213,7 +232,7 @@ const changePage = async () => {
   router.push({
     query: {
       page: currentPage.value,
-      ...route.query,
+      ...params.value,
     },
   });
 };
@@ -244,11 +263,11 @@ const closeAllDropdowns = (e) => {
     activeCard.value = -1;
   }
 };
-onUnmounted(() => {
-  document.removeEventListener("click", closeAllDropdowns);
-});
 onMounted(() => {
   document.addEventListener("click", closeAllDropdowns);
+});
+onUnmounted(() => {
+  document.removeEventListener("click", closeAllDropdowns);
 });
 </script>
 

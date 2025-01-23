@@ -14,8 +14,6 @@
 </template>
 
 <script setup>
-const device = useDevice();
-
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -48,11 +46,6 @@ const closePopup = () => {
     height: 384px;
     @media screen and (max-width: $md) {
       height: 280px;
-    }
-    &__box {
-      // display: flex;
-      // align-items: center;
-      // height: 100%;
     }
     &__images {
       flex: 0 0 287px;

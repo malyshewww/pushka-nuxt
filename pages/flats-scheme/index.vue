@@ -1,11 +1,10 @@
 <template lang="pug">
 	div
-		div.loading(v-if="isLoading") loading...
 		BreadCrumbs(:list="flatsScheme.breadcrumb")
 		main.main.flats.flats-scheme
 			.container
 				FlatHeading
-				FlatFilter(:params.sync="flatsScheme.params" @newSliderValues="newSliderValues" @load-data="loadData" @reset-filter="resetFilter")
+				FlatFilter(:params.sync="flatsScheme.params" @load-data="loadData" @reset-filter="resetFilter")
 				.flats-scheme__wrapper
 					FlatSchemeLegend(:is-scroll-scheme="isScrollScheme")
 					.flats-scheme__places-wrap
@@ -59,6 +58,8 @@ const newListRoom = ref([]);
 const isFilterChanged = ref(false);
 
 const runtimeConfig = useRuntimeConfig();
+
+// !!! Фильтрация реализована на строне клиента
 const {
   data: flatsScheme,
   status,
@@ -71,9 +72,10 @@ const {
     }),
   {
     transform: (res) => {
-      console.log(res);
-      const { breadcrumb, data, filter } = res;
+      const { breadcrumb, data, filter, metatag } = res;
+      console.log(data);
       newListRoom.value = generateNewData(data);
+      const metadata = useMetatags(metatag.html_head);
       return {
         breadcrumb,
         corpus: data,
@@ -84,13 +86,15 @@ const {
           space: filter.slider.space,
           options: filter.options,
         },
+        metadata,
       };
     },
-    // watch: [priceMin, priceMax],
   }
 );
 
-const isLoading = ref(false);
+useHead({
+  ...flatsScheme.value.metadata
+})
 
 function generateNewData(data) {
   const arr = [];
@@ -108,16 +112,11 @@ const scrollToScheme = () => {
 };
 
 const resetFilter = () => {
-  console.log("reset");
-  isLoading.value = !isLoading.value;
   flatsScheme.value.newList.map((floor) => {
     floor.apartments.map((room, i) => {
       room.isActive = true;
     });
   });
-  setTimeout(() => {
-    isLoading.value = !isLoading.value;
-  }, 2000);
 };
 
 // loadData = update function newSliderValues
@@ -132,7 +131,6 @@ const loadData = (
 ) => {
   // isFilterChanged - Фильтр активен
   isFilterChanged.value = true;
-  isLoading.value = !isLoading.value;
   const checkOptions = (optionOne, optionTwo, optionThree) => {
     if (options.length === 0) return;
     if (
@@ -184,20 +182,8 @@ const loadData = (
       }
     });
   });
-  setTimeout(() => {
-    isLoading.value = !isLoading.value;
-  }, 2000);
   scrollToScheme();
 };
-
-function routerReplace() {
-  router.replace({
-    query: {
-      "price[min]": priceMin.value,
-      "price[max]": priceMax.value,
-    },
-  });
-}
 
 const data = reactive({
   tooltip: {

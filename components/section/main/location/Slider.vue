@@ -30,7 +30,7 @@ const props = defineProps({
   placeId: {
     type: Number,
     required: false,
-    default: () => "",
+    default: () => 0,
   },
 });
 

@@ -24,6 +24,7 @@ const {
   {
     transform: (res) => {
       const { breadcrumb, data, links, metatag } = res;
+      const metadata = useMetatags(metatag.html_head);
       return {
         breadcrumb,
         main: {
@@ -31,10 +32,15 @@ const {
           content: data.body[0],
           gallery: data.field_images,
         },
+        metadata,
       };
     },
   }
 );
+
+useHead({
+  ...pageText.value.metadata,
+});
 </script>
 
 <style lang="scss" scoped>

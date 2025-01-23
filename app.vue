@@ -2,14 +2,18 @@
 	NuxtLayout
 		NuxtPage
 	AppPopups
+	AppLoader(v-if="appStore.isLoading")
 </template>
 
 <script setup>
-import { useMainInfoStore } from "@/stores/maininfo";
+import { useMainInfoStore } from "~/stores/maininfo";
+import { useAppStore } from "~/stores/app";
 
 const runtimeConfig = useRuntimeConfig();
 
 const mainInfoStore = useMainInfoStore();
+
+const appStore = useAppStore();
 
 const { data: mainInfoData } = await useFetch("/wsapi/packs/site_info", {
   baseURL: `${runtimeConfig.public.apiBase}`,
@@ -17,40 +21,11 @@ const { data: mainInfoData } = await useFetch("/wsapi/packs/site_info", {
 
 mainInfoStore.setData(mainInfoData.value);
 
-// const menu = [
-//   {
-//     title: "О проекте",
-//     path: "/",
-//     // hash: "#about",
-//   },
-//   {
-//     title: "Апартаменты в продаже",
-//     path: "/flats-list",
-//   },
-//   {
-//     title: "Динамика строительства",
-//     path: "/dynamic",
-//   },
-//   {
-//     title: "Новости и акции",
-//     path: "/",
-//     hash: "#news",
-//   },
-//   {
-//     title: "Паркинг",
-//     path: "/parking",
-//   },
-//   {
-//     title: "Ипотека",
-//     path: "/page/text",
-//   },
-//   {
-//     title: "Контакты",
-//     path: "/contacts",
-//   },
-// ];
+// const nuxtApp = useNuxtApp();
 
-// provide("menu", menu);
+onNuxtReady(() => {
+  appStore.isLoading = false;
+});
 
 onMounted(() => {
   // console.log(window.navigator.languages);
@@ -65,10 +40,10 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
+@import "~/assets/scss/fonts.scss";
 @import "~/assets/scss/nullstyle.scss";
 @import "~/assets/scss/mixins.scss";
 @import "~/assets/scss/keyframes.scss";
-@import "~/assets/scss/fonts.scss";
 @import "~/assets/scss/common.scss";
 
 body.page--home {

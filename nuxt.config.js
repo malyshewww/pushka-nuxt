@@ -6,7 +6,7 @@ import postCssSortMediaQueries from "postcss-sort-media-queries";
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
-  modules: ["@pinia/nuxt", "@nuxtjs/device", "@nuxt/image"],
+  modules: ["@nuxt/eslint", "@pinia/nuxt", "@nuxtjs/device", "@nuxt/image"],
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE_URL,
@@ -87,14 +87,14 @@ export default defineNuxtConfig({
   // site: { url: "http://localhost:3000" },
   ssr: true,
   vite: {
-    server: {
-      port: 3001,
-      host: "0.0.0.0",
-      strictPort: true,
-      hmr: {
-        port: 3001,
-      },
-    },
+    // server: {
+    //   port: 3001,
+    //   host: "0.0.0.0",
+    //   strictPort: true,
+    //   hmr: {
+    //     port: 3001,
+    //   },
+    // },
     vue: {
       script: {
         defineModel: true,
