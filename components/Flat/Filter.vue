@@ -32,8 +32,8 @@
 				UiButton(class-names="btn-green" type="button" text="применить" @button-click="loadData")
 			.filter-group.filter-group--options
 				.filter-options
-					.filter-group__option.filter-option(v-for="item, index in params.options" :class="`filter-option--${item.id}`")
-						input(type="checkbox" name="additional" :id="item.id" :value="item.id" v-model="option")
+					.filter-group__option.filter-option(v-for="(item, index) in params.options" :class="`filter-option--${item.id}`")
+						input(type="checkbox" name="additional" :id="item.id" :value="item.id" v-model="option" :checked='queryOptions.includes(item.id)')
 						label(:for="item.id")
 							| {{item.title}}
 							button(type="button").filter-option__delete-btn
@@ -68,6 +68,8 @@ const props = defineProps({
   },
 });
 
+const checked = ref(true);
+
 const option = ref([]);
 
 const emit = defineEmits([
@@ -80,6 +82,33 @@ const emit = defineEmits([
 const sliderPrice = ref("");
 const sliderArea = ref("");
 const sliderFloor = ref("");
+
+const queryOptions = ref([]);
+
+// if (route.query["options[]"] && route.query["options[]"].length) {
+//   queryOptions.value = [route.query["options[]"]];
+// }
+
+watch(
+  () => route.query,
+  () => {
+    console.log("route query");
+  }
+);
+
+// result.map((item, index) => {
+//   return {
+//     ...item[index],
+//     checked: "true",
+//   };
+// });
+
+// watch(
+//   () => route.query,
+//   () => {
+//     console.log("query");
+//   }
+// );
 
 const filter = reactive({
   price: {
@@ -327,8 +356,6 @@ const resetRangeSliders = () => {
   resetRangeSlider(sliderFloor.value, filter.floor);
 };
 
-const changePage = () => {};
-
 const resetFilter = () => {
   resetRangeSliders();
   option.value = [];
@@ -339,36 +366,41 @@ onMounted(() => {
   initRangeSliders();
   updateRangeSliders();
   changeSliderValues();
-  // if (route.query["price[min]"] && route.query["price[max]"]) {
-  //   const min = Math.round(route.query["price[min]"]);
-  //   const max = Math.round(route.query["price[max]"]);
-  //   filter.price.minRange = min;
-  //   filter.price.maxRange = max;
-  //   sliderPrice.value.noUiSlider.set([
-  //     filter.price.minRange,
-  //     filter.price.maxRange,
-  //   ]);
-  // }
-  // if (route.query["space[min]"] && route.query["space[max]"]) {
-  //   const min = Math.round(route.query["space[min]"]);
-  //   const max = Math.round(route.query["space[max]"]);
-  //   filter.area.minRange = min;
-  //   filter.area.maxRange = max;
-  //   sliderArea.value.noUiSlider.set([
-  //     filter.area.minRange,
-  //     filter.area.maxRange,
-  //   ]);
-  // }
-  // if (route.query["floor[min]"] && route.query["floor[max]"]) {
-  //   const min = Math.round(route.query["floor[min]"]);
-  //   const max = Math.round(route.query["floor[max]"]);
-  //   filter.floor.minRange = min;
-  //   filter.floor.maxRange = max;
-  //   sliderFloor.value.noUiSlider.set([
-  //     filter.floor.minRange,
-  //     filter.floor.maxRange,
-  //   ]);
-  // }
+  if (route.query["price[min]"] && route.query["price[max]"]) {
+    const min = Math.round(route.query["price[min]"]);
+    const max = Math.round(route.query["price[max]"]);
+    filter.price.minRange = min;
+    filter.price.maxRange = max;
+    sliderPrice.value.noUiSlider.set([
+      filter.price.minRange,
+      filter.price.maxRange,
+    ]);
+  }
+  if (route.query["space[min]"] && route.query["space[max]"]) {
+    const min = Math.round(route.query["space[min]"]);
+    const max = Math.round(route.query["space[max]"]);
+    filter.area.minRange = min;
+    filter.area.maxRange = max;
+    sliderArea.value.noUiSlider.set([
+      filter.area.minRange,
+      filter.area.maxRange,
+    ]);
+  }
+  if (route.query["floor[min]"] && route.query["floor[max]"]) {
+    const min = Math.round(route.query["floor[min]"]);
+    const max = Math.round(route.query["floor[max]"]);
+    filter.floor.minRange = min;
+    filter.floor.maxRange = max;
+    sliderFloor.value.noUiSlider.set([
+      filter.floor.minRange,
+      filter.floor.maxRange,
+    ]);
+  }
+  if (route.query["options[]"] && route.query["options[]"].length) {
+    queryOptions.value = [route.query["options[]"]];
+    filter.option = queryOptions.value;
+    console.log("filter", filter.option);
+  }
 });
 </script>
 

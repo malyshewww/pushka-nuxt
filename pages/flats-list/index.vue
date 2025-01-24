@@ -6,7 +6,7 @@
 				FlatHeading
 				FlatFilter(:params="flatsList.params" @load-data="loadData" @reset-filter="resetFilter")
 				LoadingContainer(:status.sync="status" :error.sync="error")
-				.flats__wrapper
+				.flats__wrapper(v-if="flatsList.newData.length > 0")
 					.flats__body
 						FlatCard(
 							v-for="(item, index) in flatsList.newData"
@@ -14,8 +14,9 @@
 							:flat-index="index"
 							:active-card="activeCard"
 							@toggle-dropdown="toggleDropdown")
-					.flats__bottom
-						UiButton(v-if="flatsList.pagination.count > cards.length" text="показать ещё" class-names="btn-transparent" @button-click="changePage")
+					.flats__bottom(v-if="flatsList.currentPage.length >= flatsList.pagination.perPage")
+						UiButton(text="показать ещё" class-names="btn-transparent" @button-click="changePage")
+				.flats__wrapper.empty(v-else) По вашему запросу ничего на найдено
 </template>
 
 <script setup>
@@ -49,19 +50,43 @@ const currentFloorMax = ref(
   route.query["floor[max]"] ? route.query["floor[max]"] : "all"
 );
 
+const currentOptions = ref(
+  route.query["options[]"] ? route.query["options[]"] : "all"
+);
+
 const params = ref({});
 
-params.value = {
-  page: currentPage.value,
-  "price[min]": currentPriceMin.value,
-  "price[max]": currentPriceMax.value,
-  "space[min]": currentAreaMin.value,
-  "space[max]": currentAreaMax.value,
-  "floor[min]": currentFloorMin.value,
-  "floor[max]": currentFloorMax.value,
-};
+// const queryOptions = ref([]);
+
+// if (route.query["options[]"] && route.query["options[]"].length) {
+//   queryOptions.value = [...route.query["options[]"]];
+// }
+
+// Начальная провека (например, когда перезагружаем страницу)
+if (route.query["options[]"] && route.query["options[]"].length) {
+  params.value = {
+    "price[min]": currentPriceMin.value,
+    "price[max]": currentPriceMax.value,
+    "space[min]": currentAreaMin.value,
+    "space[max]": currentAreaMax.value,
+    "floor[min]": currentFloorMin.value,
+    "floor[max]": currentFloorMax.value,
+    "options[]": route.query["options[]"],
+  };
+} else {
+  params.value = {
+    "price[min]": currentPriceMin.value,
+    "price[max]": currentPriceMax.value,
+    "space[min]": currentAreaMin.value,
+    "space[max]": currentAreaMax.value,
+    "floor[min]": currentFloorMin.value,
+    "floor[max]": currentFloorMax.value,
+  };
+}
 
 const cards = ref([]);
+
+const count = ref(0);
 
 const initialState = () => {
   cards.value = [];
@@ -79,6 +104,7 @@ const {
   () =>
     $fetch(`${runtimeConfig.public.apiBase}/flats-list?_format=json`, {
       query: {
+        page: currentPage.value,
         ...params.value,
       },
     }),
@@ -86,18 +112,20 @@ const {
     transform: (res) => {
       const { breadcrumb, data, filter, meta, metatag } = res;
       cards.value.push(...data);
-      console.log("data", res);
       const metadata = useMetatags(metatag.html_head);
+      const currentPage = data;
       return {
         breadcrumb,
         data,
         newData: cards.value,
+        currentPage,
         params: {
           floor: filter.slider.floor,
           price: filter.slider.price,
           space: filter.slider.space,
           options: filter.options,
         },
+        // count: count.value,
         pagination: {
           perPage: meta.per_page,
           count: meta.count,
@@ -107,7 +135,7 @@ const {
         metadata,
       };
     },
-    watch: [currentPage],
+    watch: [currentPage, params],
   }
 );
 
@@ -115,14 +143,18 @@ useHead({
   ...flatsList.value.metadata,
 });
 
+const isShowMore = ref(
+  flatsList.value.currentPage.length >= flatsList.value.pagination.perPage
+);
+
 cards.value = flatsList.value.newData;
 
-console.log("pagination", flatsList.value.pagination.countPages);
-console.log("cards", cards.value.length);
+// console.log("pagination", flatsList.value.pagination.countPages);
+// console.log("cards", cards.value.length);
 
-const isShowMore = ref(
-  flatsList.value.pagination.countPages > cards.value.length ? true : false
-);
+// const isShowMore = ref(
+//   flatsList.value.pagination.countPages > cards.value.length ? true : false
+// );
 
 const router = useRouter();
 
@@ -143,7 +175,7 @@ const fetchData = async (page) => {
             perPage: meta.per_page,
             count: meta.count,
             totalItems: Math.ceil(meta.count / meta.per_page),
-            currPage: page,
+            currPage: +page,
           },
         };
       },
@@ -156,7 +188,7 @@ const fetchData = async (page) => {
 };
 
 const loadNewData = async () => {
-  const { data } = await fetchData(currentPage.value);
+  const { data, pagination } = await fetchData(currentPage.value);
   initialState();
   if (data.length > 0) {
     flatsList.value.newData = data;
@@ -181,6 +213,7 @@ watch(
   () => currentPage.value,
   (val) => {
     currentPage.value = val;
+    console.log(currentPage.value);
   }
 );
 
@@ -199,7 +232,7 @@ const loadData = async (
   currentAreaMax.value = maxArea;
   currentFloorMin.value = minFloor;
   currentFloorMax.value = maxFloor;
-  options.value = options;
+  currentOptions.value = options;
   params.value = {
     "price[min]": currentPriceMin.value,
     "price[max]": currentPriceMax.value,
@@ -208,6 +241,7 @@ const loadData = async (
     "floor[min]": currentFloorMin.value,
     "floor[max]": currentFloorMax.value,
   };
+  // currentPage.value = 0;
   initialState();
   router.push({
     path: route.path,
@@ -218,16 +252,16 @@ const loadData = async (
   if (options.length > 0) {
     params.value = {
       ...params.value,
-      "options[]": options.value,
+      "options[]": currentOptions.value,
     };
     router.push({
-      query: { ...params.value, "options[]": options.value },
+      query: { ...params.value, "options[]": currentOptions.value },
     });
   }
   refresh();
 };
 
-const changePage = async () => {
+const changePage = () => {
   currentPage.value++;
   router.push({
     query: {
@@ -235,6 +269,16 @@ const changePage = async () => {
       ...params.value,
     },
   });
+  // refresh();
+  // loadData(
+  //   currentPriceMin.value,
+  //   currentPriceMax.value,
+  //   currentAreaMin.value,
+  //   currentAreaMax.value,
+  //   currentFloorMin.value,
+  //   currentFloorMax.value,
+  //   currentOptions.value
+  // );
 };
 
 const resetFilter = async () => {
@@ -263,8 +307,14 @@ const closeAllDropdowns = (e) => {
     activeCard.value = -1;
   }
 };
-onMounted(() => {
+onMounted(async () => {
   document.addEventListener("click", closeAllDropdowns);
+  // if (route.query) {
+  //   const { data, pagination } = await fetchData(currentPage.value);
+  //   if (data.length > 0) {
+  //     flatsList.value.newData = data;
+  //   }
+  // }
 });
 onUnmounted(() => {
   document.removeEventListener("click", closeAllDropdowns);
@@ -287,6 +337,15 @@ onUnmounted(() => {
     @media screen and (max-width: $xl) {
       gap: 32px;
       margin-top: 40px;
+    }
+    &.empty {
+      font-size: 18px;
+      line-height: 28px;
+      display: block;
+      margin-top: 64px;
+      @media screen and (max-width: $xl) {
+        margin-top: 40px;
+      }
     }
   }
   &__body {
