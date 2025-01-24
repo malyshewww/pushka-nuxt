@@ -68,9 +68,11 @@ const props = defineProps({
   },
 });
 
-const checked = ref(true);
-
-const option = ref([]);
+const option = ref(
+  route.query["options[]"] && route.query["options[]"].length
+    ? [route.query["options[]"]]
+    : []
+);
 
 const emit = defineEmits([
   "newSliderValues",
@@ -84,31 +86,6 @@ const sliderArea = ref("");
 const sliderFloor = ref("");
 
 const queryOptions = ref([]);
-
-// if (route.query["options[]"] && route.query["options[]"].length) {
-//   queryOptions.value = [route.query["options[]"]];
-// }
-
-watch(
-  () => route.query,
-  () => {
-    console.log("route query");
-  }
-);
-
-// result.map((item, index) => {
-//   return {
-//     ...item[index],
-//     checked: "true",
-//   };
-// });
-
-// watch(
-//   () => route.query,
-//   () => {
-//     console.log("query");
-//   }
-// );
 
 const filter = reactive({
   price: {
@@ -150,7 +127,6 @@ const filter = reactive({
 watch(
   () => option.value,
   (val) => {
-    console.log(val);
     filter.option = val;
   },
   {
@@ -362,10 +338,8 @@ const resetFilter = () => {
   emit("resetFilter");
 };
 
-onMounted(() => {
-  initRangeSliders();
-  updateRangeSliders();
-  changeSliderValues();
+const setValuesWithGet = () => {
+  // Проверяем гет параметры для проставления значений в range слайдеры
   if (route.query["price[min]"] && route.query["price[max]"]) {
     const min = Math.round(route.query["price[min]"]);
     const max = Math.round(route.query["price[max]"]);
@@ -399,8 +373,14 @@ onMounted(() => {
   if (route.query["options[]"] && route.query["options[]"].length) {
     queryOptions.value = [route.query["options[]"]];
     filter.option = queryOptions.value;
-    console.log("filter", filter.option);
   }
+};
+
+onMounted(() => {
+  initRangeSliders();
+  updateRangeSliders();
+  changeSliderValues();
+  setValuesWithGet();
 });
 </script>
 

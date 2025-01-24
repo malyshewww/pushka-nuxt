@@ -56,12 +56,6 @@ const currentOptions = ref(
 
 const params = ref({});
 
-// const queryOptions = ref([]);
-
-// if (route.query["options[]"] && route.query["options[]"].length) {
-//   queryOptions.value = [...route.query["options[]"]];
-// }
-
 // Начальная провека (например, когда перезагружаем страницу)
 if (route.query["options[]"] && route.query["options[]"].length) {
   params.value = {
@@ -149,13 +143,6 @@ const isShowMore = ref(
 
 cards.value = flatsList.value.newData;
 
-// console.log("pagination", flatsList.value.pagination.countPages);
-// console.log("cards", cards.value.length);
-
-// const isShowMore = ref(
-//   flatsList.value.pagination.countPages > cards.value.length ? true : false
-// );
-
 const router = useRouter();
 
 const fetchData = async (page) => {
@@ -241,7 +228,6 @@ const loadData = async (
     "floor[min]": currentFloorMin.value,
     "floor[max]": currentFloorMax.value,
   };
-  // currentPage.value = 0;
   initialState();
   router.push({
     path: route.path,
@@ -269,16 +255,6 @@ const changePage = () => {
       ...params.value,
     },
   });
-  // refresh();
-  // loadData(
-  //   currentPriceMin.value,
-  //   currentPriceMax.value,
-  //   currentAreaMin.value,
-  //   currentAreaMax.value,
-  //   currentFloorMin.value,
-  //   currentFloorMax.value,
-  //   currentOptions.value
-  // );
 };
 
 const resetFilter = async () => {
@@ -309,12 +285,6 @@ const closeAllDropdowns = (e) => {
 };
 onMounted(async () => {
   document.addEventListener("click", closeAllDropdowns);
-  // if (route.query) {
-  //   const { data, pagination } = await fetchData(currentPage.value);
-  //   if (data.length > 0) {
-  //     flatsList.value.newData = data;
-  //   }
-  // }
 });
 onUnmounted(() => {
   document.removeEventListener("click", closeAllDropdowns);
