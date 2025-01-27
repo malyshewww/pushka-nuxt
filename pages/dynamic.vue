@@ -12,10 +12,10 @@
 								span Сдаём проект в 2027
 				.dynamic__wrapper
 					.dynamic__body
-						ProgressCard(v-for="(item, index) in cards" :key="index" @click="openPopupDynamic($event, item)" :card="item")
+						ProgressCard(v-for="(item, index) in cards" :key="index" :card="item" @click="openPopupDynamic($event, item)")
 					.dynamic__bottom(v-if="hasMore")
 						UiButton(text="Показать ещё" class-names="btn-transparent" @button-click="loadData")
-	PopupDynamic(:is-open.sync="storePopupDynamic.isOpenPopupDynamic" @close-popup="closePopupDynamic" :popup-data="initialState")
+	PopupDynamic(:is-open="storePopupDynamic.isOpenPopupDynamic" :popup-data="initialState" @close-popup="closePopupDynamic")
 </template>
 
 <script setup>
@@ -48,11 +48,7 @@ const hasMore = ref(true);
 const runtimeConfig = useRuntimeConfig();
 
 // Доработать гидратацию
-const {
-  data: initDynamicData,
-  status,
-  error,
-} = await useAsyncData(
+const { data: initDynamicData } = await useAsyncData(
   "initDynamicData",
   () => $fetch(`${runtimeConfig.public.apiBase}/dynamic?_format=json`, {}),
   {
@@ -71,11 +67,7 @@ useHead({
 });
 
 const fetchData = async (page) => {
-  const {
-    data: dynamicData,
-    status,
-    error,
-  } = await useAsyncData(
+  const { data: dynamicData } = await useAsyncData(
     "dynamicData",
     () =>
       $fetch(`${runtimeConfig.public.apiBase}/dynamic?_format=json`, {

@@ -25,7 +25,7 @@ const aboutImage = ref("");
 
 const aboutWrapper = ref("");
 
-const { $gsap: gsap, $ScrollTrigger: ScrollTrigger } = useNuxtApp();
+const { $gsap: gsap } = useNuxtApp();
 
 const animation = () => {
   gsap.fromTo(

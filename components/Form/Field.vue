@@ -1,14 +1,13 @@
 <template lang="pug">
 	.form-item(:class="{error: !isValid}")
 		.form-item__field(:class="[{focus: isFocusField}, {disabled: isDisabledField}]")
-			input(v-if="name === 'phone'" :type="type" :name="name" v-maska="'+7 (###) ### ## ##'" v-model="selectedValue" :placeholder="placeholder" @input="emit('update:modelValue', $event.target.value)" @focus="onFocusField" @blur="onBlurField")
-			input(v-else :type="type" :name="name" :placeholder="placeholder" v-model="selectedValue" @input="emit('update:modelValue', $event.target.value)" @focus="onFocusField" @blur="onBlurField")
+			input(v-if="name === 'phone'" v-model="selectedValue" v-maska="'+7 (###) ### ## ##'" :type="type" :name="name" :placeholder="placeholder" @input="emit('update:modelValue', $event.target.value)" @focus="onFocusField" @blur="onBlurField")
+			input(v-else v-model="selectedValue" :type="type" :name="name" :placeholder="placeholder" @input="emit('update:modelValue', $event.target.value)" @focus="onFocusField" @blur="onBlurField")
 			button(v-if="!isValid" type="button" @click="removeError").form-item__close
 		FormErrorMessage(v-if="!isValid" :message="errorMessage")
 </template>
 
 <script setup>
-// eslint-disable-next-line
 import { vMaska } from "maska/vue";
 
 const props = defineProps({
@@ -59,7 +58,6 @@ const onBlurField = () => {
 
 const emit = defineEmits(["removeError", "update:modelValue"]);
 
-// // eslint-disable-next-line
 const removeError = () => {
   emit("removeError", props.name);
 };

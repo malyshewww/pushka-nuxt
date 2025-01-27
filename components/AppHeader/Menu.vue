@@ -34,7 +34,7 @@ const newMenu = computed(() => {
   });
 });
 
-const props = defineProps({
+defineProps({
   isOpenMenu: {
     type: Boolean,
     required: true,
@@ -64,35 +64,34 @@ const closeMenu = (e) => {
 // };
 
 onMounted(() => {
-  const menu = document.querySelector(".menu"),
-    menuVisible = document.querySelector(".menu__body .menu__list"),
-    menuHidden = document.querySelector(".menu__dropdown .dropdown-menu__list"),
-    dropdownMenu = document.querySelector(".dropdown-menu"),
-    breaks = [];
-  const updateNav = () => {
-    const navWidth = dropdownMenu.classList.contains("hidden")
-      ? menu.offsetWidth
-      : menu.offsetWidth - dropdownMenu.offsetWidth - 48;
-    const menuVisibleWidth = menuVisible.offsetWidth;
-    if (menuVisibleWidth > navWidth) {
-      breaks.push(menuVisibleWidth);
-      menuHidden.prepend(menuVisible.lastElementChild);
-      dropdownMenu.classList.remove("hidden");
-      updateNav();
-    } else {
-      if (navWidth < breaks[breaks.length - 1]) {
-        breaks.pop();
-        menuVisible.append(menuHidden.firstElementChild);
-      }
-      if (breaks.length < 1) {
-        dropdownMenu.classList.add("hidden");
-      }
-    }
-  };
+  // const menu = document.querySelector(".menu"),
+  //   menuVisible = document.querySelector(".menu__body .menu__list"),
+  //   menuHidden = document.querySelector(".menu__dropdown .dropdown-menu__list"),
+  //   dropdownMenu = document.querySelector(".dropdown-menu"),
+  //   breaks = [];
+  // const updateNav = () => {
+  //   const navWidth = dropdownMenu.classList.contains("hidden")
+  //     ? menu.offsetWidth
+  //     : menu.offsetWidth - dropdownMenu.offsetWidth - 48;
+  //   const menuVisibleWidth = menuVisible.offsetWidth;
+  //   if (menuVisibleWidth > navWidth) {
+  //     breaks.push(menuVisibleWidth);
+  //     menuHidden.prepend(menuVisible.lastElementChild);
+  //     dropdownMenu.classList.remove("hidden");
+  //     updateNav();
+  //   } else {
+  //     if (navWidth < breaks[breaks.length - 1]) {
+  //       breaks.pop();
+  //       menuVisible.append(menuHidden.firstElementChild);
+  //     }
+  //     if (breaks.length < 1) {
+  //       dropdownMenu.classList.add("hidden");
+  //     }
+  //   }
+  // };
   // updateNav();
   // window.addEventListener("resize", updateNav);
   // window.addEventListener("DOMContentLoaded", updateNav);
-
   // const updateLinks = () => {
   //    const menuItems = [...menuVisible.querySelectorAll(".menu__item")];
   //    const takeRight = (arr, n = 1) => arr.slice(arr.length - n, arr.length);

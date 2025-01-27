@@ -4,8 +4,8 @@
 				.subscribe-form__body
 					.subscribe-form__title Оставьте свои контактные данные — и наш менеджер свяжется с вами
 					.subscribe-form__items 
-							FormField(type="text" name="name" placeholder="Имя" :modelValue="data.name" @update:modelValue="$event => (data.name = $event)" :is-valid="status.name.isValid" :error-message="status.name.message" @remove-error="removeError")
-							FormField(type="tel" name="phone" placeholder="Телефон" :modelValue="data.phone" @update:modelValue="$event => (data.phone = $event)" :is-valid="status.phone.isValid" :error-message="status.phone.message" @remove-error="removeError")
+							FormField(type="text" :model-value="data.name" name="name" placeholder="Имя" :is-valid="status.name.isValid" :error-message="status.name.message" @update:model-value="$event => (data.name = $event)" @remove-error="removeError")
+							FormField(type="tel" :model-value="data.phone" name="phone" placeholder="Телефон" :is-valid="status.phone.isValid" :error-message="status.phone.message" @update:model-value="$event => (data.phone = $event)" @remove-error="removeError")
 					.subscribe-form__bottom
 							UiButton(text="отправить" type="submit" class-names="btn-green")
 							.subscribe-form__text Отправляя заявку, вы подтверждаете, что ознакомлены и согласны с условиями политики обработки персональных данных
@@ -32,7 +32,6 @@ const formRef = ref(null);
 
 const timer = ref("");
 
-// eslint-disable-next-line
 const removeError = (key) => {
   useRemoveError(key, data, status);
 };
@@ -59,10 +58,8 @@ const formError = () => {
   }, 3000);
 };
 
-// eslint-disable-next-line
 const formSend = async () => {
   const { error } = useFormValidate(errors, data, status);
-  console.log("data", data);
   if (error === 0) {
     const tokenResponse = await fetch(
       `${useRuntimeConfig().public.apiBase}/session/token`,

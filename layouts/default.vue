@@ -78,7 +78,7 @@ onMounted(() => {
   const footer = document.querySelector(".footer");
   const header = document.querySelector(".header");
   const buttonUp = document.querySelector(".button-up");
-  window.addEventListener("scroll", (e) => {
+  window.addEventListener("scroll", () => {
     const scrollY = window.scrollY;
     const headerHeight = header.getBoundingClientRect().height;
     scrollY > headerHeight

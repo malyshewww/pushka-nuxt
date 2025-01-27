@@ -4,31 +4,30 @@
 		main.main.flats.flats-scheme
 			.container
 				FlatHeading
-				FlatFilter(:params.sync="flatsScheme.params" @load-data="loadData" @reset-filter="resetFilter")
+				FlatFilter(:params="flatsScheme.params" @load-data="loadData" @reset-filter="resetFilter")
 				.flats-scheme__wrapper
 					FlatSchemeLegend(:is-scroll-scheme="isScrollScheme")
 					.flats-scheme__places-wrap
 						.flats-scheme__places(ref="scheme" :class="{active: isScrollScheme}")
 							.flats-scheme__body
-								FlatScheme(:corpus="flatsScheme.newList" @openTooltip="openTooltip" @closeTooltip="closeTooltip" :is-filter-changed="isFilterChanged")
+								FlatScheme(:corpus="flatsScheme.newList" :is-filter-changed="isFilterChanged" @open-tooltip="openTooltip" @close-tooltip="closeTooltip")
 						.flats-scheme__tooltip.tooltip-scheme(ref="tooltip" :class="{active: data.tooltip.isActive}")
 							.tooltip-scheme__body
 								.tooltip-scheme__image
 									img(:src="data.tooltip.img" alt="изображение")
 								.tooltip-scheme__content
 									ul.tooltip-scheme__parameters
-										li.tooltip-scheme__parameter #[span Апартаменты {{data.tooltip.square}}]
-										li.tooltip-scheme__parameter {{data.tooltip.number}}
-									.tooltip-scheme__price {{data.tooltip.price}}
-									.tooltip-scheme__status {{data.tooltip.status}}
-						.flats-scheme__mask.scheme-mask(@touchstart="moveScheme" @touchend="moveScheme" :class="{hidden: !showMaskScheme}")
+										li.tooltip-scheme__parameter #[span Апартаменты {{ data.tooltip.square }}]
+										li.tooltip-scheme__parameter {{ data.tooltip.number }}
+									.tooltip-scheme__price {{ data.tooltip.price }}
+									.tooltip-scheme__status {{ data.tooltip.status }}
+						.flats-scheme__mask.scheme-mask(:class="{hidden: !showMaskScheme}" @touchstart="moveScheme" @touchend="moveScheme")
 							.scheme-mask__content
 								.scheme-mask__icon
 									span.scheme-mask__handle
 								.scheme-mask__text Тяните
 </template>
 <script setup>
-import json from "~/static/data.json";
 import SimpleBar from "simplebar";
 // You will need a ResizeObserver polyfill for browsers that don't support it! (iOS Safari, Edge, ...)
 import ResizeObserver from "resize-observer-polyfill";
@@ -39,20 +38,6 @@ useHead({
   },
 });
 
-const route = useRoute();
-const router = useRouter();
-
-const priceMin = ref(0);
-const priceMax = ref(0);
-
-const areaMin = ref(0);
-const areaMax = ref(0);
-
-const floorMin = ref(0);
-const floorMax = ref(0);
-
-const filteredData = ref([]);
-
 const newListRoom = ref([]);
 
 const isFilterChanged = ref(false);
@@ -60,11 +45,7 @@ const isFilterChanged = ref(false);
 const runtimeConfig = useRuntimeConfig();
 
 // !!! Фильтрация реализована на строне клиента
-const {
-  data: flatsScheme,
-  status,
-  error,
-} = await useAsyncData(
+const { data: flatsScheme } = await useAsyncData(
   "flatsScheme",
   () =>
     $fetch(`${runtimeConfig.public.apiBase}/flats-scheme?_format=json`, {
@@ -93,8 +74,8 @@ const {
 );
 
 useHead({
-  ...flatsScheme.value.metadata
-})
+  ...flatsScheme.value.metadata,
+});
 
 function generateNewData(data) {
   const arr = [];
@@ -113,7 +94,7 @@ const scrollToScheme = () => {
 
 const resetFilter = () => {
   flatsScheme.value.newList.map((floor) => {
-    floor.apartments.map((room, i) => {
+    floor.apartments.map((room) => {
       room.isActive = true;
     });
   });
@@ -142,7 +123,7 @@ const loadData = (
     }
   };
   flatsScheme.value.newList.map((floor) => {
-    floor.apartments.map((room, i) => {
+    floor.apartments.map((room) => {
       const isHasOptions = checkOptions(
         room.options[0],
         room.options[1],
@@ -203,7 +184,7 @@ const isScrollScheme = ref(false);
 
 const showMaskScheme = ref(true);
 
-const openTooltip = (event, room, item) => {
+const openTooltip = (event) => {
   const target = event.target;
   data.tooltip.number = `${target.dataset.number}`;
   data.tooltip.img = `${target.dataset.image}`;

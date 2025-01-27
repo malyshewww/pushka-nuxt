@@ -1,6 +1,6 @@
 <template lang="pug">
 	.main-scenariors__cards
-		SectionMainScenariorsCard(v-for="(item, index) in  scenariorCards" :key="index" :card="item" :index="index")
+		SectionMainScenariorsCard(v-for="(item, index) in scenariorCards" :key="index" :card="item" :index="index")
 </template>
 
 <script setup>
@@ -25,7 +25,6 @@ const calcPositionCards = () => {
     const mainScenariorsCards = mainScenariors.querySelector(
       ".main-scenariors__cards"
     );
-    const sectionTop = mainScenariors.querySelector(".section-top");
     if (window.innerWidth > 1024) {
       // mainScenariorsCards.style.marginTop = `-${sectionTopHeight}px`;
       mainScenariorsCards.style.marginTop = `-${

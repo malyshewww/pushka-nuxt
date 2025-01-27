@@ -3,7 +3,7 @@
 		.heading
 			h2.heading__title Фотогалерея
 		.gallery__body
-			.gallery-item(v-for="item in gallery")
+			.gallery-item(v-for="(item, index) in gallery" :key="index")
 				span.mask
 					span.mask__icon
 				a(:href="item.raw" data-fancybox="gallery-static" v-html="item.markup").gallery-item__image.ibg
@@ -12,10 +12,6 @@
 <script setup>
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
-const fancyboxOptions = {
-  Hash: false,
-};
-Fancybox.bind(`[data-fancybox="gallery-static"]`, fancyboxOptions);
 
 defineProps({
   gallery: {
@@ -24,6 +20,12 @@ defineProps({
     default: () => [],
   },
 });
+
+const fancyboxOptions = {
+  Hash: false,
+};
+
+Fancybox.bind(`[data-fancybox="gallery-static"]`, fancyboxOptions);
 </script>
 
 <style lang="scss" scoped>

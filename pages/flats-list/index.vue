@@ -5,7 +5,7 @@
 			.container
 				FlatHeading
 				FlatFilter(:params="flatsList.params" @load-data="loadData" @reset-filter="resetFilter")
-				LoadingContainer(:status.sync="status" :error.sync="error")
+				LoadingContainer(:status="status" :error="error")
 				.flats__wrapper(v-if="flatsList.newData.length > 0")
 					.flats__body
 						FlatCard(
@@ -106,7 +106,6 @@ const {
       cards.value.push(...data);
       const metadata = useMetatags(metatag.html_head);
       const currentPage = data;
-      console.log(res);
       return {
         breadcrumb,
         data,
@@ -134,10 +133,6 @@ const {
 useHead({
   ...flatsList.value.metadata,
 });
-
-const isShowMore = ref(
-  flatsList.value.currentPage.length >= flatsList.value.pagination.perPage
-);
 
 cards.value = flatsList.value.newData;
 
@@ -173,7 +168,7 @@ const fetchData = async (page) => {
 };
 
 const loadNewData = async () => {
-  const { data, pagination } = await fetchData(currentPage.value);
+  const { data } = await fetchData(currentPage.value);
   initialState();
   if (data.length > 0) {
     flatsList.value.newData = data;
@@ -198,7 +193,6 @@ watch(
   () => currentPage.value,
   (val) => {
     currentPage.value = val;
-    console.log(currentPage.value);
   }
 );
 

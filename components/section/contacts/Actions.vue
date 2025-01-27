@@ -1,7 +1,7 @@
 <template lang="pug">
 	.info-contacts__actions
 		UiButton(text="заказать звонок" class-names="btn-green" @button-click="openPopupCall")
-		PopupCall(:is-open="store.isOpenPopup" @close-popup="closePopupCall" :popup-data="popupData.call")
+		PopupCall(:is-open="store.isOpenPopup" :popup-data="popupData.call" @close-popup="closePopupCall")
 </template>
 
 <script setup>
@@ -14,10 +14,6 @@ const openPopupCall = () => {
 };
 const closePopupCall = () => {
   store.closePopup();
-};
-
-const closePopupNotice = () => {
-  storeNotice.closePopup();
 };
 
 const popupData = reactive({

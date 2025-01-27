@@ -8,40 +8,39 @@
 				.filter-group__caption Стоимость (₽)
 				.filter-group__wrapper
 					.filter-group__values
-						.filter-group__value #[span от] {{filter.price.startMin}} млн
-						.filter-group__value #[span до] {{filter.price.startMax}} млн
+						.filter-group__value #[span от] {{ filter.price.startMin }} млн
+						.filter-group__value #[span до] {{ filter.price.startMax }} млн
 					.filter-group__slider-wrap
 						.filter-group__slider(ref="sliderPrice")
 			.filter-group
 				.filter-group__caption Площадь (м#[sup 2])
 				.filter-group__wrapper
 					.filter-group__values
-						.filter-group__value #[span от] {{filter.area.startMin}}
-						.filter-group__value #[span до] {{filter.area.startMax}}
+						.filter-group__value #[span от] {{ filter.area.startMin }}
+						.filter-group__value #[span до] {{ filter.area.startMax }}
 					.filter-group__slider-wrap
 						.filter-group__slider(ref="sliderArea")
 			.filter-group
 				.filter-group__caption Этаж
 				.filter-group__wrapper
 					.filter-group__values
-						.filter-group__value #[span от] {{filter.floor.startMin}}
-						.filter-group__value #[span до] {{filter.floor.startMax}}
+						.filter-group__value #[span от] {{ filter.floor.startMin }}
+						.filter-group__value #[span до] {{ filter.floor.startMax }}
 					.filter-group__slider-wrap
 						.filter-group__slider(ref="sliderFloor")
 			.filter-group.filter-group--apply
 				UiButton(class-names="btn-green" type="button" text="применить" @button-click="loadData")
 			.filter-group.filter-group--options
 				.filter-options
-					.filter-group__option.filter-option(v-for="(item, index) in params.options" :class="`filter-option--${item.id}`")
-						input(type="checkbox" name="additional" :id="item.id" :value="item.id" v-model="option" :checked='queryOptions.includes(item.id)')
+					.filter-group__option.filter-option(v-for="(item, index) in params.options" :key="index" :class="`filter-option--${item.id}`")
+						input(:id="item.id" v-model="option" type="checkbox" name="additional" :value="item.id" :checked="queryOptions.includes(item.id)")
 						label(:for="item.id")
-							| {{item.title}}
+							| {{ item.title }}
 							button(type="button").filter-option__delete-btn
 			.filter-group.filter-group--last
 				.filter-group__buttons
 					button(type="button" @click="resetFilter").filter-group__reset-btn Сбросить фильтры
 					button(type="button" @click="resetFilter").filter-group__reset-btn.filter-group__reset-btn--mobile Сбросить
-			| {{option}}
 </template>
 
 <script setup>
@@ -161,13 +160,14 @@ const initRange = (element, { ...obj }) => {
 };
 
 const changeSliderValues = () => {
-  sliderPrice.value.noUiSlider.on("change", (e, values, handle) => {
+  //  sliderPrice.value.noUiSlider.on("change", (e, values, handle)
+  sliderPrice.value.noUiSlider.on("change", (e) => {
     let min = parseInt(e[0]);
     let max = parseInt(e[1]);
     filter.price.min = min;
     filter.price.max = max;
-    const { minArea, maxArea } = getRangeArea();
-    const { minFloor, maxFloor } = getRangeFloor();
+    // const { minArea, maxArea } = getRangeArea();
+    // const { minFloor, maxFloor } = getRangeFloor();
     // newSliderValues(
     //    filter.price.min,
     //    filter.price.max,
@@ -178,13 +178,13 @@ const changeSliderValues = () => {
     //    option.value
     // );
   });
-  sliderArea.value.noUiSlider.on("change", (e, values, handle) => {
+  sliderArea.value.noUiSlider.on("change", (e) => {
     let min = parseInt(e[0]);
     let max = parseInt(e[1]);
     filter.area.min = min;
     filter.area.max = max;
-    const { minPrice, maxPrice } = getRangePrice();
-    const { minFloor, maxFloor } = getRangeFloor();
+    // const { minPrice, maxPrice } = getRangePrice();
+    // const { minFloor, maxFloor } = getRangeFloor();
     // newSliderValues(
     //    minPrice,
     //    maxPrice,
@@ -195,13 +195,13 @@ const changeSliderValues = () => {
     //    option.value
     // );
   });
-  sliderFloor.value.noUiSlider.on("change", (e, values, handle) => {
+  sliderFloor.value.noUiSlider.on("change", (e) => {
     let min = parseInt(e[0]);
     let max = parseInt(e[1]);
     filter.floor.min = min;
     filter.floor.max = max;
-    const { minPrice, maxPrice } = getRangePrice();
-    const { minArea, maxArea } = getRangeArea();
+    // const { minPrice, maxPrice } = getRangePrice();
+    // const { minArea, maxArea } = getRangeArea();
     // newSliderValues(
     //    minPrice,
     //    maxPrice,
@@ -214,33 +214,33 @@ const changeSliderValues = () => {
   });
 };
 
-function getRangePrice() {
-  const priceRange = sliderPrice.value.noUiSlider.get();
-  let minPrice = parseFloat(priceRange[0]);
-  let maxPrice = parseFloat(priceRange[1]);
-  return {
-    minPrice,
-    maxPrice,
-  };
-}
-function getRangeArea() {
-  const areaRange = sliderArea.value.noUiSlider.get();
-  let minArea = parseFloat(areaRange[0]);
-  let maxArea = parseFloat(areaRange[1]);
-  return {
-    minArea,
-    maxArea,
-  };
-}
-function getRangeFloor() {
-  const floorRange = sliderFloor.value.noUiSlider.get();
-  let minFloor = parseFloat(floorRange[0]);
-  let maxFloor = parseFloat(floorRange[1]);
-  return {
-    minFloor,
-    maxFloor,
-  };
-}
+// function getRangePrice() {
+//   const priceRange = sliderPrice.value.noUiSlider.get();
+//   let minPrice = parseFloat(priceRange[0]);
+//   let maxPrice = parseFloat(priceRange[1]);
+//   return {
+//     minPrice,
+//     maxPrice,
+//   };
+// }
+// function getRangeArea() {
+//   const areaRange = sliderArea.value.noUiSlider.get();
+//   let minArea = parseFloat(areaRange[0]);
+//   let maxArea = parseFloat(areaRange[1]);
+//   return {
+//     minArea,
+//     maxArea,
+//   };
+// }
+// function getRangeFloor() {
+//   const floorRange = sliderFloor.value.noUiSlider.get();
+//   let minFloor = parseFloat(floorRange[0]);
+//   let maxFloor = parseFloat(floorRange[1]);
+//   return {
+//     minFloor,
+//     maxFloor,
+//   };
+// }
 
 // function newSliderValues(
 //    minPrice,
@@ -264,7 +264,7 @@ function getRangeFloor() {
 // }
 
 const updateSliderPrice = (element, obj) => {
-  element.noUiSlider.on("update", (e, values, handle) => {
+  element.noUiSlider.on("update", (e) => {
     let min = e[0];
     let max = e[1];
     if (!isNaN(min) && !isNaN(max)) {
@@ -279,7 +279,7 @@ const updateSliderPrice = (element, obj) => {
 };
 
 const updateSliderArea = (element, obj) => {
-  element.noUiSlider.on("update", (e, values, handle) => {
+  element.noUiSlider.on("update", (e) => {
     let min = Math.round(e[0]);
     let max = Math.round(e[1]);
     if (!isNaN(min) && !isNaN(max)) {
@@ -294,7 +294,7 @@ const updateSliderArea = (element, obj) => {
 };
 
 const updateSliderFloor = (element, obj) => {
-  element.noUiSlider.on("update", (e, values, handle) => {
+  element.noUiSlider.on("update", (e) => {
     let min = Math.round(e[0]);
     let max = Math.round(e[1]);
     if (!isNaN(min) && !isNaN(max)) {
@@ -307,8 +307,6 @@ const updateSliderFloor = (element, obj) => {
     }
   });
 };
-
-const runtimeConfig = useRuntimeConfig();
 
 const updateRangeSliders = () => {
   updateSliderPrice(sliderPrice.value, filter.price);

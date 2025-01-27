@@ -14,12 +14,12 @@ const closePopupNotice = () => {
   storePopupNotice.closePopup();
 };
 
-const popupData = reactive({
-  request: {
-    title: "Оставить заявку",
-    subTitle:
-      "Оставьте заявку, наш менеджер перезвонит и&nbsp;проконсультирует вас по всем вопросам",
-    isImage: true,
-  },
-});
+// const popupData = reactive({
+//   request: {
+//     title: "Оставить заявку",
+//     subTitle:
+//       "Оставьте заявку, наш менеджер перезвонит и&nbsp;проконсультирует вас по всем вопросам",
+//     isImage: true,
+//   },
+// });
 </script>

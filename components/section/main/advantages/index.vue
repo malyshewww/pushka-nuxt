@@ -11,7 +11,7 @@
 					.main-advantages__decor
 						NuxtPicture(:src="`/images/main-advantages/decor.png`" alt="декор")
 				ul.main-advantages__list
-					SectionMainAdvantagesCard(v-for="(card, index) in advantages" :key="index" :idx="index" :card="card" @show-info="showInfo" :active-index="activeIndex")
+					SectionMainAdvantagesCard(v-for="(card, index) in advantages" :key="index" :idx="index" :card="card" :active-index="activeIndex" @show-info="showInfo")
 </template>
 
 <script setup>

@@ -2,7 +2,7 @@
 	.menu-trigger(:class="{active: isOpenMenu}")
 		button(type="button" @click="openFilter").menu-trigger__filter
 		a(v-if="info.phone" :href="`tel:${formatPhone(info.phone)}`").menu-trigger__phone
-			span.menu-trigger__phone-text {{info.phone}}
+			span.menu-trigger__phone-text {{ info.phone }}
 			span.menu-trigger__phone-icon 
 		.menu-trigger__burger.burger(@click="openMenu")
 			.burger__close
@@ -30,233 +30,232 @@ const store = useFilterStore();
 
 const emit = defineEmits(["openMenu"]);
 
-const props = defineProps({
-   isOpenMenu: {
-      type: Boolean,
-      required: true,
-   },
+defineProps({
+  isOpenMenu: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 const openMenu = () => {
-   emit("openMenu");
+  emit("openMenu");
 };
 
 const openFilter = () => {
-   store.openFilter();
+  store.openFilter();
 };
 </script>
 
 <style lang="scss">
 .menu-trigger {
-   display: none;
-   @media screen and (max-width: $xl) {
-      position: fixed;
-      z-index: 40;
-      right: 10px;
-      bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      border-radius: 40px;
-      padding: 6px;
-      height: 46px;
-      backdrop-filter: blur(4px);
-      background: var(--border-white);
-   }
-   @media screen and (max-width: $md) {
-      right: 15px;
-      bottom: 12px;
-   }
-   &.active {
-      & .menu-trigger__phone {
-         width: 163px;
-         &-text {
-            opacity: 1;
-         }
+  display: none;
+  @media screen and (max-width: $xl) {
+    position: fixed;
+    z-index: 40;
+    right: 10px;
+    bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 40px;
+    padding: 6px;
+    height: 46px;
+    backdrop-filter: blur(4px);
+    background: var(--border-white);
+  }
+  @media screen and (max-width: $md) {
+    right: 15px;
+    bottom: 12px;
+  }
+  &.active {
+    & .menu-trigger__phone {
+      width: 163px;
+      &-text {
+        opacity: 1;
       }
-      & .burger {
-         width: 32px;
-         border-radius: 50%;
-         &__inner {
-            transform: scale(0);
-            opacity: 0;
-         }
-         &__close {
-            transform: scale(1);
-            opacity: 1;
-            transition: transform $time ease-out 0.2s,
-               opacity $time ease-out 0.2s;
-         }
-      }
-   }
-   &__filter {
+    }
+    & .burger {
+      width: 32px;
       border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      background: var(--bg-white);
-      place-items: center;
+      &__inner {
+        transform: scale(0);
+        opacity: 0;
+      }
+      &__close {
+        transform: scale(1);
+        opacity: 1;
+        transition: transform $time ease-out 0.2s, opacity $time ease-out 0.2s;
+      }
+    }
+  }
+  &__filter {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    background: var(--bg-white);
+    place-items: center;
+    flex-shrink: 0;
+    display: none;
+    @media screen and (max-width: $md) {
+      .page--flats-list &,
+      .page--flats-scheme & {
+        display: grid;
+      }
+    }
+    &::before {
+      content: "";
+      display: block;
+      width: 20px;
+      height: 20px;
+      mask-image: url("/images/icons/filter.svg");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      mask-size: 20px 20px;
+      background-color: var(--main-color);
+    }
+  }
+  &__phone {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: max-width $time, width $time;
+    position: relative;
+    padding: 4px 16px;
+    flex-shrink: 0;
+    background: var(--bg-white);
+    border-radius: 40px;
+  }
+  &__phone-icon {
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+    background: var(--bg-white);
+    margin-left: auto;
+    &::before {
+      content: "";
+      display: block;
       flex-shrink: 0;
-      display: none;
-      @media screen and (max-width: $md) {
-         .page--flats-list &,
-         .page--flats-scheme & {
-            display: grid;
-         }
-      }
-      &::before {
-         content: "";
-         display: block;
-         width: 20px;
-         height: 20px;
-         mask-image: url("/images/icons/filter.svg");
-         mask-repeat: no-repeat;
-         mask-position: center;
-         mask-size: 20px 20px;
-         background-color: var(--main-color);
-      }
-   }
-   &__phone {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      overflow: hidden;
-      transition: max-width $time, width $time;
-      position: relative;
-      padding: 4px 16px;
-      flex-shrink: 0;
-      background: var(--bg-white);
-      border-radius: 40px;
-   }
-   &__phone-icon {
-      border-radius: 50%;
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 4;
-      background: var(--bg-white);
-      margin-left: auto;
-      &::before {
-         content: "";
-         display: block;
-         flex-shrink: 0;
-         width: 18px;
-         height: 18px;
-         mask-image: url("/images/icons/phone.svg");
-         mask-repeat: no-repeat;
-         mask-position: center;
-         mask-size: 18px 18px;
-         background: var(--main-color);
-      }
-   }
-   &__phone-text {
-      position: absolute;
-      white-space: nowrap;
-      font-weight: 600;
-      font-size: 14px;
-      line-height: 20px;
-      font-family: var(--font-family);
-      opacity: 0;
-      transition: opacity $time;
-   }
+      width: 18px;
+      height: 18px;
+      mask-image: url("/images/icons/phone.svg");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      mask-size: 18px 18px;
+      background: var(--main-color);
+    }
+  }
+  &__phone-text {
+    position: absolute;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    font-family: var(--font-family);
+    opacity: 0;
+    transition: opacity $time;
+  }
 }
 .burger {
-   border-radius: 40px;
-   padding: 4px;
-   width: 108px;
-   height: 34px;
-   flex-shrink: 0;
-   background: var(--text-avocado);
-   transition: width $time, border-radius $time;
-   position: relative;
-   &__close {
-      width: 32px;
-      height: 100%;
-      position: absolute;
-      right: 0;
-      top: 0;
-      display: grid;
-      place-items: center;
-      transform: scale(0.4);
-      opacity: 0;
-      transition: transform 0s ease 0s, opacity 0s ease 0s;
-      & svg {
-         width: 14px;
-         height: 14px;
-         & path {
-            fill: var(--bg-white);
-         }
+  border-radius: 40px;
+  padding: 4px;
+  width: 108px;
+  height: 34px;
+  flex-shrink: 0;
+  background: var(--text-avocado);
+  transition: width $time, border-radius $time;
+  position: relative;
+  &__close {
+    width: 32px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: grid;
+    place-items: center;
+    transform: scale(0.4);
+    opacity: 0;
+    transition: transform 0s ease 0s, opacity 0s ease 0s;
+    & svg {
+      width: 14px;
+      height: 14px;
+      & path {
+        fill: var(--bg-white);
       }
-   }
-   &__inner {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      white-space: nowrap;
-      transform-origin: center center;
-      transition: transform $time, opacity $time;
-   }
-   &__icon-wrap {
-      width: 20px;
-      height: 18px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-   }
-   &__icon {
+    }
+  }
+  &__inner {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    white-space: nowrap;
+    transform-origin: center center;
+    transition: transform $time, opacity $time;
+  }
+  &__icon-wrap {
+    width: 20px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__icon {
+    width: 8px;
+    height: 2px;
+    display: block;
+    position: relative;
+    color: var(--text-white);
+    background: currentColor;
+    animation: animBurger 0.3s 0.3s linear infinite alternate;
+    &::after,
+    &::before {
+      content: "";
+      box-sizing: border-box;
       width: 8px;
       height: 2px;
-      display: block;
-      position: relative;
-      color: var(--text-white);
+      border-radius: 4px;
       background: currentColor;
-      animation: animBurger 0.3s 0.3s linear infinite alternate;
-      &::after,
-      &::before {
-         content: "";
-         box-sizing: border-box;
-         width: 8px;
-         height: 2px;
-         border-radius: 4px;
-         background: currentColor;
-         position: absolute;
-         left: 50%;
-         transform: translateX(-50%);
-         top: 5px;
-         animation: animBurger 0.3s 0.45s linear infinite alternate;
-      }
-      &::after {
-         top: -5px;
-         animation-delay: 0s;
-      }
-   }
-   &__text {
-      font-family: var(--second-family);
-      font-weight: 700;
-      color: var(--text-white);
-      font-size: 14px;
-      line-height: 17px;
-      text-transform: lowercase;
-   }
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 5px;
+      animation: animBurger 0.3s 0.45s linear infinite alternate;
+    }
+    &::after {
+      top: -5px;
+      animation-delay: 0s;
+    }
+  }
+  &__text {
+    font-family: var(--second-family);
+    font-weight: 700;
+    color: var(--text-white);
+    font-size: 14px;
+    line-height: 17px;
+    text-transform: lowercase;
+  }
 }
 @keyframes animBurger {
-   0% {
-      width: 3px;
-   }
-   100% {
-      width: 12px;
-   }
+  0% {
+    width: 3px;
+  }
+  100% {
+    width: 12px;
+  }
 }
 </style>

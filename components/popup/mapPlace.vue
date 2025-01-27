@@ -8,13 +8,13 @@
 							NuxtPicture(:src="`/images/main-location/slide-${popupData.id}.jpg`" :alt="popupData.caption")
 					.slider-location__outer
 						.slider-location__content
-							.slider-location__caption {{popupData.caption}}
-							.slider-location__description {{popupData.description}}
-							.slider-location__distance {{popupData.distance}}
+							.slider-location__caption {{ popupData.caption }}
+							.slider-location__description {{ popupData.description }}
+							.slider-location__distance {{ popupData.distance }}
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   isOpen: {
     type: Boolean,
     required: true,
@@ -22,6 +22,7 @@ const props = defineProps({
   placeId: {
     type: Number,
     required: false,
+    default: () => 0,
   },
   popupData: {
     type: Object,
@@ -31,7 +32,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["closePopup"]);
-// eslint-disable-next-line
+
 const closePopup = () => {
   emit("closePopup");
 };

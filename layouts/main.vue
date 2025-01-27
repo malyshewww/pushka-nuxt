@@ -11,8 +11,6 @@
 </template>
 
 <script setup>
-const { $ScrollTrigger: ScrollTrigger } = useNuxtApp();
-
 const isWhite = ref(true);
 
 onMounted(() => {
@@ -47,12 +45,7 @@ onMounted(() => {
     }
   }
   activeButtonUp();
-  window.addEventListener("scroll", (e) => {
-    const scrollY = window.scrollY;
-    // document.documentElement.style.setProperty(
-    //    "--scrollTopDecrement",
-    //    `${-scrollY}px`
-    // );
+  window.addEventListener("scroll", () => {
     checkScroll();
     activeButtonUp();
   });

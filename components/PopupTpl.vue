@@ -5,11 +5,11 @@
 		.popup__image.ibg(v-if="popupData.isImageProject")
 			NuxtPicture(:src="`/images/popup/popup-img-project.jpg`" alt="изображение")
 		form(ref="formRef" @submit.prevent="formSend").popup__form.form-popup
-			.form-popup__title(v-if="popupData.title") {{popupData.title}}
+			.form-popup__title(v-if="popupData.title") {{ popupData.title }}
 			.form-popup__sub-title(v-if="popupData.subTitle" v-html="popupData.subTitle")
 			.form-popup__items
-				FormField(type="text" placeholder="Имя" name="name" :modelValue="data.name" @update:modelValue="$event => (data.name = $event)" :is-valid="status.name.isValid" :error-message="status.name.message" @remove-error="removeError")
-				FormField(type="tel" placeholder="Телефон" name="phone" :modelValue="data.phone" @update:modelValue="$event => (data.phone = $event)" :is-valid="status.phone.isValid" :error-message="status.phone.message" @remove-error="removeError")
+				FormField(type="text" placeholder="Имя" name="name" :model-value="data.name" :is-valid="status.name.isValid" :error-message="status.name.message" @update:model-value="$event => (data.name = $event)" @remove-error="removeError")
+				FormField(type="tel" placeholder="Телефон" name="phone" :model-value="data.phone" :is-valid="status.phone.isValid" :error-message="status.phone.message" @update:model-value="$event => (data.phone = $event)" @remove-error="removeError")
 			.form-popup__text Отправляя заявку, вы подтверждаете, что ознакомлены и согласны с условиями #[nuxt-link(to="/page/politic").form-popup__link политики обработки персональных данных]
 			UiButton(text="отправить" class-names="btn-green" type="submit")
 </template>
@@ -34,7 +34,7 @@ const props = defineProps({
   store: {
     type: Object,
     required: false,
-    default: {},
+    default: () => {},
   },
   popupKey: {
     type: String,
@@ -51,7 +51,6 @@ const { errors } = store.value;
 
 const timer = ref("");
 
-// eslint-disable-next-line
 const removeError = (key) => {
   useRemoveError(key, data, status);
 };
@@ -224,6 +223,22 @@ const formSend = async () => {
     @media screen and (max-width: $xl) {
       margin-top: 12px;
       width: 100%;
+    }
+  }
+}
+.popup {
+  &__body {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    @media screen and (max-width: $md) {
+      display: flex;
+    }
+  }
+  &__image {
+    padding-bottom: math.div(500, 300) * 100%;
+    flex: 0 0 300px;
+    @media screen and (max-width: $md) {
+      display: none;
     }
   }
 }

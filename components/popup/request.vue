@@ -5,32 +5,32 @@
 </template>
 
 <script setup>
-const props = defineProps({
-   isOpen: {
-      type: Boolean,
-      required: true,
-   },
-   popupData: {
-      type: Object,
-      required: true,
-      default: () => {},
-   },
+defineProps({
+  isOpen: {
+    type: Boolean,
+    required: true,
+  },
+  popupData: {
+    type: Object,
+    required: true,
+    default: () => {},
+  },
 });
 
 const emit = defineEmits(["closePopup"]);
-// eslint-disable-next-line
+
 const closePopup = () => {
-   emit("closePopup");
+  emit("closePopup");
 };
 </script>
 
 <style lang="scss">
 .popup-request {
-   & .popup {
-      &__content {
-         padding: 0;
-         max-width: 910px;
-      }
-   }
+  & .popup {
+    &__content {
+      padding: 0;
+      max-width: 910px;
+    }
+  }
 }
 </style>

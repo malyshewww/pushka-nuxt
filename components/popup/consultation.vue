@@ -7,10 +7,9 @@
 <script setup>
 import { usePopupConsultationStore } from "~/stores/popup/consultation";
 
-// eslint-disable-next-line
 const popupStore = usePopupConsultationStore();
 
-const props = defineProps({
+defineProps({
   isOpen: {
     type: Boolean,
     required: true,
@@ -23,7 +22,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["closePopup"]);
-// eslint-disable-next-line
+
 const closePopup = () => {
   emit("closePopup");
 };

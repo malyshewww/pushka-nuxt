@@ -4,7 +4,7 @@
 		main.main.contacts
 			.container 
 				.main__heading.heading-main
-					h1.heading-main__title {{contacts.main.title}}
+					h1.heading-main__title {{ contacts.main.title }}
 				.contacts__body
 					SectionContactsMap
 					SectionContactsInfo
@@ -13,11 +13,7 @@
 <script setup>
 const runtimeConfig = useRuntimeConfig();
 
-const {
-  data: contacts,
-  status,
-  error,
-} = await useAsyncData(
+const { data: contacts } = await useAsyncData(
   "contacts",
   () => $fetch(`${runtimeConfig.public.apiBase}/contacts?_format=json`, {}),
   {

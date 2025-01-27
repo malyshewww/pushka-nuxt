@@ -12,15 +12,15 @@ defineProps({
     required: true,
   },
 });
+
 const emit = defineEmits(["closePopup"]);
 
-// eslint-disable-next-line
 const closePopup = () => {
   emit("closePopup");
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .popup {
   position: fixed;
   top: 0;

@@ -24,79 +24,79 @@ import { useMainInfoStore } from "~/stores/maininfo";
 const mainInfoStore = useMainInfoStore();
 const { info } = mainInfoStore;
 
-const props = defineProps({
-   color: {
-      type: String,
-      required: true,
-      default: () => "",
-   },
+defineProps({
+  color: {
+    type: String,
+    required: true,
+    default: () => "",
+  },
 });
 </script>
 
 <style lang="scss" scoped>
 .social {
-   &.gray {
-      & .social__link {
-         width: 48px;
-         height: 48px;
-         & svg path {
-            fill: var(--text-gray);
-         }
-         border: 1px solid var(--bg-gray);
-         @media (any-hover: hover) {
-            &:hover {
-               border-color: var(--text-gray);
-            }
-         }
+  &.gray {
+    & .social__link {
+      width: 48px;
+      height: 48px;
+      & svg path {
+        fill: var(--text-gray);
       }
-   }
-   &.white {
-      & .social__link {
-         border: 1px solid var(--border-white);
-         & svg path {
-            fill: var(--text-white);
-         }
-         @media (any-hover: hover) {
-            &:hover {
-               border-color: var(--text-white);
-            }
-         }
+      border: 1px solid var(--bg-gray);
+      @media (any-hover: hover) {
+        &:hover {
+          border-color: var(--text-gray);
+        }
       }
-   }
-   &__list {
-      @include reset-list;
-      display: inline-flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px 20px;
-      @media screen and (max-width: $md) {
-         gap: 10px;
+    }
+  }
+  &.white {
+    & .social__link {
+      border: 1px solid var(--border-white);
+      & svg path {
+        fill: var(--text-white);
       }
-   }
-   &__item {
-      flex-shrink: 0;
-   }
-   &__link {
-      border: 1px solid transparent;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      transition: border-color $time;
-      display: grid;
-      place-items: center;
-      & svg {
-         width: 24px;
-         height: 24px;
+      @media (any-hover: hover) {
+        &:hover {
+          border-color: var(--text-white);
+        }
       }
-      @media screen and (max-width: $xl) {
-         width: 50px;
-         height: 50px;
-      }
-      //   @media (any-hover: hover) {
-      //      &:hover {
-      //         border-color: var(--text-gray);
-      //      }
-      //   }
-   }
+    }
+  }
+  &__list {
+    @include reset-list;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    @media screen and (max-width: $md) {
+      gap: 10px;
+    }
+  }
+  &__item {
+    flex-shrink: 0;
+  }
+  &__link {
+    border: 1px solid transparent;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    transition: border-color $time;
+    display: grid;
+    place-items: center;
+    & svg {
+      width: 24px;
+      height: 24px;
+    }
+    @media screen and (max-width: $xl) {
+      width: 50px;
+      height: 50px;
+    }
+    //   @media (any-hover: hover) {
+    //      &:hover {
+    //         border-color: var(--text-gray);
+    //      }
+    //   }
+  }
 }
 </style>

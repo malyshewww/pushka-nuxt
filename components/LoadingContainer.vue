@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-const props = defineProps(["status", "error"]);
+defineProps(["status", "error"]);
 </script>
 
 <style lang="scss" scoped>

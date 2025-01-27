@@ -16,7 +16,7 @@ import { usePopupNoticeStore } from "~/stores/popup/notice";
 
 const popupNotice = usePopupNoticeStore();
 
-const props = defineProps({
+defineProps({
   isOpen: {
     type: Boolean,
     required: true,
@@ -29,7 +29,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["closePopup"]);
-// eslint-disable-next-line
+
 const closePopup = () => {
   emit("closePopup");
 };

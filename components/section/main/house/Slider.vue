@@ -2,7 +2,7 @@
 	.house-format__slider.slider-format
 		.slider-format__body.swiper(ref="sliderFormat")
 			.slider-format__wrapper.swiper-wrapper
-				a(:href="`/images/house-format/house-${index+1}.jpg`" v-for="(slide, index) in 6" :key="index" data-fancybox="house").slider-format__item.swiper-slide
+				a(v-for="index in 6" :key="index" :href="`/images/house-format/house-${index+1}.jpg`" data-fancybox="house").slider-format__item.swiper-slide
 					.slider-format__image.ibg
 						NuxtPicture(:src="`/images/house-format/house-${index+1}.jpg`" alt="house")
 		.slider-controls(ref="sliderControls")
@@ -12,7 +12,6 @@
 </template>
 
 <script setup>
-import gsap from "gsap";
 import Swiper from "swiper";
 import { Navigation } from "swiper/modules";
 import { Fancybox } from "@fancyapps/ui";
@@ -24,13 +23,8 @@ const sliderFormat = ref("");
 const swiperFormat = ref(null);
 const buttonPrev = ref("");
 const buttonNext = ref("");
-const houseSliderControls = ref("");
-
-const slideWidth = ref(0);
 
 const device = useDevice();
-
-const router = useRouter();
 
 const changeRoute = () => {
   navigateTo("/flats-list");

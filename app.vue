@@ -40,11 +40,11 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/fonts.scss";
-@import "~/assets/scss/nullstyle.scss";
-@import "~/assets/scss/mixins.scss";
-@import "~/assets/scss/keyframes.scss";
-@import "~/assets/scss/common.scss";
+@import "assets/scss/fonts";
+@import "assets/scss/nullstyle";
+@import "assets/scss/mixins";
+@import "assets/scss/keyframes";
+@import "assets/scss/common";
 
 body.page--home {
   font-family: var(--second-family);

@@ -29,12 +29,16 @@
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
-const props = defineProps({
+defineProps({
   plan: {
     required: true,
+    type: Object,
+    default: () => {},
   },
   floor: {
     required: true,
+    type: Object,
+    default: () => {},
   },
 });
 

@@ -2,16 +2,16 @@
 	.main-location__slider.slider-location(ref="mainLocation")
 		.slider-location__box
 			.slider-location__images
-				.slider-location__image(v-for="(item, index) in slides" :class="{active: index === currentSlideIndex}")
+				.slider-location__image(v-for="(item, index) in slides" :key="index" :class="{active: index === currentSlideIndex}")
 					NuxtPicture(:src="`/images/main-location/slide-${index+1}.jpg`" :alt="item.caption")
 			.slider-location__outer
 				.slider-location__body.swiper(ref="locationSlider")
 					.slider-location__wrapper.swiper-wrapper
-						.slider-location__item.swiper-slide(v-for="(item, index) in slides")
+						.slider-location__item.swiper-slide(v-for="(item, index) in slides" :key="index")
 							.slider-location__content
-								.slider-location__caption {{item.caption}}
-								.slider-location__description(v-if="item.description") {{item.description}}
-								.slider-location__distance {{item.distance}}
+								.slider-location__caption {{ item.caption }}
+								.slider-location__description(v-if="item.description") {{ item.description }}
+								.slider-location__distance {{ item.distance }}
 				.slider-controls
 					button(ref="buttonPrev" type="button").slider-button.slider-button-prev
 					button(ref="buttonNext" type="button").slider-button.slider-button-next

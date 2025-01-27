@@ -30,10 +30,12 @@ const crumbs = [
 // const error = useError();
 
 const props = defineProps({
-  error: Object,
+  error: {
+    type: Object,
+    required: false,
+    default: {},
+  },
 });
-
-const router = useRouter();
 
 // Print types of variables
 // console.log(typeof props.error.statusCode, typeof "404");

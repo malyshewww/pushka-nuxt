@@ -1,12 +1,13 @@
 <template lang="pug">
 	.flats-scheme__floors
 		.flats-scheme__floor(v-for="(item, index) in corpus" :key="index")
-			.flats-scheme__number {{index+1}}
+			.flats-scheme__number {{ index+1 }}
 			.flats-scheme__inner
 				nuxt-link.flats-scheme__room(
-					:to="room.url"
 					v-for="(room, idx) in item.apartments"
-					:key="idx" :data-status="room.field_status"
+					:key="idx" 
+					:data-status="room.field_status"
+					:to="room.url"
 					:data-price="room.field_price"
 					:data-area="room.field_space"
 					:data-number="room.field_number"
@@ -14,7 +15,7 @@
 					:class="[`${room.isActive || !isFilterChanged ? 'active' : 'disabled'}`, room.field_status]"
 					:data-options="`${room.options}`"
 					@mouseenter="showDetailRoom($event, room, item)"
-					@mouseleave="hideDetailRoom") {{room.field_number}}
+					@mouseleave="hideDetailRoom") {{ room.field_number }}
 			a(:href="item.floor_image[0].markup" :data-fancybox="`plan-${index}`").flats-scheme__link План этажа
 	.flats-scheme__bottom
 		.flats-scheme__bottom-top
@@ -22,14 +23,14 @@
 		.flats-scheme__floor.empty
 			.flats-scheme__number 1-5
 			ul.flats-scheme__inner
-				li.flats-scheme__room(v-for="(item, index) in 31")
+				li.flats-scheme__room(v-for="index in 31" :key="index")
 </template>
 
 <script setup>
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
-const props = defineProps({
+defineProps({
   corpus: {
     type: Object,
     required: true,
@@ -40,25 +41,24 @@ const props = defineProps({
   },
 });
 
-const floors = [
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
-  "11",
-  "12",
-  "13",
-  "14",
-  "15",
-  "16",
-  "17",
-];
+// const floors = [
+//   "6",
+//   "7",
+//   "8",
+//   "9",
+//   "10",
+//   "11",
+//   "12",
+//   "13",
+//   "14",
+//   "15",
+//   "16",
+//   "17",
+// ];
 
 const emit = defineEmits(["openTooltip", "closeTooltip"]);
 
 const showDetailRoom = (event, currentRoom) => {
-  // console.log(currentRoom);
   if (window.innerWidth >= 1024) {
     emit("openTooltip", event, currentRoom);
   }

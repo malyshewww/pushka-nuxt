@@ -3,7 +3,8 @@
 		BreadCrumbs(:list="pageText.breadcrumb")
 		.container
 			.main__heading.heading-main
-				h1.heading-main__title {{pageText.main.title}}
+				h1.heading-main__title {{ pageText.main.title }}
+			//- eslint-disable vue/no-v-html
 			.content(v-html="pageText.main.content")
 			.galleries(v-if="pageText.main.gallery.length > 0")
 				//- SliderGallery(:slider="slider" slider-caption="Варианты дизайнерской отделки" :isDescr="true")
@@ -14,16 +15,12 @@
 const { text } = useRoute().params;
 
 const runtimeConfig = useRuntimeConfig();
-const {
-  data: pageText,
-  status,
-  error,
-} = await useAsyncData(
+const { data: pageText } = await useAsyncData(
   "pageText",
   () => $fetch(`${runtimeConfig.public.apiBase}/page/${text}?_format=json`, {}),
   {
     transform: (res) => {
-      const { breadcrumb, data, links, metatag } = res;
+      const { breadcrumb, data, metatag } = res;
       const metadata = useMetatags(metatag.html_head);
       return {
         breadcrumb,

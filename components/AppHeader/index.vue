@@ -2,10 +2,10 @@
 	header.header(ref="header" :class="[{'header-white': isWhite}, {'header-black': !isWhite}, {'menu-open': isOpenMenu}, {'hidden': !isVisible && !isOpenMenu}]").lock-padding
 		.header__body
 			AppHeaderLogo
-			AppHeaderMenu(:is-open-menu="isOpenMenu" @close-menu="closeMenu" data-da=".wrapper, 1024, 1")
+			AppHeaderMenu(:is-open-menu="isOpenMenu" data-da=".wrapper, 1024, 1" @close-menu="closeMenu")
 			AppHeaderActions
-			AppHeaderMenuTrigger(@openMenu="openMenu" :is-open-menu="isOpenMenu" data-da=".wrapper, 1024, 1")
-	.menu-overlay(@click="hideOverlay" :class="{active: isOpenMenu}")
+			AppHeaderMenuTrigger(data-da=".wrapper, 1024, 1" :is-open-menu="isOpenMenu" @open-menu="openMenu")
+	.menu-overlay(:class="{active: isOpenMenu}" @click="hideOverlay")
 </template>
 
 <script setup>
@@ -15,16 +15,16 @@ import { useMenuStore } from "~/stores/menu";
 
 const storeMenu = useMenuStore();
 
-const props = defineProps({
+defineProps({
   isWhite: {
     type: Boolean,
     required: false,
-    default: () => "",
+    default: () => false,
   },
   isVisible: {
     type: Boolean,
     required: false,
-    default: "",
+    default: () => false,
   },
 });
 

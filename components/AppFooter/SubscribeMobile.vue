@@ -1,6 +1,6 @@
 <template lang="pug">
 	UiButton(text="узнать больше о проекте" class-names="btn-green" @button-click="openPopupProject")
-	PopupProject(:is-open="store.isOpenPopup" @closePopup="closePopupProject" :popup-data="popupData.project")
+	PopupProject(:is-open="store.isOpenPopup" :popup-data="popupData.project" @close-popup="closePopupProject")
 	PopupNoticeProject(:is-open="popupNoticeStore.isOpenPopupProject" @close-popup="closePopupProjectNotice")
 </template>
 

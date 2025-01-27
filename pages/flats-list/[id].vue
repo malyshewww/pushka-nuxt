@@ -7,9 +7,9 @@
 					.apartment-card__body
 						SectionApartmentScheme(:plan="apartment.main.scheme.planImage" :floor="apartment.main.scheme.floorImage")
 						SectionApartmentInfo(:info="apartment.main.info")
-					SliderGallery(:slider="slider" slider-caption="Варианты дизайнерской отделки" :isDescr="true")
-		PopupBook(:is-open="storePopupBook.isOpenPopup" @close-popup="closePopupBook" :popupData="popupData.book")
-		PopupConsultation(:is-open="storePopupConsultation.isOpenPopup" @close-popup="closePopupConsultation" :popupData="popupData.consultation")
+					SliderGallery(:slider="slider" slider-caption="Варианты дизайнерской отделки" :is-descr="true")
+		PopupBook(:is-open="storePopupBook.isOpenPopup" :popup-data="popupData.book" @close-popup="closePopupBook")
+		PopupConsultation(:is-open="storePopupConsultation.isOpenPopup" :popup-data="popupData.consultation" @close-popup="closePopupConsultation")
 </template>
 
 <script setup>
@@ -19,11 +19,10 @@ import { usePopupConsultationStore } from "~/stores/popup/consultation";
 const storePopupBook = usePopupBookStore();
 const storePopupConsultation = usePopupConsultationStore();
 
-// eslint-disable-next-line
 const closePopupBook = () => {
   storePopupBook.closePopup();
 };
-// eslint-disable-next-line
+
 const closePopupConsultation = () => {
   storePopupConsultation.closePopup();
 };
@@ -83,11 +82,7 @@ const slider = [
 
 const { id } = useRoute().params;
 const runtimeConfig = useRuntimeConfig();
-const {
-  data: apartment,
-  status,
-  error,
-} = await useAsyncData(
+const { data: apartment } = await useAsyncData(
   "apartment",
   () =>
     $fetch(`${runtimeConfig.public.apiBase}/flats-list/${id}?_format=json`, {}),

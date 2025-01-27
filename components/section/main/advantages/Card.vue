@@ -1,12 +1,12 @@
 <template lang="pug">
-	li.advantages-card(@click="showInfo(idx)" :class="{active: activeIndex === idx}")
+	li.advantages-card(:class="{active: activeIndex == idx}" @click="showInfo(idx)")
 		.advantages-card__button
 			span.advantages-card__button-icon
 		.advantages-card__image.ibg
 			NuxtPicture(:src="`/images/main-advantages/card-${idx+1}.jpg`" :alt="card.title")
 		.advantages-card__content
 			.advantages-card__description 
-				p(v-for="(p, idx) in card.text" :key="idx") {{p}}
+				p(v-for="(p, index) in card.text" :key="index") {{ p }}
 		.advantages-card__title(v-html="card.title")
 
 </template>
@@ -23,13 +23,12 @@ defineProps({
   },
   activeIndex: {
     required: true,
-    default: () => "",
+    type: null,
+    default: () => null,
   },
 });
 
 const emit = defineEmits(["showInfo"]);
-
-const isShowInfo = ref(false);
 
 const showInfo = (idx) => {
   emit("showInfo", idx);

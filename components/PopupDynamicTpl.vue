@@ -1,6 +1,6 @@
 <template lang="pug">
 	.popup-slider
-		.popup-slider__date {{popupData.caption}}
+		.popup-slider__date {{ popupData.caption }}
 		.popup-slider__body.swiper(ref="dynamicSlider")
 			.popup-slider__wrapper.swiper-wrapper
 				.popup-slider__item.swiper-slide(v-for="image, index in popupData.images" :key="index")
@@ -23,11 +23,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-import { usePopupDynamicStore } from "~/stores/popup/dynamic";
-
-const store = usePopupDynamicStore();
-
-const props = defineProps({
+defineProps({
   popupData: {
     type: Object,
     required: true,
@@ -44,11 +40,11 @@ const addZero = (num) => {
   return num > 9 ? num : "0" + num;
 };
 
-function destroyDynamicSlider() {
-  if (dynamicSwiper.value != null) {
-    dynamicSwiper.value.destroy();
-  }
-}
+// function destroyDynamicSlider() {
+//   if (dynamicSwiper.value != null) {
+//     dynamicSwiper.value.destroy();
+//   }
+// }
 
 const initDynamicSlider = () => {
   if (dynamicSlider.value) {

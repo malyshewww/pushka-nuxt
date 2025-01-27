@@ -22,11 +22,7 @@ useHead({
 });
 
 const runtimeConfig = useRuntimeConfig();
-const {
-  data: front,
-  status,
-  error,
-} = await useAsyncData(
+const { data: front } = await useAsyncData(
   "front",
   () =>
     $fetch(
@@ -34,7 +30,7 @@ const {
       {}
     ),
   {
-    transform: ({ data, links, meta, metatag }) => {
+    transform: ({ data, metatag }) => {
       const metadata = useMetatags(metatag.html_head);
       return {
         main: {

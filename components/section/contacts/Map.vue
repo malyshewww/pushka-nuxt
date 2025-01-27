@@ -7,7 +7,6 @@
 const coords = [44.012679, 56.323597];
 
 // const isLoaded = ref(false);
-const runtimeConfig = useRuntimeConfig();
 
 onMounted(() => {
   let isLoaded = false;
@@ -173,6 +172,9 @@ onMounted(() => {
   }
   [class*="--controls"] {
     z-index: 1 !important;
+    @media screen and (max-width: $xl) {
+      display: none;
+    }
   }
 }
 </style>

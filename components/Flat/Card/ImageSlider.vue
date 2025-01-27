@@ -1,14 +1,14 @@
 <template lang="pug">
 	nuxt-link(:to="url").flat-card__slider
-		div(ref="imageSlider" v-if="plan || floor" ).flat-slider__images
+		div(v-if="plan || floor" ref="imageSlider").flat-slider__images
 			.image-switch
-				.image-switch__item(v-if="plan" @mouseenter="switchImages(0)" @mouseleave="initialState" :class="{active: currentImage === 0}")
+				.image-switch__item(v-if="plan" :class="{active: currentImage === 0}" @mouseenter="switchImages(0)" @mouseleave="initialState")
 					.image-switch__picture(v-html="plan[0].markup")
-				.image-switch__item(v-if="floor" @mouseenter="switchImages(1)" @mouseleave="initialState" :class="{active: currentImage === 1}")
+				.image-switch__item(v-if="floor" :class="{active: currentImage === 1}" @mouseenter="switchImages(1)" @mouseleave="initialState")
 					.image-switch__picture(v-html="floor[0].markup")
 		.flat-slider__pagination.image-pagination
 			ul.image-pagination__list
-				li.image-pagination__item(v-for="(image, idx) in 2" :key="idx" :class="{active: currentImage === idx}" @click="switchImages(idx)")
+				li.image-pagination__item(v-for="(item, idx) in 2" :key="idx" :class="{active: currentImage === idx}" @click="switchImages(idx)")
 		.swiper-pagination(ref="imagePagination")
 </template>
 
@@ -18,14 +18,16 @@ import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-const props = defineProps({
+defineProps({
   plan: {
     required: false,
-    default: () => "",
+    type: Object,
+    default: () => {},
   },
   floor: {
     required: false,
-    default: () => "",
+    type: Object,
+    default: () => {},
   },
   url: {
     type: String,

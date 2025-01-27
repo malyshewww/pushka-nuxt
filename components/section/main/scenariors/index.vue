@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-const { $gsap: gsap, $ScrollTrigger: ScrollTrigger } = useNuxtApp();
+const { $gsap: gsap } = useNuxtApp();
 
 const timeline = ref(null);
 
@@ -38,9 +38,6 @@ const checkAnchor = () => {
 const animationScenariors = () => {
   const cards = document.querySelectorAll(".scenariors__card");
   const boxCards = document.querySelector(".main-scenariors");
-
-  const sectionHeading = boxCards.querySelector(".section-heading");
-  const sectionHeadingHeight = sectionHeading.getBoundingClientRect().height;
   if (cards.length > 0) {
     timeline.value = gsap
       .timeline({

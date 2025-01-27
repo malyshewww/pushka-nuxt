@@ -6,7 +6,7 @@
 				.main-location__body
 					SectionMainLocationMap(:location-id="locationId")
 					button(type="button" @click="openPopupMap").main-location__button развернуть карту
-					SectionMainLocationSlider(v-if="device.isDesktop" @updateLocationId="updateLocationId")
+					SectionMainLocationSlider(v-if="device.isDesktop" @update-location-id="updateLocationId")
 					.main-location__mask.mask-location(:class="{hidden: isHiddenMask}")
 						.mask-location__content
 							.mask-location__icon
@@ -14,8 +14,8 @@
 									span
 							.mask-location__text Нажимайте на отметки на карте, чтобы узнать подробности
 							UiButton(text="начать" class-names="btn-green" @button-click="hideMaskLocation")
-		PopupMap(:is-open="store.isOpenPopup" @close-popup="closePopupMap" :location-id="locationId")
-		PopupMapPlace(:is-open="isOpenPopup" @close-popup="closePopupMapPlace" :place-id.sync="placeId" :popup-data="popupMapPlaceData")
+		PopupMap(:is-open="store.isOpenPopup" :location-id="locationId" @close-popup="closePopupMap")
+		PopupMapPlace(:is-open="isOpenPopup" :place-id="placeId" :popup-data="popupMapPlaceData" @close-popup="closePopupMapPlace")
 </template>
 
 <script setup>
