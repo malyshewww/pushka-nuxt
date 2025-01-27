@@ -19,12 +19,12 @@ defineProps({
   isWhite: {
     type: Boolean,
     required: false,
-    default: () => false,
+    default: () => true,
   },
   isVisible: {
     type: Boolean,
     required: false,
-    default: () => false,
+    default: () => true,
   },
 });
 

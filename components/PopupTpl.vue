@@ -10,7 +10,7 @@
 			.form-popup__items
 				FormField(type="text" placeholder="Имя" name="name" :model-value="data.name" :is-valid="status.name.isValid" :error-message="status.name.message" @update:model-value="$event => (data.name = $event)" @remove-error="removeError")
 				FormField(type="tel" placeholder="Телефон" name="phone" :model-value="data.phone" :is-valid="status.phone.isValid" :error-message="status.phone.message" @update:model-value="$event => (data.phone = $event)" @remove-error="removeError")
-			.form-popup__text Отправляя заявку, вы подтверждаете, что ознакомлены и согласны с условиями #[nuxt-link(to="/page/politic").form-popup__link политики обработки персональных данных]
+			.form-popup__text Отправляя заявку, вы подтверждаете, что ознакомлены и согласны с условиями #[nuxt-link(to="/page/politic" target="_blank").form-popup__link политики обработки персональных данных]
 			UiButton(text="отправить" class-names="btn-green" type="submit")
 </template>
 

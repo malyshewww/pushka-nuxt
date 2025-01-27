@@ -14,7 +14,7 @@
 							:flat-index="index"
 							:active-card="activeCard"
 							@toggle-dropdown="toggleDropdown")
-					.flats__bottom(v-if="flatsList.currentPage.length > flatsList.pagination.perPage")
+					.flats__bottom(v-if="flatsList.currentPage.length >= flatsList.pagination.perPage && flatsList.pagination.countPages > 1")
 						UiButton(text="показать ещё" class-names="btn-transparent" @button-click="changePage")
 				.flats__wrapper.empty(v-else) По вашему запросу ничего на найдено
 </template>
@@ -251,6 +251,7 @@ const changePage = () => {
 
 const resetFilter = async () => {
   params.value = "";
+  currentPage.value = 0;
   router.push({
     path: route.path,
     query: {},
