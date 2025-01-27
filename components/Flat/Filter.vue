@@ -425,6 +425,12 @@ onMounted(() => {
     display: none;
     @media screen and (max-width: $md) {
       display: flex;
+      padding: 20px;
+      margin: -20px;
+      position: sticky;
+      top: -20px;
+      z-index: 20;
+      background: var(--bg-beige);
     }
   }
   &__close {
@@ -459,9 +465,12 @@ onMounted(() => {
       gap: 20px;
     }
     @media screen and (max-width: $md) {
+      // display: flex;
+      // flex-direction: column;
+      // height: 100%;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      flex: 1 1 auto;
     }
   }
 }

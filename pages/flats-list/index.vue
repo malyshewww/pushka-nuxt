@@ -14,7 +14,7 @@
 							:flat-index="index"
 							:active-card="activeCard"
 							@toggle-dropdown="toggleDropdown")
-					.flats__bottom(v-if="flatsList.currentPage.length >= flatsList.pagination.perPage")
+					.flats__bottom(v-if="flatsList.currentPage.length > flatsList.pagination.perPage")
 						UiButton(text="показать ещё" class-names="btn-transparent" @button-click="changePage")
 				.flats__wrapper.empty(v-else) По вашему запросу ничего на найдено
 </template>
@@ -80,8 +80,6 @@ if (route.query["options[]"] && route.query["options[]"].length) {
 
 const cards = ref([]);
 
-const count = ref(0);
-
 const initialState = () => {
   cards.value = [];
   currentPage.value = 0;
@@ -108,6 +106,7 @@ const {
       cards.value.push(...data);
       const metadata = useMetatags(metatag.html_head);
       const currentPage = data;
+      console.log(res);
       return {
         breadcrumb,
         data,
@@ -119,7 +118,6 @@ const {
           space: filter.slider.space,
           options: filter.options,
         },
-        // count: count.value,
         pagination: {
           perPage: meta.per_page,
           count: meta.count,

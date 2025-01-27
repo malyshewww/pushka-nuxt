@@ -121,6 +121,9 @@ img {
     width: 100%;
     height: 100%;
   }
+  .scheme-apartment__image & {
+    object-fit: contain;
+  }
 }
 // scroll-bar
 *::-webkit-scrollbar {

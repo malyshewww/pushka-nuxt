@@ -5,7 +5,7 @@
 			.main__heading.heading-main
 				h1.heading-main__title {{pageText.main.title}}
 			.content(v-html="pageText.main.content")
-			.galleries(v-if="pageText.main.gallery")
+			.galleries(v-if="pageText.main.gallery.length > 0")
 				//- SliderGallery(:slider="slider" slider-caption="Варианты дизайнерской отделки" :isDescr="true")
 				StaticGallery(:gallery="pageText.main.gallery")
 </template>
@@ -40,6 +40,21 @@ const {
 
 useHead({
   ...pageText.value.metadata,
+});
+
+const device = useDevice();
+
+onMounted(() => {
+  if (device.isMobileOrTablet) {
+    const tables = document.querySelectorAll(".content table");
+
+    for (const table of tables) {
+      const tableWrap = document.createElement("div");
+      tableWrap.classList.add("table-wrap");
+      table.parentNode.insertBefore(tableWrap, table);
+      tableWrap.appendChild(table);
+    }
+  }
 });
 </script>
 

@@ -1,14 +1,14 @@
 <template lang="pug">
-	.header__menu.menu(:class="{active: isOpenMenu}" @click="closeMenu")
-		.menu__top
+	.header__menu.menu(:class="{active: isOpenMenu}")
+		.menu__top(@click="closeMenu")
 			nuxt-link(to="/").logo-mobile
 				picture
 					source(:srcset="`/images/logo-black.svg`" media="(min-width: 1024px)")
 					source(:srcset="`/images/logo-black-mobile.svg`" media="(min-width: 300px)")
 					img(src="/images/logo-black.svg")
 			AppHeaderActions
-		nav.menu__body
-			ul.menu__list 
+		nav.menu__body(@click="closeMenu")
+			ul.menu__list
 				li.menu__item(v-for="(item, index) in newMenu" :key="index")
 					nuxt-link(:to="{ path: item.url.href, hash: `${item.hash ? item.hash : ''}`}").menu__link {{item.title}}
 		nav.menu__dropdown.dropdown-menu(:class="{active: isDropdownMenuActive}")

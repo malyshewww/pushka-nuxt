@@ -9,11 +9,12 @@
   // flex-direction: column;
   // height: 100%;
   // min-height: 100%;
-  display: grid;
-  grid-template-columns: 100%;
-  align-items: start;
-  grid-template-rows: auto 1fr auto;
+  display: flex;
+  flex-direction: column;
   overflow: clip;
+}
+.footer {
+  margin-top: auto;
 }
 
 body.lock {
@@ -43,7 +44,8 @@ h1,
 h2,
 h3,
 h4,
-h5 {
+h5,
+h6 {
   font-weight: 700;
   text-transform: uppercase;
   font-family: var(--second-family);
@@ -108,9 +110,28 @@ h5 {
     font-size: 13px;
   }
 }
+h6 {
+  font-size: 16px;
+  line-height: 20px;
+  margin-bottom: 8px;
+  @media screen and (max-width: $xl) {
+    font-size: 14px;
+    line-height: 130%;
+  }
+  @media screen and (max-width: $md) {
+    font-size: 13px;
+  }
+}
 
 .content {
   max-width: 1250px;
+  * + h2,
+  * + h3,
+  * + h4,
+  * + h5,
+  * + h6 {
+    margin-top: 36px;
+  }
   p {
     font-size: 16px;
     line-height: 140%;
@@ -124,9 +145,6 @@ h5 {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    &:not(:last-child) {
-      margin-bottom: 20px;
-    }
     & li {
       padding-left: 16px;
       line-height: 120%;
@@ -154,11 +172,15 @@ h5 {
     }
     & p {
       display: inline-block;
-      margin: 0 0 12px;
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
     }
     & > li {
       position: relative;
-      margin-bottom: 12px;
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
       & > ol {
         margin-top: 12px;
       }
@@ -182,6 +204,10 @@ h5 {
       }
     }
   }
+  ul,
+  ol {
+    margin: 24px 0;
+  }
   a {
     font-size: 16px;
     line-height: 120%;
@@ -197,7 +223,7 @@ h5 {
     }
   }
   & .table-wrap {
-    margin: 90px 0;
+    margin: 0px -20px;
     overflow-x: auto;
     overflow-y: hidden;
     &::-webkit-scrollbar,
@@ -213,6 +239,10 @@ h5 {
     border-spacing: 0;
     border-collapse: collapse;
     width: 100%;
+    margin: 94px 0;
+    @media screen and (max-width: $md) {
+      margin: 36px 0;
+    }
     & tr {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -259,7 +289,7 @@ h5 {
   margin-bottom: 56px;
   .apartment-card & {
     gap: 20px 72px;
-    @media screen and (max-width:$md) {
+    @media screen and (max-width: $md) {
       gap: 20px;
     }
   }
@@ -348,7 +378,6 @@ picture {
       line-height: 31px;
       hyphens: auto;
     }
-
   }
 }
 
@@ -416,8 +445,6 @@ picture {
     text-align: left;
     justify-content: flex-start;
   }
-
-
 }
 .slider-controls {
   display: flex;
@@ -468,12 +495,12 @@ picture {
   }
   &-prev {
     &::before {
-      mask-image: url('/images/icons/arrow-prev.svg');
+      mask-image: url("/images/icons/arrow-prev.svg");
     }
   }
   &-next {
     &::before {
-      mask-image: url('/images/icons/arrow-next.svg');
+      mask-image: url("/images/icons/arrow-next.svg");
     }
   }
   &.disabled,
@@ -530,7 +557,7 @@ picture {
     }
   }
   &__link {
-    border: 2px solid rgba(#A6BF6E, .3);
+    border: 2px solid rgba(#a6bf6e, 0.3);
     width: 80px;
     height: 80px;
     border-radius: 50%;
@@ -543,7 +570,7 @@ picture {
       display: block;
       width: 32px;
       height: 32px;
-      mask-image: url('/images/icons/arrow-rotate.svg');
+      mask-image: url("/images/icons/arrow-rotate.svg");
       mask-repeat: no-repeat;
       mask-size: 32px 32px;
       mask-position: center;
@@ -552,12 +579,11 @@ picture {
         width: 24px;
         height: 24px;
         mask-size: 24px 24px;
-        ;
       }
     }
-    @media (any-hover:hover) {
+    @media (any-hover: hover) {
       &:hover {
-        border-color: #A6BF6E;
+        border-color: #a6bf6e;
       }
     }
     @media screen and (max-width: $xxxl) {
