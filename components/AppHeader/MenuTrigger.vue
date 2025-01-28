@@ -59,7 +59,7 @@ const openFilter = () => {
     gap: 4px;
     border-radius: 40px;
     padding: 6px;
-    height: 46px;
+    height: 56px;
     backdrop-filter: blur(4px);
     background: var(--border-white);
   }
@@ -69,13 +69,13 @@ const openFilter = () => {
   }
   &.active {
     & .menu-trigger__phone {
-      width: 163px;
+      width: 171px;
       &-text {
         opacity: 1;
       }
     }
     & .burger {
-      width: 32px;
+      width: 44px;
       border-radius: 50%;
       &__inner {
         transform: scale(0);
@@ -90,8 +90,8 @@ const openFilter = () => {
   }
   &__filter {
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     background: var(--bg-white);
     place-items: center;
     flex-shrink: 0;
@@ -118,8 +118,8 @@ const openFilter = () => {
     display: flex;
     align-items: center;
     gap: 4px;
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     overflow: hidden;
     transition: max-width $time, width $time;
@@ -134,8 +134,8 @@ const openFilter = () => {
     position: absolute;
     right: 0;
     top: 0;
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -170,13 +170,13 @@ const openFilter = () => {
   border-radius: 40px;
   padding: 4px;
   width: 108px;
-  height: 34px;
+  height: 44px;
   flex-shrink: 0;
   background: var(--text-avocado);
   transition: width $time, border-radius $time;
   position: relative;
   &__close {
-    width: 32px;
+    width: 44px;
     height: 100%;
     position: absolute;
     right: 0;

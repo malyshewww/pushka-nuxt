@@ -65,11 +65,11 @@ const succesPopupKey = (key) => {
   switch (key) {
     case "book":
       popupNoticeStore.successText =
-        "Оставьте заявку, наш менеджер перезвонит вам и поможет забронировать квартиру";
+        "В ближайшее время с вами свяжется менеджер и поможет оформить бронь";
       break;
     case "consultation":
       popupNoticeStore.successText =
-        "Оставьте заявку, наш менеджер перезвонит и&nbsp;проконсультирует вас по всем вопросам";
+        "В ближайшее время с вами свяжется менеджер для консультации";
       break;
     case "call":
       popupNoticeStore.successText =

@@ -16,7 +16,7 @@
 					:data-options="`${room.options}`"
 					@mouseenter="showDetailRoom($event, room, item)"
 					@mouseleave="hideDetailRoom") {{ room.field_number }}
-			a(:href="item.floor_image[0].markup" :data-fancybox="`plan-${index}`").flats-scheme__link План этажа
+			a(:href="item.floor_image[0].raw" :data-fancybox="`plan-${index}`").flats-scheme__link План этажа
 	.flats-scheme__bottom
 		.flats-scheme__bottom-top
 			.flats-scheme__caption Нежилые помещения

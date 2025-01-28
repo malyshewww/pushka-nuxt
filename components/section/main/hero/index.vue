@@ -4,14 +4,15 @@
 			.main-hero__scroll-down листайте вниз
 		.container
 			.main-hero__image
-				picture
-					source(:srcset="`/images/main-hero/main-bg.jpg`" media="(min-width: 1366px)")
-					source(type="image/webp" :srcset="`/images/main-hero/main-bg.webp`" media="(min-width: 1366px)")
-					source(:srcset="`/images/main-hero/main-bg-pc.jpg`" media="(min-width: 767.98px)")
-					source(type="image/webp" :srcset="`/images/main-hero/main-bg-pc.webp`" media="(min-width: 767.98px)")
-					source(:srcset="`/images/main-hero/main-bg-mobile.jpg`" media="(min-width: 300px)")
-					source(type="image/webp" :srcset="`/images/main-hero/main-bg-mobile.webp`" media="(min-width: 300px)")
-					img(:src="`/images/main-hero/main-bg.jpg`" alt="фоновое изображение")
+				NuxtPicture(:src="`/images/main-hero/main-bg-new.jpg`" alt="фоновое изображение")
+				//- picture
+				//- 	source(:srcset="`/images/main-hero/main-bg.jpg`" media="(min-width: 1366px)")
+				//- 	source(type="image/webp" :srcset="`/images/main-hero/main-bg.webp`" media="(min-width: 1366px)")
+				//- 	source(:srcset="`/images/main-hero/main-bg-pc.jpg`" media="(min-width: 767.98px)")
+				//- 	source(type="image/webp" :srcset="`/images/main-hero/main-bg-pc.webp`" media="(min-width: 767.98px)")
+				//- 	source(:srcset="`/images/main-hero/main-bg-mobile.jpg`" media="(min-width: 300px)")
+				//- 	source(type="image/webp" :srcset="`/images/main-hero/main-bg-mobile.webp`" media="(min-width: 300px)")
+				//- 	img(:src="`/images/main-hero/main-bg.jpg`" alt="фоновое изображение")
 			.main-hero__body
 				.main-hero__title.hero-title(:class="{active: isShowTitle}")
 					picture
@@ -92,7 +93,7 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 :root {
   --index: calc(1vw + 1vh);
   --transition: transform 0.75s cubic-bezier(0.075, 0.5, 0, 0.9);

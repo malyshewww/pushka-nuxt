@@ -2,7 +2,7 @@
 	.house-format__slider.slider-format
 		.slider-format__body.swiper(ref="sliderFormat")
 			.slider-format__wrapper.swiper-wrapper
-				a(v-for="index in 6" :key="index" :href="`/images/house-format/house-${index+1}.jpg`" data-fancybox="house").slider-format__item.swiper-slide
+				a(v-for="index in 5" :key="index" :href="`/images/house-format/house-${index+1}.jpg`" data-fancybox="house").slider-format__item.swiper-slide
 					.slider-format__image.ibg
 						NuxtPicture(:src="`/images/house-format/house-${index+1}.jpg`" alt="house")
 		.slider-controls(ref="sliderControls")
