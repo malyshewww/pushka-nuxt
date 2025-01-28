@@ -44,7 +44,6 @@ const device = useDevice();
 onMounted(() => {
   if (device.isMobileOrTablet) {
     const tables = document.querySelectorAll(".content table");
-
     for (const table of tables) {
       const tableWrap = document.createElement("div");
       tableWrap.classList.add("table-wrap");
