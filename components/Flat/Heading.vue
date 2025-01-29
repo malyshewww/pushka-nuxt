@@ -10,16 +10,10 @@
 
 <style lang="scss" scoped>
 .heading-main {
-   display: flex;
-   justify-content: space-between;
-   flex-wrap: wrap;
-   align-items: center;
-   gap: 20px;
-   .page--flats-scheme & {
-      margin-bottom: 66px;
-      @media screen and (max-width: $xl) {
-         margin-bottom: 40px;
-      }
-   }
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
 }
 </style>

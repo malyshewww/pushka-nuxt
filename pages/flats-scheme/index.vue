@@ -54,7 +54,6 @@ const { data: flatsScheme } = await useAsyncData(
   {
     transform: (res) => {
       const { breadcrumb, data, filter, metatag } = res;
-      console.log(data);
       newListRoom.value = generateNewData(data);
       const metadata = useMetatags(metatag.html_head);
       return {
