@@ -20,9 +20,21 @@
 body.lock {
   overflow: hidden;
 }
-html.with-fancybox {
-  overflow-y: auto;
+// html.with-fancybox {
+//   overflow-y: auto !important;
+// }
+
+html.with-fancybox body.hide-scrollbar {
+  margin-right: var(--scroll-width) !important;
 }
+
+html.with-fancybox body.hide-scrollbar .widget-circle {
+  margin-right: var(--scroll-width) !important;
+}
+html.with-fancybox body.page--home.hide-scrollbar .header {
+  margin-right: var(--scroll-width) !important;
+}
+
 // .fancybox__container {
 //   z-index: 3000;
 // }

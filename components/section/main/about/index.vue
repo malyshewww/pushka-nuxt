@@ -161,16 +161,26 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   font-weight: 700;
-  font-size: 92px;
-  line-height: 108px;
   text-transform: uppercase;
   margin: 0 0 20px;
+  // @include adaptiv-value("font-size", 92, 28, 1);
+  // @include adaptiv-value("line-height", 108, 31, 1);
+  // font-size: 92px;
+  // line-height: 108px;
+  @media screen and (min-width: 1919px) {
+    font-size: 92px;
+    line-height: 108px;
+  }
+  @media screen and (max-width: 1919px) {
+    font-size: 4.792vw;
+    line-height: 5.625vw;
+  }
   &-mobile {
     display: none;
   }
   @media screen and (max-width: $xxxl) {
-    font-size: 56px;
-    line-height: 73px;
+    font-size: 4.1vw;
+    line-height: 5.344vw;
     margin: 0;
   }
   @media screen and (max-width: $xl) {
@@ -195,21 +205,28 @@ onMounted(() => {
     &::before {
       content: "";
       display: block;
-      width: 320px;
       border-radius: 500px;
       padding: 20px;
       display: grid;
       place-items: center;
-      height: 92px;
       background-color: var(--text-avocado);
       background-image: url("/images/main-about/text-logo.svg");
       background-repeat: no-repeat;
       background-position: center;
+      @media screen and (min-width: 1919px) {
+        width: 300px;
+        height: 92px;
+      }
+      @media screen and (max-width: 1919px) {
+        width: 15.625vw;
+        height: 4.792vw;
+        background-size: 9.74vw 1.875vw;
+      }
       @media screen and (max-width: $xxxl) {
-        width: 267px;
-        height: 69px;
+        width: 19.546vw;
+        height: 5.051vw;
         padding: 16px;
-        background-size: 172px 34px;
+        background-size: 12.518vw 2.416vw;
       }
       @media screen and (max-width: $xl) {
         width: 176px;
@@ -255,23 +272,33 @@ onMounted(() => {
     &::after {
       content: "";
       display: block;
-      height: 92px;
       border-radius: 500px;
+      @media screen and (min-width: 1919px) {
+        height: 87px;
+      }
+      @media screen and (max-width: 1919px) {
+        height: 4.531vw;
+      }
       @media screen and (max-width: $xxxl) {
-        height: 69px;
+        height: 5.051vw;
       }
       @media screen and (max-width: $xl) {
         height: 48px;
       }
     }
     &::before {
-      width: 180px;
       background-image: url("/images/main-about/text-image.png");
       background-repeat: no-repeat;
       background-position: center;
       background-size: cover;
-      @media screen and (max-width: $xxxl) {
+      @media screen and (min-width: 1919px) {
         width: 180px;
+      }
+      @media screen and (max-width: 1919px) {
+        width: 9.375vw;
+      }
+      @media screen and (max-width: $xxxl) {
+        width: 13.177vw;
       }
       @media screen and (max-width: $xl) {
         width: 106px;
@@ -280,8 +307,6 @@ onMounted(() => {
     &::after {
       content: attr(data-title);
       font-weight: 700;
-      font-size: 22px;
-      line-height: 27px;
       line-height: 125%;
       text-transform: uppercase;
       text-align: center;
@@ -289,12 +314,21 @@ onMounted(() => {
       display: grid;
       place-items: center;
       padding: 10px;
-      width: 315px;
       background: var(--text-midnight-70);
-      @media screen and (max-width: $xxxl) {
-        width: 307px;
+      @media screen and (min-width: 1919px) {
+        width: 315px;
         font-size: 22px;
         line-height: 27px;
+      }
+      @media screen and (max-width: 1919px) {
+        width: 16.406vw;
+        font-size: 1.146vw;
+        line-height: 1.406vw;
+      }
+      @media screen and (max-width: $xxxl) {
+        width: 22.474vw;
+        font-size: 1.611vw;
+        line-height: 1.977vw;
       }
       @media screen and (max-width: $xl) {
         width: 245px;

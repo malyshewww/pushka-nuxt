@@ -483,7 +483,7 @@ onMounted(() => {
   }
   &--options {
     grid-column: span 2;
-    @media screen and (max-width: $xl) {
+    @media screen and (max-width: $xxl) {
       grid-column: initial;
     }
     @media screen and (max-width: $md) {
@@ -495,8 +495,10 @@ onMounted(() => {
     grid-column: span 2;
     justify-items: end;
     align-self: center;
-    @media screen and (max-width: $xl) {
+    @media screen and (max-width: $xxl) {
       grid-column: initial;
+    }
+    @media screen and (max-width: $xl) {
       order: 2;
       justify-content: center;
     }

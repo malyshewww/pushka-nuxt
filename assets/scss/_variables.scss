@@ -47,6 +47,10 @@
   --margin-pc: 15;
 
   --time: 0.3s;
+
+  --scroll-width: 0px;
+
+  --header-height: 80px;
 }
 
 // Минимальная ширина страницы
@@ -54,7 +58,7 @@ $minWidth: 320;
 // Ширина полотна (макета)
 $maxWidth: 1920;
 // Ширина ограничивающего контейнера (0 = нет ограничения)
-$maxWidthContainer: 1710;
+$maxWidthContainer: 1920;
 
 // Общий отступ у контейнера
 // (30 = по 15px слева и справа, 0 = нет отступа)
@@ -78,3 +82,14 @@ $xxl: 1200px;
 $xxxl: 1400px;
 
 $time: 0.3s;
+
+@media screen and (max-width: $xl) {
+  :root {
+    --header-height: 61px;
+  }
+}
+@media screen and (max-width: $md) {
+  :root {
+    --header-height: 48px;
+  }
+}

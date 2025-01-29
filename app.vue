@@ -36,13 +36,24 @@ onMounted(() => {
   // } else {
   //    console.log("Geolocation is not supported by this browser.");
   // }
+
+  // Компенсация ширины полосы прокрути при открытии модального окна fancybox
+  const wrapper = document.querySelector(".wrapper");
+  if (wrapper) {
+    const scrollWidth =
+      window.innerWidth - document.querySelector(".wrapper").offsetWidth + "px";
+    document.documentElement.style.setProperty(
+      "--scroll-width",
+      `${scrollWidth}`
+    );
+  }
 });
 </script>
 
 <style lang="scss">
+@import "assets/scss/mixins";
 @import "assets/scss/fonts";
 @import "assets/scss/nullstyle";
-@import "assets/scss/mixins";
 @import "assets/scss/keyframes";
 @import "assets/scss/common";
 

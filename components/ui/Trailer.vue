@@ -169,7 +169,8 @@ onMounted(() => {
   width: 100%;
   white-space: nowrap;
   font-weight: 500;
-  font-size: 48px;
+  // font-size: 48px;
+  font-size: 32px;
   color: var(--text-white);
   &::before,
   &::after {

@@ -8,7 +8,7 @@
 		.slider-controls(ref="sliderControls")
 			button(ref="buttonPrev" type="button").slider-button.slider-button-prev
 			button(ref="buttonNext" type="button").slider-button.slider-button-next
-		UiTrailer(v-if="device.isDesktop" :is-active="true" text="выбрать" @action="changeRoute")
+		UiTrailer(v-if="device.isDesktop" :is-active="true" text="выбрать квартиру" @action="changeRoute")
 </template>
 
 <script setup>

@@ -28,7 +28,7 @@
 <script setup>
 import Rellax from "rellax";
 
-const { $gsap: gsap } = useNuxtApp();
+const { $gsap: gsap, $ScrollTrigger: ScrollTrigger } = useNuxtApp();
 
 const isShowTitle = ref(false);
 
@@ -38,34 +38,65 @@ const showTitle = () => {
 
 const mainHero = ref("");
 
+const next = ref(false);
+
 const animationHero = () => {
+  // gsap.set(mainHero.value, { "--opacity": 0 });
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: mainHero.value,
       start: "top 0%",
-      end: "40%",
-      scrub: 2,
+      end: "+=100%",
+      scrub: 1,
       pin: false,
+      onUpdate: (self) => {
+        if (self.progress >= 0.8) {
+          next.value = true;
+        } else {
+          next.value = false;
+        }
+        // if (self.progress == 1) {
+        //   gsap.to(".main-hero__cards", {
+        //     opacity: 1,
+        //     yPercent: 0,
+        //     bottom: 0,
+        //   });
+        // } else {
+        //   return;
+        // }
+      },
     },
   });
   tl.to(mainHero.value, {
     "--opacity": 1,
   });
-  const tlCards = gsap.timeline({
-    scrollTrigger: {
-      trigger: mainHero.value,
-      start: "top 0%",
-      end: "40%",
-      scrub: 2,
-      pin: false,
-    },
-  });
-  tlCards.to(".main-hero__cards", {
+  tl.to(".main-hero__cards", {
     opacity: 1,
   });
-  tlCards.to(".main-hero__cards", {
-    y: "0vh",
+  tl.to(".main-hero__cards", {
+    yPercent: 0,
   });
+  // if (next.value == true) {
+  //   const tlCards = gsap.timeline({
+  //     scrollTrigger: {
+  //       trigger: mainHero.value,
+  //       start: "bottom 5%",
+  //       end: "40%",
+  //       scrub: 1,
+  //       pin: false,
+  //       pinSpacing: false,
+  //     },
+  //   });
+  //   tlCards.to(".main-hero__cards", {
+  //     opacity: 1,
+  //   });
+  //   tlCards.to(".main-hero__cards", {
+  //     yPercent: 0,
+  //   });
+  // }
+  // tlCards.to(".main-hero__cards", {
+  //   y: "0vh",
+  // });
   // const cards = document.querySelectorAll(".main-hero__card-wrap");
   // cards.forEach((card, index) => {
   //    const duration = 0.5 + index * 0.2; // Увеличение длительности анимации для каждой карточки

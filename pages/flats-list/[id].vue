@@ -90,6 +90,7 @@ const { data: apartment } = await useAsyncData(
     transform: (res) => {
       const { breadcrumb, data, metatag } = res;
       const metadata = useMetatags(metatag.html_head);
+      console.log(res);
       return {
         breadcrumb,
         main: {

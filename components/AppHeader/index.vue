@@ -1,6 +1,6 @@
 <template lang="pug">
 	header.header(ref="header" :class="[{'header-white': isWhite}, {'header-black': !isWhite}, {'menu-open': isOpenMenu}, {'hidden': !isVisible && !isOpenMenu}]").lock-padding
-		.header__body
+		.header__body(@click="closeMenu($event)")
 			AppHeaderLogo
 			AppHeaderMenu(:is-open-menu="isOpenMenu" data-da=".wrapper, 1024, 1" @close-menu="closeMenu")
 			AppHeaderActions
@@ -53,11 +53,12 @@ const closeMenu = (e) => {
     if (
       target.closest(".menu__link") ||
       target.closest(".logo-mobile img") ||
-      target.closest(".actions-header__btn")
+      target.closest(".actions-header__btn") ||
+      target.closest(".header__logo")
     ) {
       isOpenMenu.value = false;
     }
-    storeMenu.toggleMenu();
+    storeMenu.closeMenu();
   }
 };
 
@@ -66,6 +67,15 @@ const hideOverlay = () => {
   storeMenu.toggleMenu();
 };
 
+const route = useRoute();
+
+watch(
+  () => route.path,
+  () => {
+    body_lock_remove();
+  }
+);
+
 onMounted(() => {
   useDynamicAdapt();
 });
@@ -73,12 +83,12 @@ onMounted(() => {
 
 <style lang="scss">
 .header {
-  min-height: 80px;
+  min-height: var(--header-height);
   background-color: transparent;
   padding: 21px 56px;
   position: sticky;
   top: 0;
-  width: 100%;
+  width: 100vw;
   z-index: 30;
   transition: transform $time, box-shadow $time, background-color $time;
   &::before {
@@ -103,7 +113,7 @@ onMounted(() => {
   }
   @media screen and (max-width: $xl) {
     padding: 15px 32px;
-    min-height: 61px;
+    // min-height: 61px;
     &.menu-open {
       box-shadow: 0 0 0 0 transparent;
       &::before {
@@ -123,7 +133,7 @@ onMounted(() => {
   }
   @media screen and (max-width: $md) {
     padding: 10.5px 15px;
-    min-height: 48px;
+    // min-height: 48px;
   }
   .page--home & {
     position: fixed;
