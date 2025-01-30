@@ -16,7 +16,7 @@
 				.main-about__image-container
 					.main-about__image-wrap
 						.main-about__image.ibg(ref="aboutImage")
-							NuxtPicture(:src="`/images/main-about/about-img-new.jpg`" alt="фоновое изображение")
+							nuxt-img(:src="`/images/main-about/about-img-new.jpg`" alt="фоновое изображение")
 							//- img(:src="`/images/main-about/about-img.jpg`" alt="фоновое изображение")
 </template>
 

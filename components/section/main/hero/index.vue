@@ -4,7 +4,8 @@
 			.main-hero__scroll-down листайте вниз
 		.container
 			.main-hero__image
-				NuxtPicture(:src="`/images/main-hero/main-bg-new.jpg`" alt="фоновое изображение")
+				nuxt-img(:src="`/images/main-hero/main-bg-new.jpg`" alt="фоновое изображение")
+				//- NuxtPicture(:src="`/images/main-hero/main-bg-new.jpg`" alt="фоновое изображение")
 				//- picture
 				//- 	source(:srcset="`/images/main-hero/main-bg.jpg`" media="(min-width: 1366px)")
 				//- 	source(type="image/webp" :srcset="`/images/main-hero/main-bg.webp`" media="(min-width: 1366px)")
