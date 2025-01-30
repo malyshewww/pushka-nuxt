@@ -44,7 +44,7 @@ onMounted(() => {
       ? trailer.classList.add("active")
       : trailer.classList.remove("active");
     trailer.animate(keyframes, {
-      duration: 1000,
+      duration: 100,
       fill: "forwards",
     });
   }
@@ -116,7 +116,7 @@ onMounted(() => {
     z-index: 2;
     transform: translate(-50%, -50%);
     background-color: var(--text-avocado);
-    transition: width 0.5s, height 0.5s, opacity $time, background-color $time;
+    transition: width 0.35s, height 0.35s, opacity $time, background-color $time;
     z-index: -1;
     pointer-events: none;
   }
@@ -131,14 +131,14 @@ onMounted(() => {
       width: 100%;
       height: 100%;
       opacity: 0.5;
-      transition: width 0.5s ease 0.1s, height 0.5s ease 0.1s, opacity $time,
+      transition: width 0.35s ease 0.1s, height 0.35s ease 0.1s, opacity $time,
         background-color $time;
     }
     &::after {
       width: 100%;
       height: 100%;
       opacity: 1;
-      transition: width 0.5s ease 0.3s, height 0.5s ease 0.3s, opacity $time,
+      transition: width 0.35s ease 0.3s, height 0.35s ease 0.3s, opacity $time,
         background-color $time;
     }
     & .marquee {

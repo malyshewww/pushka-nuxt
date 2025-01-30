@@ -38,6 +38,7 @@ const data = reactive({
     height: 100vh;
     opacity: 1;
     transform: translateY(120vh);
+    pointer-events: none;
     // &.active {
     //    & .hero-card {
     //       opacity: 1;
