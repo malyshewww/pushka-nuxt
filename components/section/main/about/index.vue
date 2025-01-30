@@ -168,12 +168,12 @@ onMounted(() => {
   // font-size: 92px;
   // line-height: 108px;
   @media screen and (min-width: 1919px) {
-    font-size: 92px;
-    line-height: 108px;
+    font-size: 84px;
+    line-height: 98px;
   }
   @media screen and (max-width: 1919px) {
-    font-size: 4.792vw;
-    line-height: 5.625vw;
+    font-size: 4.375vw;
+    line-height: 5.104vw;
   }
   &-mobile {
     display: none;
@@ -201,7 +201,7 @@ onMounted(() => {
     align-items: flex-start;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0px 30px;
+    gap: 0px 24px;
     &::before {
       content: "";
       display: block;
@@ -215,12 +215,12 @@ onMounted(() => {
       background-position: center;
       @media screen and (min-width: 1919px) {
         width: 300px;
-        height: 92px;
+        height: 87px;
       }
       @media screen and (max-width: 1919px) {
         width: 15.625vw;
-        height: 4.792vw;
-        background-size: 9.74vw 1.875vw;
+        height: 4.531vw;
+        background-size: 9.74vw 1.927vw;
       }
       @media screen and (max-width: $xxxl) {
         width: 19.546vw;
@@ -253,7 +253,7 @@ onMounted(() => {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 0 30px;
+    gap: 0 24px;
     @media screen and (max-width: $xxxl) {
       gap: 0 18px;
     }
