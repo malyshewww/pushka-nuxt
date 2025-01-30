@@ -146,12 +146,12 @@ const openFilter = () => {
       content: "";
       display: block;
       flex-shrink: 0;
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       mask-image: url("/images/icons/phone.svg");
       mask-repeat: no-repeat;
       mask-position: center;
-      mask-size: 18px 18px;
+      mask-size: 16px 16px;
       background: var(--main-color);
     }
   }
