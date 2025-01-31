@@ -2,10 +2,11 @@
 	Teleport(to="body")
 		Popup(class="popup-map" :is-open="isOpen" @close-popup="closePopup")
 			SectionMainLocationMap(:location-id="locationId")
+			SectionMainLocationSlider(v-if="device.isDesktop" @update-location-id="updateLocationId" :location-id="locationId")
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   isOpen: {
     type: Boolean,
     required: true,
@@ -16,10 +17,16 @@ defineProps({
   },
 });
 
-const emit = defineEmits(["closePopup"]);
+const device = useDevice();
+
+const emit = defineEmits(["closePopup", "updateLocationId"]);
 
 const closePopup = () => {
   emit("closePopup");
+};
+
+const updateLocationId = (id) => {
+  emit("updateLocationId", id);
 };
 </script>
 

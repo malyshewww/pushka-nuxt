@@ -15,6 +15,8 @@ const props = defineProps({
   },
 });
 
+const locationId = ref(props.locationId);
+
 const mapElem = ref("");
 
 const map = ref(null);
@@ -70,7 +72,7 @@ const placemarks = [
 // Обновление маркеров
 const updateMarkers = () => {
   placemarks.map((marker) => {
-    if (props.locationId === marker.id) {
+    if (locationId.value == marker.id) {
       marker.isActive = true;
       // console.log("active");
     } else {
@@ -84,8 +86,9 @@ const updateMarkers = () => {
 };
 
 watch(
-  () => props.locationId,
-  () => {
+  () => locationId.value,
+  (val) => {
+    console.log("mao", val);
     // console.log("update");
     updateMarkers();
   }
@@ -313,6 +316,9 @@ onMounted(() => {
       place-items: center;
       transform: translate(-50%, -50%);
       visibility: visible;
+      @media (any-hover: hover) and (max-width: $xxl) {
+        cursor: pointer;
+      }
       &__image {
         pointer-events: none;
         transform: scale(0.71);

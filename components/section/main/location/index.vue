@@ -6,7 +6,7 @@
 				.main-location__body
 					SectionMainLocationMap(:location-id="locationId")
 					button(type="button" @click="openPopupMap").main-location__button развернуть карту
-					SectionMainLocationSlider(v-if="device.isDesktop" @update-location-id="updateLocationId")
+					SectionMainLocationSlider(v-if="device.isDesktop" :location-id="locationId" @update-location-id="updateLocationId")
 					.main-location__mask.mask-location(:class="{hidden: isHiddenMask}")
 						.mask-location__content
 							.mask-location__icon
@@ -14,7 +14,7 @@
 									span
 							.mask-location__text Нажимайте на отметки на карте, чтобы узнать подробности
 							UiButton(text="начать" class-names="btn-green" @button-click="hideMaskLocation")
-		PopupMap(:is-open="store.isOpenPopup" :location-id="locationId" @close-popup="closePopupMap")
+		PopupMap(:is-open="store.isOpenPopup" :location-id="locationId" @close-popup="closePopupMap" @update-location-id="updateLocationId")
 		PopupMapPlace(:is-open="isOpenPopup" :place-id="placeId" :popup-data="popupMapPlaceData" @close-popup="closePopupMapPlace")
 </template>
 
@@ -48,6 +48,7 @@ const closePopupMapPlace = () => {
 };
 
 const locationId = ref(1);
+
 const updateLocationId = (id) => {
   locationId.value = id;
 };
@@ -60,10 +61,8 @@ const hideMaskLocation = () => {
 watch(
   () => locationId.value,
   (val) => {
-    console.log(locationId.value);
     locationId.value = val;
-  },
-  { deep: true }
+  }
 );
 
 const popupMapPlaceData = reactive({
@@ -74,7 +73,7 @@ const popupMapPlaceData = reactive({
 });
 
 onMounted(() => {
-  if (window.innerWidth < 1024) {
+  if (window.innerWidth <= 1200) {
     function documentActions(e) {
       const target = e.target;
       if (target.closest(".map-marker")) {
@@ -126,7 +125,7 @@ onMounted(() => {
       @media screen and (max-width: $xxxl) {
         width: 62.85%;
       }
-      @media screen and (max-width: $xl) {
+      @media screen and (max-width: $xxl) {
         content: none;
       }
     }
@@ -190,7 +189,7 @@ onMounted(() => {
       font-size: 18px;
       line-height: 28px;
     }
-    @media screen and (max-width: $xl) {
+    @media screen and (max-width: $xxl) {
       display: none;
     }
   }
@@ -219,7 +218,7 @@ onMounted(() => {
       animation-play-state: paused;
     }
   }
-  @media screen and (max-width: $xl) {
+  @media screen and (max-width: $xxl) {
     display: grid;
   }
   &__content {

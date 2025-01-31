@@ -57,6 +57,7 @@ const initSlider = () => {
       slideClass: "item-dynamic",
       speed: 1000,
       slidesPerView: 4,
+      watchOverflow: true,
       navigation: {
         nextEl: buttonNext.value,
         prevEl: buttonPrev.value,
@@ -75,18 +76,18 @@ const initSlider = () => {
           spaceBetween: 40,
         },
       },
-      on: {
-        init: function (swiper) {
-          const slides = swiper.slides;
-          const sliderControls =
-            swiper.navigation.prevEl.parentNode ||
-            swiper.navigation.nextEl.parentNode;
-          if (slides.length <= swiper.passedParams.slidesPerView) {
-            swiper.navigation.destroy();
-            sliderControls.remove();
-          }
-        },
-      },
+      // on: {
+      //   init: function (swiper) {
+      //     const slides = swiper.slides;
+      //     const sliderControls =
+      //       swiper.navigation.prevEl.parentNode ||
+      //       swiper.navigation.nextEl.parentNode;
+      //     if (slides.length <= swiper.passedParams.slidesPerView) {
+      //       swiper.navigation.destroy();
+      //       sliderControls.remove();
+      //     }
+      //   },
+      // },
     });
   }
 };

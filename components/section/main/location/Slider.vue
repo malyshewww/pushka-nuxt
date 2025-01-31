@@ -20,11 +20,11 @@
 <script setup>
 import Swiper from "swiper";
 import { Navigation, EffectFade, Autoplay } from "swiper/modules";
+import { useDynamicAdapt } from "#imports";
+
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
-
-import { useDynamicAdapt } from "#imports";
 
 const props = defineProps({
   placeId: {
@@ -32,7 +32,36 @@ const props = defineProps({
     required: false,
     default: () => 0,
   },
+  locationId: {
+    type: Number,
+    required: false,
+    default: () => 1,
+  },
 });
+
+const locationSlider = ref("");
+const locationSwiper = ref(null);
+const buttonPrev = ref("");
+const buttonNext = ref("");
+
+const emit = defineEmits(["updateLocationId"]);
+
+const currentSlideIndex = ref(props.locationId);
+
+watch(
+  () => currentSlideIndex.value,
+  (val) => {
+    currentSlideIndex.value = val;
+  }
+);
+
+watch(
+  () => props.locationId,
+  (val) => {
+    currentSlideIndex.value = val;
+    locationSwiper.value.slideTo(val);
+  }
+);
 
 const locationId = ref(props.placeId);
 
@@ -61,15 +90,6 @@ const slides = [
     distance: "5 мин пешком",
   },
 ];
-
-const currentSlideIndex = ref(0);
-
-const locationSlider = ref("");
-const locationSwiper = ref(null);
-const buttonPrev = ref("");
-const buttonNext = ref("");
-
-const emit = defineEmits(["updateLocationId"]);
 
 const updateLocationId = (id) => {
   emit("updateLocationId", id);
@@ -106,12 +126,19 @@ const initSlider = () => {
         },
       },
       on: {
+        init: function (swiper) {
+          const activeIndex = swiper.activeIndex;
+          currentSlideIndex.value = activeIndex;
+          updateLocationId(currentSlideIndex.value);
+        },
         slideChange: function (swiper) {
           if (window.innerWidth > 1024) {
             const activeIndex = swiper.activeIndex;
             currentSlideIndex.value = activeIndex;
             updateLocationId(currentSlideIndex.value);
             const mapMarkers = document.querySelectorAll(".map-marker");
+            // mapMarkers[currentSlideIndex.value].classList.add("active");
+            // console.log(mapMarkers[currentSlideIndex.value]);
             mapMarkers.forEach((marker) => {
               if (currentSlideIndex.value + 1 == marker.dataset.markerId) {
                 marker.classList.add("active");
@@ -124,6 +151,7 @@ const initSlider = () => {
       },
     });
   }
+
   const toggleAutoplay = (isVisible, swiper) => {
     if (isVisible) {
       swiper.autoplay.start();
@@ -145,11 +173,6 @@ const initSlider = () => {
   }
 };
 
-// watchEffect(props.placeId, () => {
-//    console.log(props.placeId);
-//    locationSwiper.value.slideTo(locationId.value);
-// });
-
 onMounted(() => {
   initSlider();
   useDynamicAdapt();
@@ -169,7 +192,7 @@ onMounted(() => {
     width: 689px;
     height: 268px;
   }
-  @media screen and (max-width: $xl) {
+  @media screen and (max-width: $xxl) {
     display: none;
   }
   &__box {
