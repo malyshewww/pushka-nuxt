@@ -28,6 +28,7 @@ onNuxtReady(() => {
 });
 
 onMounted(() => {
+  addTouchClass();
   // console.log(window.navigator.languages);
   // if (window.navigator.geolocation) {
   //    window.navigator.geolocation.getCurrentPosition(function (position) {

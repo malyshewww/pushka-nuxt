@@ -66,7 +66,7 @@ onMounted(() => {
     }
     if (isMobile.any() || (isMobile.any() && getBrowserName() == "Safari")) {
       let currentScrollPosition = window.scrollY;
-      if (scrollPosition <= currentScrollPosition) {
+      if (scrollPosition <= currentScrollPosition && scrollPosition > 0) {
         isHeaderVisible.value = false;
       } else {
         isHeaderVisible.value = true;

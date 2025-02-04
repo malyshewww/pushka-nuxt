@@ -57,8 +57,8 @@ onMounted(() => {
       slidesPerView: 1,
       speed: 800,
       centeredSlides: true,
-      observer: true,
-      observeSlideChildren: true,
+      // observer: true,
+      // observeSlideChildren: true,
       pagination: {
         el: imagePagination.value,
         clickable: true,

@@ -94,7 +94,7 @@ const openPopupNews = () => {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
     overflow: hidden;
-    & p {
+    & > * {
       display: inline;
     }
     @media screen and (max-width: $xl) {
@@ -132,6 +132,20 @@ const openPopupNews = () => {
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 20px;
+  }
+}
+
+html._touch {
+  & .news-item {
+    &__text {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+      & > * {
+        display: inline;
+      }
+    }
   }
 }
 </style>
