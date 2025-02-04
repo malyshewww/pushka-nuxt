@@ -47,51 +47,53 @@ const imageSlider = ref("");
 const imageSwiper = ref("");
 const imagePagination = ref("");
 
+function initializeSwiper() {
+  imageSwiper.value = new Swiper(imageSlider.value, {
+    modules: [Pagination],
+    wrapperClass: "image-switch",
+    slideClass: "image-switch__item",
+    spaceBetween: 10,
+    slidesPerView: 1,
+    speed: 800,
+    centeredSlides: true,
+    // observer: true,
+    // observeSlideChildren: true,
+    pagination: {
+      el: imagePagination.value,
+      clickable: true,
+      // type: "bullets",
+      // bulletElement: "li",
+      // bulletActiveClass: "active",
+      // bulletClass: "image-pagination__item",
+      // renderBullet: function (index, className) {
+      //    return '<span class="' + className + '">' + "</span>";
+      // },
+      // dynamicBullets: true,
+    },
+  });
+}
+function destroySwiper() {
+  if (imageSwiper.value) {
+    imageSwiper.value.destroy();
+    imageSwiper.value = null;
+  }
+}
+function checkScreenWidth() {
+  if (window.matchMedia("(max-width: 1024px)").matches) {
+    initializeSwiper();
+  } else {
+    destroySwiper();
+  }
+}
+
 onMounted(() => {
-  function initializeSwiper() {
-    imageSwiper.value = new Swiper(imageSlider.value, {
-      modules: [Pagination],
-      wrapperClass: "image-switch",
-      slideClass: "image-switch__item",
-      spaceBetween: 10,
-      slidesPerView: 1,
-      speed: 800,
-      centeredSlides: true,
-      // observer: true,
-      // observeSlideChildren: true,
-      pagination: {
-        el: imagePagination.value,
-        clickable: true,
-        // type: "bullets",
-        // bulletElement: "li",
-        // bulletActiveClass: "active",
-        // bulletClass: "image-pagination__item",
-        // renderBullet: function (index, className) {
-        //    return '<span class="' + className + '">' + "</span>";
-        // },
-        // dynamicBullets: true,
-      },
-    });
-  }
-  function destroySwiper() {
-    if (imageSwiper.value) {
-      imageSwiper.value.destroy();
-      imageSwiper.value = null;
-    }
-  }
-  function checkScreenWidth() {
-    if (window.matchMedia("(max-width: 1024px)").matches) {
-      initializeSwiper();
-    } else {
-      destroySwiper();
-    }
-  }
   checkScreenWidth();
   window.addEventListener("resize", checkScreenWidth);
 });
 
 onUnmounted(() => {
-  imageSwiper.value = null;
+  destroySwiper();
+  window.removeEventListener("resize", checkScreenWidth);
 });
 </script>
 
