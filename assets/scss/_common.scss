@@ -17,6 +17,10 @@
   margin-top: auto;
 }
 
+html._touch body.lock {
+  overflow: hidden;
+}
+
 body.lock {
   overflow: hidden;
 }
