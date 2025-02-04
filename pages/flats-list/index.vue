@@ -20,6 +20,12 @@
 </template>
 
 <script setup>
+import { useMenuStore } from "~/stores/menu";
+import { useFilterStore } from "~/stores/filter-actions";
+
+const menuStore = useMenuStore();
+const filterStore = useFilterStore();
+
 // !!! Фильтрация реализована на строне сервера через гет параметры
 useHead({
   bodyAttrs: {
@@ -237,6 +243,9 @@ const loadData = async (
     });
   }
   refresh();
+  filterStore.closeFitler();
+  menuStore.closeMenu();
+  console.log(menuStore);
 };
 
 const changePage = () => {
@@ -257,6 +266,8 @@ const resetFilter = async () => {
     query: {},
   });
   await loadNewData();
+  filterStore.closeFitler();
+  menuStore.closeMenu();
 };
 
 const activeCard = ref(-1);

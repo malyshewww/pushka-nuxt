@@ -1,5 +1,5 @@
 <template lang="pug">
-	.header__menu.menu(:class="{active: isOpenMenu}")
+	.header__menu.menu(:class="{active: menuStore.isOpenMenu}")
 		.menu__top(@click="closeMenu")
 			nuxt-link(to="/").logo-mobile
 				picture
@@ -19,9 +19,12 @@
 						nuxt-link(:to="{ path: item.url.href, hash: `${item.hash ? item.hash : ''}`}").menu__link {{item.title}}
 </template>
 <script setup>
-import { useMainInfoStore } from "@/stores/maininfo";
+import { useMainInfoStore } from "~/stores/maininfo";
+import { useMenuStore } from "~/stores/menu";
 
 const mainInfoStore = useMainInfoStore();
+
+const menuStore = useMenuStore();
 
 const { menu } = mainInfoStore;
 
@@ -32,13 +35,6 @@ const newMenu = computed(() => {
       hash: item.url.href === "/#news" ? "#news" : false,
     };
   });
-});
-
-defineProps({
-  isOpenMenu: {
-    type: Boolean,
-    required: true,
-  },
 });
 
 const isDropdownMenuActive = ref(false);
@@ -151,7 +147,7 @@ onMounted(() => {
     align-items: flex-start;
     justify-content: flex-start;
     transform: translateX(110%);
-    transition: transform 0.6s;
+    transition: transform 0.6s ease-in-out 0s;
     &.active {
       transform: translateX(0);
     }

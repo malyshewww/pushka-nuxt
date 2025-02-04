@@ -1,5 +1,5 @@
 <template lang="pug">
-	.menu-trigger(:class="{active: isOpenMenu}")
+	.menu-trigger(:class="{active: menuStore.isOpenMenu}")
 		button(type="button" @click="openFilter").menu-trigger__filter
 		a(v-if="info.phone" :href="`tel:${formatPhone(info.phone)}`").menu-trigger__phone
 			span.menu-trigger__phone-text {{ info.phone }}
@@ -20,29 +20,22 @@
 
 <script setup>
 import { useFilterStore } from "~/stores/filter-actions";
-
 import { useMainInfoStore } from "~/stores/maininfo";
+import { useMenuStore } from "~/stores/menu";
+
+const menuStore = useMenuStore();
 
 const mainInfoStore = useMainInfoStore();
 const { info } = mainInfoStore;
 
-const store = useFilterStore();
-
-const emit = defineEmits(["openMenu"]);
-
-defineProps({
-  isOpenMenu: {
-    type: Boolean,
-    required: true,
-  },
-});
+const storeFilter = useFilterStore();
 
 const openMenu = () => {
-  emit("openMenu");
+  menuStore.toggleMenu();
 };
 
 const openFilter = () => {
-  store.openFilter();
+  storeFilter.openFilter();
 };
 </script>
 

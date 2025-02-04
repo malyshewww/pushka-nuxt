@@ -144,7 +144,6 @@ const loadData = () => {
     filter.area.maxRange,
     filter.option
   );
-  closeFilter();
 };
 
 const initRange = (element, { ...obj }) => {

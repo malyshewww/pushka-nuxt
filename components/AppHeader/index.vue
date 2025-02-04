@@ -1,11 +1,11 @@
 <template lang="pug">
-	header.header(ref="header" :class="[{'header-white': isWhite}, {'header-black': !isWhite}, {'menu-open': isOpenMenu}, {'hidden': !isVisible && !isOpenMenu}]").lock-padding
+	header.header(ref="header" :class="[{'header-white': isWhite}, {'header-black': !isWhite}, {'menu-open': storeMenu.isOpenMenu}, {'hidden': !isVisible && !storeMenu.isOpenMenu}]").lock-padding
 		.header__body(@click="closeMenu($event)")
 			AppHeaderLogo
-			AppHeaderMenu(:is-open-menu="isOpenMenu" data-da=".wrapper, 1024, 1" @close-menu="closeMenu")
+			AppHeaderMenu(data-da=".wrapper, 1024, 1" @close-menu="closeMenu")
 			AppHeaderActions
-			AppHeaderMenuTrigger(data-da=".wrapper, 1024, 1" :is-open-menu="isOpenMenu" @open-menu="openMenu")
-	.menu-overlay(:class="{active: isOpenMenu}" @click="hideOverlay")
+			AppHeaderMenuTrigger(data-da=".wrapper, 1024, 1")
+	.menu-overlay(:class="{active: storeMenu.isOpenMenu}" @click="hideOverlay")
 </template>
 
 <script setup>
@@ -38,15 +38,6 @@ defineProps({
 
 const header = ref("");
 
-const isOpenMenu = ref(false);
-
-const openMenu = () => {
-  if (window.innerWidth < 1024) {
-    isOpenMenu.value = !isOpenMenu.value;
-    storeMenu.toggleMenu();
-  }
-};
-
 const closeMenu = (e) => {
   const target = e.target;
   if (window.innerWidth < 1024) {
@@ -56,15 +47,14 @@ const closeMenu = (e) => {
       target.closest(".actions-header__btn") ||
       target.closest(".header__logo")
     ) {
-      isOpenMenu.value = false;
+      storeMenu.closeMenu();
     }
     storeMenu.closeMenu();
   }
 };
 
 const hideOverlay = () => {
-  isOpenMenu.value = false;
-  storeMenu.toggleMenu();
+  storeMenu.closeMenu();
 };
 
 const route = useRoute();

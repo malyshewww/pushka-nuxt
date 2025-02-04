@@ -9,7 +9,7 @@
 		.flat-slider__pagination.image-pagination
 			ul.image-pagination__list
 				li.image-pagination__item(v-for="(item, idx) in 2" :key="idx" :class="{active: currentImage === idx}" @click="switchImages(idx)")
-		.swiper-pagination(ref="imagePagination")
+		//- .swiper-pagination(ref="imagePagination")
 </template>
 
 <script setup>
@@ -56,20 +56,26 @@ function initializeSwiper() {
     slidesPerView: 1,
     speed: 800,
     centeredSlides: true,
+    on: {
+      slideChange: function (swiper) {
+        const activeIndex = swiper.activeIndex;
+        switchImages(activeIndex);
+      },
+    },
     // observer: true,
     // observeSlideChildren: true,
-    pagination: {
-      el: imagePagination.value,
-      clickable: true,
-      // type: "bullets",
-      // bulletElement: "li",
-      // bulletActiveClass: "active",
-      // bulletClass: "image-pagination__item",
-      // renderBullet: function (index, className) {
-      //    return '<span class="' + className + '">' + "</span>";
-      // },
-      // dynamicBullets: true,
-    },
+    // pagination: {
+    // el: imagePagination.value,
+    // clickable: true,
+    // type: "bullets",
+    // bulletElement: "li",
+    // bulletActiveClass: "active",
+    // bulletClass: "image-pagination__item",
+    // renderBullet: function (index, className) {
+    //    return '<span class="' + className + '">' + "</span>";
+    // },
+    // dynamicBullets: true,
+    // },
   });
 }
 function destroySwiper() {
@@ -199,7 +205,8 @@ onUnmounted(() => {
     gap: 6px;
   }
   @media screen and (max-width: $xl) {
-    display: none;
+    pointer-events: none;
+    // display: none;
   }
   &__item {
     background-color: var(--bg-white-dirt);
