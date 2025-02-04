@@ -1,7 +1,7 @@
 <template lang="pug">
 	Teleport(to="body")
 		Popup(class="popup-dynamic" :is-open="isOpen" @close-popup="closePopup")
-			PopupDynamicTpl(v-if="isOpen" :popup-data="popupData")
+			PopupDynamicTpl(:popup-data="popupData")
 </template>
 
 <script setup>

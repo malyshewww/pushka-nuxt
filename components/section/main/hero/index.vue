@@ -29,7 +29,7 @@
 <script setup>
 import Rellax from "rellax";
 
-const { $gsap: gsap, $ScrollTrigger: ScrollTrigger } = useNuxtApp();
+const { $gsap: gsap } = useNuxtApp();
 
 const isShowTitle = ref(false);
 
@@ -77,27 +77,6 @@ const animationHero = () => {
   tl.to(".main-hero__cards", {
     yPercent: 0,
   });
-  // if (next.value == true) {
-  //   const tlCards = gsap.timeline({
-  //     scrollTrigger: {
-  //       trigger: mainHero.value,
-  //       start: "bottom 5%",
-  //       end: "40%",
-  //       scrub: 1,
-  //       pin: false,
-  //       pinSpacing: false,
-  //     },
-  //   });
-  //   tlCards.to(".main-hero__cards", {
-  //     opacity: 1,
-  //   });
-  //   tlCards.to(".main-hero__cards", {
-  //     yPercent: 0,
-  //   });
-  // }
-  // tlCards.to(".main-hero__cards", {
-  //   y: "0vh",
-  // });
   // const cards = document.querySelectorAll(".main-hero__card-wrap");
   // cards.forEach((card, index) => {
   //    const duration = 0.5 + index * 0.2; // Увеличение длительности анимации для каждой карточки

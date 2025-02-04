@@ -13,8 +13,8 @@
 		.slider-controls
 			.slider-pagination(ref="sliderPagination")
 			.slider-buttons
-				button(ref="buttonPrev" type="button" class="slider-button slider-button-prev")
-				button(ref="buttonNext" type="button" class="slider-button slider-button-next")
+				button(ref="buttonPrev" class="slider-button slider-button-prev" type="button")
+				button(ref="buttonNext" class="slider-button slider-button-next" type="button" )
 </template>
 
 <script setup>
@@ -22,6 +22,10 @@ import Swiper from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+
+import { usePopupDynamicStore } from "~/stores/popup/dynamic";
+
+const popupDynamicStore = usePopupDynamicStore();
 
 defineProps({
   popupData: {
@@ -40,11 +44,11 @@ const addZero = (num) => {
   return num > 9 ? num : "0" + num;
 };
 
-// function destroyDynamicSlider() {
-//   if (dynamicSwiper.value != null) {
-//     dynamicSwiper.value.destroy();
-//   }
-// }
+function destroyDynamicSlider() {
+  if (dynamicSwiper.value != null) {
+    dynamicSwiper.value.destroy();
+  }
+}
 
 const initDynamicSlider = () => {
   if (dynamicSlider.value) {
@@ -74,9 +78,23 @@ const initDynamicSlider = () => {
   }
 };
 
-onMounted(() => {
-  initDynamicSlider();
-});
+/* 
+  Наблюдение за состоянием открытого/закрытого попапа с изображениями для блока "Ход строительства"
+  Если true - инициализируем слайдер, если false - уничтожаем экземпляр слайдера через небольшую задержку
+*/
+watch(
+  () => popupDynamicStore.isOpenPopupDynamic,
+  (val) => {
+    if (val) {
+      initDynamicSlider();
+    } else {
+      setTimeout(() => {
+        destroyDynamicSlider();
+      }, 500);
+    }
+  },
+  { deep: true }
+);
 </script>
 
 <style lang="scss" scoped>

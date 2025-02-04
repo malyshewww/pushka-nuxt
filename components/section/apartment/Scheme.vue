@@ -65,12 +65,6 @@ const switchButtons = (e) => {
 onMounted(() => {
   Fancybox.bind(`[data-fancybox*="gallery"]`, {
     Hash: false,
-    on: {
-      done: (fancybox) => {
-        console.log("show");
-        // here `fancybox` refers to the current instance
-      },
-    },
   });
   const switchButtons = document.querySelectorAll(".switch-scheme__button");
   if (switchButtons) {
