@@ -25,7 +25,9 @@ const fancyboxOptions = {
   Hash: false,
 };
 
-Fancybox.bind(`[data-fancybox="gallery-static"]`, fancyboxOptions);
+onMounted(() => {
+  Fancybox.bind(`[data-fancybox="gallery-static"]`, fancyboxOptions);
+});
 </script>
 
 <style lang="scss" scoped>

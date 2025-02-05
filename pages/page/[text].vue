@@ -4,7 +4,6 @@
 		.container
 			.main__heading.heading-main
 				h1.heading-main__title {{ pageText.main.title }}
-			//- eslint-disable vue/no-v-html
 			.content(v-html="pageText.main.content")
 			.galleries(v-if="pageText.main.gallery.length > 0")
 				//- SliderGallery(:slider="slider" slider-caption="Варианты дизайнерской отделки" :isDescr="true")
