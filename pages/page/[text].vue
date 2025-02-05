@@ -20,6 +20,7 @@ const { data: pageText } = await useAsyncData(
   () => $fetch(`${runtimeConfig.public.apiBase}/page/${text}?_format=json`, {}),
   {
     transform: (res) => {
+      console.log(res);
       const { breadcrumb, data, metatag } = res;
       const metadata = useMetatags(metatag.html_head);
       return {
@@ -44,11 +45,13 @@ const device = useDevice();
 onMounted(() => {
   if (device.isMobileOrTablet) {
     const tables = document.querySelectorAll(".content table");
-    for (const table of tables) {
-      const tableWrap = document.createElement("div");
-      tableWrap.classList.add("table-wrap");
-      table.parentNode.insertBefore(tableWrap, table);
-      tableWrap.appendChild(table);
+    if (tables.length > 0) {
+      for (const table of tables) {
+        const tableWrap = document.createElement("div");
+        tableWrap.classList.add("table-wrap");
+        table.parentNode.insertBefore(tableWrap, table);
+        tableWrap.appendChild(table);
+      }
     }
   }
 });
