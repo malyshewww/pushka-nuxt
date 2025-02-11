@@ -1,4 +1,38 @@
-# Общая информация
+# ЖК "Пушка"
+
+## Установка
+
+```bash
+npm install
+```
+
+## Запуск дев-режима
+
+Запускает дев-режим на `http://localhost:3000`:
+
+```bash
+npm run dev
+```
+
+## Прод
+
+Сбилдить проект:
+
+```bash
+npm run build
+```
+
+Локально посмотреть билд:
+
+```bash
+npm run preview
+```
+
+## Деплой
+
+[Документация для деплоя](https://nuxt.com/docs/getting-started/deployment)
+
+## Общая информация
 
 Репозиторий для проекта "ЖК Пушка" [Ссылка на проект в системе](https://s.w-nn.ru/p/9951)
 Проект реализован на фреймворке Nuxt 3 с использованием Server-Side Rendering (SSR)
@@ -33,13 +67,6 @@
 - dynamic.vue (/dynamic) - Динамика строительства
 - index.vue (/) - Главная страница
 
-## Шаблоны (/layouts)
-
-В проекте используются 2 шаблона
-
-- main.vue - для главной страницы. Назначение шаблона происходит в файле /pages/index.vue через объект definePageMeta
-- default.vue - для внутренних страниц
-
 ## ESlint
 
 [Ссылка](https://eslint.org/) на официальную документацию
@@ -61,6 +88,17 @@ eslint.config.mjs - файл, в который мигрировали наст�
 
 Чтобы не копировать себе файлы, загруженные с админки, в папке /server/middleware есть файл 01.static-files.ts. Этот файл отрабатывает только в режиме разработки. Если нам нужен файл с папки /sites, то выполняется редирект на боевой сайт. Файлы, загруженные с админки, будут отображаться локально
 
+## Сторы
+
+Проект использует pinia для стейт-менеджмента
+
+## Шаблоны (/layouts)
+
+В проекте используются 2 шаблона
+
+- main.vue - для главной страницы. Назначение шаблона происходит в файле /pages/index.vue через объект definePageMeta
+- default.vue - для внутренних страниц
+
 ## Карты
 
 В проекте используется [3-я версия яндекс карт](https://yandex.ru/dev/jsapi30/doc/ru/common/quickstart.html)
@@ -68,79 +106,3 @@ eslint.config.mjs - файл, в который мигрировали наст�
 ## Анимации
 
 Для анимаций в проекте используется [gsap](https://gsap.com/)
-
-## Nuxt 3 Minimal Starter
-
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
-
-## Setup
-
-Make sure to install the dependencies:
-
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

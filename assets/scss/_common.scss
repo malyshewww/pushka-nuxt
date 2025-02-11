@@ -28,6 +28,7 @@ body.lock {
 //   overflow-y: auto !important;
 // }
 
+// @media screen and (min-width: $xl) {
 html.with-fancybox body.hide-scrollbar {
   margin-right: var(--scroll-width) !important;
 }
@@ -38,6 +39,7 @@ html.with-fancybox body.hide-scrollbar .widget-circle {
 html.with-fancybox body.page--home.hide-scrollbar .header {
   margin-right: var(--scroll-width) !important;
 }
+// }
 
 // .fancybox__container {
 //   z-index: 3000;
