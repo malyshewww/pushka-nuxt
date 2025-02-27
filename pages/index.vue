@@ -22,26 +22,18 @@ useHead({
 });
 
 const runtimeConfig = useRuntimeConfig();
-const { data: front } = await useAsyncData(
-  "front",
-  () =>
-    $fetch(
-      `${runtimeConfig.public.apiBase}/wsapi/packs/front?_format=json`,
-      {}
-    ),
-  {
-    transform: ({ data, metatag }) => {
-      const metadata = useMetatags(metatag.html_head);
-      return {
-        main: {
-          dynamicList: data.dynamic_front,
-          news: data.news_front,
-        },
-        metadata,
-      };
-    },
-  }
-);
+const { data: front } = await useAsyncData("front", () => $fetch(`${runtimeConfig.public.apiBase}/wsapi/packs/front?_format=json`, {}), {
+  transform: ({ data, metatag }) => {
+    const metadata = useMetatags(metatag.html_head);
+    return {
+      main: {
+        dynamicList: data.dynamic_front,
+        news: data.news_front,
+      },
+      metadata,
+    };
+  },
+});
 
 useHead({
   ...front.value.metadata,
