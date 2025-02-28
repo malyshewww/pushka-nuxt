@@ -39,8 +39,8 @@
 							button(type="button").filter-option__delete-btn
 			.filter-group.filter-group--last
 				.filter-group__buttons
-					button(type="button" @click="resetFilter").filter-group__reset-btn Сбросить фильтры
-					button(type="button" @click="resetFilter").filter-group__reset-btn.filter-group__reset-btn--mobile Сбросить
+					button(type="button" @click="resetFilter" :disabled="isDiabledButtonReset").filter-group__reset-btn Сбросить фильтры
+					button(type="button" @click="resetFilter" :disabled="isDiabledButtonReset").filter-group__reset-btn.filter-group__reset-btn--mobile Сбросить
 </template>
 
 <script setup>
@@ -49,6 +49,15 @@ import { useMenuStore } from "~/stores/menu";
 import noUiSlider from "nouislider";
 
 const route = useRoute();
+
+const isDiabledButtonReset = ref(true);
+
+watch(
+  () => route.query,
+  (val) => {
+    checkStateButtonReset(Object.keys(val));
+  }
+);
 
 const store = useFilterStore();
 const storeMenu = useMenuStore();
@@ -67,18 +76,9 @@ const props = defineProps({
   },
 });
 
-const option = ref(
-  route.query["options[]"] && route.query["options[]"].length
-    ? [route.query["options[]"]]
-    : []
-);
+const option = ref(route.query["options[]"] && route.query["options[]"].length ? [route.query["options[]"]] : []);
 
-const emit = defineEmits([
-  "newSliderValues",
-  "loadData",
-  "resetFilter",
-  "updateData",
-]);
+const emit = defineEmits(["newSliderValues", "loadData", "resetFilter", "updateData"]);
 
 const sliderPrice = ref("");
 const sliderArea = ref("");
@@ -335,6 +335,14 @@ const resetFilter = () => {
   emit("resetFilter");
 };
 
+function checkStateButtonReset(val) {
+  if (val.length > 0) {
+    isDiabledButtonReset.value = false;
+  } else {
+    isDiabledButtonReset.value = true;
+  }
+}
+
 const setValuesWithGet = () => {
   // Проверяем гет параметры для проставления значений в range слайдеры
   if (route.query["price[min]"] && route.query["price[max]"]) {
@@ -342,30 +350,21 @@ const setValuesWithGet = () => {
     const max = Math.round(route.query["price[max]"]);
     filter.price.minRange = min;
     filter.price.maxRange = max;
-    sliderPrice.value.noUiSlider.set([
-      filter.price.minRange,
-      filter.price.maxRange,
-    ]);
+    sliderPrice.value.noUiSlider.set([filter.price.minRange, filter.price.maxRange]);
   }
   if (route.query["space[min]"] && route.query["space[max]"]) {
     const min = Math.round(route.query["space[min]"]);
     const max = Math.round(route.query["space[max]"]);
     filter.area.minRange = min;
     filter.area.maxRange = max;
-    sliderArea.value.noUiSlider.set([
-      filter.area.minRange,
-      filter.area.maxRange,
-    ]);
+    sliderArea.value.noUiSlider.set([filter.area.minRange, filter.area.maxRange]);
   }
   if (route.query["floor[min]"] && route.query["floor[max]"]) {
     const min = Math.round(route.query["floor[min]"]);
     const max = Math.round(route.query["floor[max]"]);
     filter.floor.minRange = min;
     filter.floor.maxRange = max;
-    sliderFloor.value.noUiSlider.set([
-      filter.floor.minRange,
-      filter.floor.maxRange,
-    ]);
+    sliderFloor.value.noUiSlider.set([filter.floor.minRange, filter.floor.maxRange]);
   }
   if (route.query["options[]"] && route.query["options[]"].length) {
     queryOptions.value = [route.query["options[]"]];
@@ -378,6 +377,7 @@ onMounted(() => {
   updateRangeSliders();
   changeSliderValues();
   setValuesWithGet();
+  checkStateButtonReset(Object.keys(route.query));
 });
 </script>
 
@@ -575,6 +575,11 @@ onMounted(() => {
       @extend .filter-option__delete-btn;
       mask-size: 12px 12px;
       background: var(--text-gray);
+    }
+    &.disabled,
+    &:disabled {
+      pointer-events: none;
+      cursor: default;
     }
     @media screen and (max-width: $md) {
       & span {

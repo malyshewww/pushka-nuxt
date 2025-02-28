@@ -37,28 +37,14 @@ const route = useRoute();
 
 const currentPage = ref(route.query.page ? route.query.page : 0);
 
-const currentPriceMin = ref(
-  route.query["price[min]"] ? route.query["price[min]"] : "all"
-);
-const currentPriceMax = ref(
-  route.query["price[max]"] ? route.query["price[max]"] : "all"
-);
-const currentAreaMin = ref(
-  route.query["space[min]"] ? route.query["space[min]"] : "all"
-);
-const currentAreaMax = ref(
-  route.query["space[max]"] ? route.query["space[max]"] : "all"
-);
-const currentFloorMin = ref(
-  route.query["floor[min]"] ? route.query["floor[min]"] : "all"
-);
-const currentFloorMax = ref(
-  route.query["floor[max]"] ? route.query["floor[max]"] : "all"
-);
+const currentPriceMin = ref(route.query["price[min]"] ? route.query["price[min]"] : "all");
+const currentPriceMax = ref(route.query["price[max]"] ? route.query["price[max]"] : "all");
+const currentAreaMin = ref(route.query["space[min]"] ? route.query["space[min]"] : "all");
+const currentAreaMax = ref(route.query["space[max]"] ? route.query["space[max]"] : "all");
+const currentFloorMin = ref(route.query["floor[min]"] ? route.query["floor[min]"] : "all");
+const currentFloorMax = ref(route.query["floor[max]"] ? route.query["floor[max]"] : "all");
 
-const currentOptions = ref(
-  route.query["options[]"] ? route.query["options[]"] : "all"
-);
+const currentOptions = ref(route.query["options[]"] ? route.query["options[]"] : "all");
 
 const params = ref({});
 
@@ -202,15 +188,7 @@ watch(
   }
 );
 
-const loadData = async (
-  minPrice,
-  maxPrice,
-  minFloor,
-  maxFloor,
-  minArea,
-  maxArea,
-  options
-) => {
+const loadData = async (minPrice, maxPrice, minFloor, maxFloor, minArea, maxArea, options) => {
   currentPriceMin.value = minPrice;
   currentPriceMax.value = maxPrice;
   currentAreaMin.value = minArea;
