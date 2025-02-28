@@ -175,7 +175,6 @@ watch(
       path: route.path,
       query: {
         ...newVal,
-        page: currentPage.value,
       },
     });
   }
