@@ -29,7 +29,7 @@ const openPopupNews = () => {
   min-height: 322px;
   border: 1px solid var(--bg-gray);
   padding: 32px 35px 29px;
-  transition: border-color $time;
+  transition: border-color var(--time);
   flex-shrink: 0;
   max-width: 530px;
   position: relative;
@@ -120,7 +120,7 @@ const openPopupNews = () => {
     color: var(--text-avocado);
     opacity: 0;
     transform: translate3d(10px, 0, 0);
-    transition: opacity $time, transform $time;
+    transition: opacity var(--time), transform var(--time);
     @media screen and (max-width: $xl) {
       opacity: 1;
       transform: none;

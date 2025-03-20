@@ -132,7 +132,7 @@ onMounted(() => {
     height: 100%;
     background: rgba(43, 47, 59, 0.3);
     opacity: var(--opacity);
-    // transition: opacity $time;
+    // transition: opacity var(--time);
     z-index: 2;
     @media screen and (max-width: $xl) {
       opacity: 1;
@@ -186,7 +186,7 @@ onMounted(() => {
     text-align: center;
     color: var(--text-white);
     opacity: 0;
-    transition: opacity $time * 2 ease-out 0.5s;
+    transition: opacity calc(var(--time) * 2) ease-out 0.5s;
     // transform: translate3d(0, calc(var(--scrollTopDecrement) * 0.3), 0);
     will-change: transform;
     &.active {

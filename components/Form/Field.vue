@@ -91,7 +91,7 @@ watch(selectedValue, (newValue) => {
       bottom: 0;
       left: 0;
       width: 100%;
-      transition: border-color $time;
+      transition: border-color var(--time);
     }
     &.focus::before {
       border-color: var(--text-white);

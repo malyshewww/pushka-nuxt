@@ -82,7 +82,7 @@ const goBack = () => {
     font-size: 14px;
     line-height: 130%;
     color: var(--text-gray);
-    transition: border-color $time ease 0s, color $time ease 0s;
+    transition: border-color var(--time) ease 0s, color var(--time) ease 0s;
     &.disabled {
       background-color: var(--bg-white-dirt);
       color: var(--text-midnight-100);

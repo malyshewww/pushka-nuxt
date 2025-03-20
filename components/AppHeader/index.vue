@@ -80,7 +80,7 @@ onMounted(() => {
   top: 0;
   width: 100vw;
   z-index: 30;
-  transition: transform $time, box-shadow $time, background-color $time;
+  transition: transform var(--time), box-shadow var(--time), background-color var(--time);
   &::before {
     content: "";
     position: absolute;
@@ -92,7 +92,7 @@ onMounted(() => {
     z-index: 21;
     opacity: 0;
     pointer-events: none;
-    transition: opacity $time;
+    transition: opacity var(--time);
   }
   &.hidden {
     transform: translateY(-100%);

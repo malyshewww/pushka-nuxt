@@ -112,8 +112,7 @@ export default defineNuxtConfig({
       },
       preprocessorOptions: {
         scss: {
-          additionalData:
-            '@use "sass:math"; @use "assets/scss/mixins.scss" as *; @use "assets/scss/variables.scss" as *;',
+          additionalData: '@use "sass:math"; @use "assets/scss/global-vars" as *; @use "assets/scss/mixins" as *;',
           silenceDeprecations: ["legacy-js-api"],
         },
       },

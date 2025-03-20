@@ -654,7 +654,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
     gap: 10px;
-    transition: border-color $time, background-color $time;
+    transition: border-color var(--time), background-color var(--time);
     @media (any-hover: hover) {
       &:hover {
         cursor: pointer;

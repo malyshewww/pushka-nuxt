@@ -192,7 +192,10 @@ onMounted(() => {
     font-size: 16px;
     font-weight: 600;
     line-height: 22px;
-    transition: color $time ease 0s;
+    transition: color var(--time) ease 0s;
+    .dropdown-menu & {
+      color: var(--main-color);
+    }
     &.router-link-active:not([href="/"]):not([href*="#"]) {
       color: var(--text-avocado);
     }
@@ -252,7 +255,7 @@ onMounted(() => {
       border-radius: 50%;
       background-color: currentColor;
       box-shadow: 7px 0px 0px currentColor, -7px 0px 0px currentColor;
-      transition: background-color $time, box-shadow $time;
+      transition: background-color var(--time), box-shadow var(--time);
     }
   }
   &__list-wrap {
@@ -265,7 +268,7 @@ onMounted(() => {
     visibility: hidden;
     pointer-events: none;
     transform: translate3d(0, 20px, 0);
-    transition: opacity $time, visibility $time, transform $time;
+    transition: opacity var(--time), visibility var(--time), transform var(--time);
   }
   &__list {
     @include reset-list;
@@ -273,7 +276,7 @@ onMounted(() => {
     padding: 24px 28px;
     display: grid;
     grid-template-columns: 100%;
-    justify-items: center;
+    justify-items: start;
     gap: 20px;
     box-shadow: 0 0 50px 0 rgba(43, 47, 59, 0.2);
   }

@@ -17,7 +17,7 @@ const { info } = mainInfoStore;
     font-weight: 700;
     font-size: 22px;
     line-height: 27px;
-    transition: color $time ease 0s;
+    transition: color var(--time) ease 0s;
     @media (any-hover: hover) {
       &:hover {
         color: var(--text-avocado);

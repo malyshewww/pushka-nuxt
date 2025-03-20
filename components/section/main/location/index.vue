@@ -158,7 +158,7 @@ onMounted(() => {
     line-height: 27px;
     text-transform: uppercase;
     color: var(--bg-white);
-    transition: background-color $time;
+    transition: background-color var(--time);
     &::after {
       content: "";
       display: block;
@@ -208,7 +208,7 @@ onMounted(() => {
   backdrop-filter: blur(4px);
   background: rgba(255, 255, 255, 0.8);
   place-items: center;
-  transition: opacity $time;
+  transition: opacity var(--time);
   padding: 15px;
   &.hidden {
     opacity: 0;
@@ -264,7 +264,7 @@ onMounted(() => {
       height: 8px;
       background-color: var(--main-color);
       top: 0;
-      transition: opacity $time;
+      transition: opacity var(--time);
     }
     &::before,
     &::after {

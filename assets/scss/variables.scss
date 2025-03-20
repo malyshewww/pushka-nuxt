@@ -1,3 +1,5 @@
+@use "./global-vars" as *;
+
 :root {
   --font-family: "Manrope", sans-serif;
   --second-family: "Bion", sans-serif;
@@ -52,36 +54,6 @@
 
   --header-height: 80px;
 }
-
-// Минимальная ширина страницы
-$minWidth: 320;
-// Ширина полотна (макета)
-$maxWidth: 1920;
-// Ширина ограничивающего контейнера (0 = нет ограничения)
-$maxWidthContainer: 1920;
-
-// Общий отступ у контейнера
-// (30 = по 15px слева и справа, 0 = нет отступа)
-$containerPadding: 30;
-
-// Тип адаптива:
-// 1 = отзывчивость (у контейнера нет брейкпоинтов),
-// 2 = по брейк-поинтам (контейнер меняет свою ширину по брейк-поинтам)
-$responsiveType: 1;
-
-// Ширина страбатывания первого брейкпоинта
-$containerWidth: $maxWidthContainer + $containerPadding;
-// Брейкпоинты
-$pc: $containerWidth + px;
-$xs: 479.98px;
-$sm: 576px;
-$md: 767.98px;
-$lg: 991.98px;
-$xl: 1024px;
-$xxl: 1200px;
-$xxxl: 1400px;
-
-$time: 0.3s;
 
 @media screen and (max-width: $xl) {
   :root {

@@ -31,8 +31,7 @@ const placemarks = [
     transform: "translate(-50%, -50%)",
     isActive: true,
     caption: "парк пушкина",
-    description:
-      "В обновлённом парке: детский городок, специальная зона для выгула и дрессировки собак, просторная скейт-площадка",
+    description: "В обновлённом парке: детский городок, специальная зона для выгула и дрессировки собак, просторная скейт-площадка",
     distance: "5 мин пешком",
   },
   // площадь Горького
@@ -52,8 +51,7 @@ const placemarks = [
     id: 3,
     isActive: false,
     caption: "Средной рынок",
-    description:
-      "Комфортные и современные торговые ряды с фермерскими продуктами",
+    description: "Комфортные и современные торговые ряды с фермерскими продуктами",
     distance: "5 мин пешком",
   },
   // Улица Белинского
@@ -63,8 +61,7 @@ const placemarks = [
     id: 4,
     isActive: false,
     caption: "Улица Белинского",
-    description:
-      "Многочисленные скверы и исторические уголки Нижнего Новгорода",
+    description: "Многочисленные скверы и исторические уголки Нижнего Новгорода",
     distance: "5 мин пешком",
   },
 ];
@@ -109,26 +106,13 @@ onMounted(() => {
   }
   async function initMap() {
     await ymaps3.ready;
-    const {
-      YMap,
-      YMapDefaultSchemeLayer,
-      YMapDefaultFeaturesLayer,
-      YMapMarker,
-    } = ymaps3;
+    const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = ymaps3;
     map.value = new YMap(mapElem.value, {
       location: {
         center: coords,
         zoom: window.innerWidth > 1024 ? 14 : 13,
       },
-      behaviors: [
-        "drag",
-        "multiTouch",
-        "dblClickZoom",
-        "rightMouseButtonMagnifier",
-        "pinchZoom",
-        "dblClick",
-        "magnifier",
-      ],
+      behaviors: ["drag", "multiTouch", "dblClickZoom", "rightMouseButtonMagnifier", "pinchZoom", "dblClick", "magnifier"],
     });
     // Добавьте слой с дорогами и зданиями
     map.value.addChild(
@@ -251,10 +235,7 @@ onMounted(() => {
   const observer = new IntersectionObserver(([entry]) => {
     const targetInfo = entry.boundingClientRect;
     const rootBoundsInfo = entry.rootBounds;
-    if (
-      (!isLoaded && targetInfo.top < rootBoundsInfo.bottom) ||
-      targetInfo.isIntersecting
-    ) {
+    if ((!isLoaded && targetInfo.top < rootBoundsInfo.bottom) || targetInfo.isIntersecting) {
       loadMap();
       observer.unobserve(entry.target);
     }
@@ -322,13 +303,13 @@ onMounted(() => {
       &__image {
         pointer-events: none;
         transform: scale(0.71);
-        transition: transform $time * 2;
+        transition: transform calc(var(--time) * 2);
         & svg {
           width: 100%;
           height: 100%;
         }
         & svg path {
-          transition: fill $time * 2;
+          transition: fill calc(var(--time) * 2);
         }
         @media screen and (max-width: $xl) {
           width: 28px;

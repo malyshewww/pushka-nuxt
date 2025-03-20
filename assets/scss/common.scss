@@ -1,3 +1,7 @@
+@use "./variables" as *;
+@use "./mixins" as m;
+@use "./global-vars" as *;
+
 .container {
   max-width: 1710px;
   margin: 0 auto;
@@ -159,7 +163,7 @@ h6 {
     margin-bottom: 0;
   }
   ul {
-    @include reset-list;
+    @include m.reset-list;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -181,7 +185,7 @@ h6 {
     }
   }
   ol {
-    @include reset-list;
+    @include m.reset-list;
     display: flex;
     flex-direction: column;
     counter-reset: numbers;
@@ -230,7 +234,7 @@ h6 {
     font-size: 16px;
     line-height: 120%;
     border-bottom: 1px solid currentColor;
-    transition: color $time, border-color $time;
+    transition: color var(--time), border-color var(--time);
     @media (any-hover: hover) {
       &:hover {
         border-color: var(--text-avocado);
@@ -346,7 +350,7 @@ h6 {
   display: grid;
   place-items: center;
   opacity: 0;
-  transition: opacity $time * 2 ease 0s;
+  transition: opacity calc(var(--time) * 2) ease 0s;
   z-index: 2;
   pointer-events: none;
   &__icon {
@@ -358,7 +362,7 @@ h6 {
     display: grid;
     place-items: center;
     opacity: 0;
-    transition: opacity $time * 2 ease 0s;
+    transition: opacity calc(var(--time) * 2) ease 0s;
     &::before {
       content: "";
       width: 24px;
@@ -483,7 +487,7 @@ picture {
   border: 2px solid var(--bg-gray);
   display: grid;
   place-items: center;
-  transition: border-color $time, background-color $time, opacity $time;
+  transition: border-color var(--time), background-color var(--time), opacity var(--time);
   @media (any-hover: hover) {
     &:hover {
       border-color: var(--text-midnight-100);
@@ -504,7 +508,7 @@ picture {
     mask-position: center;
     mask-size: 28px 28px;
     background-color: var(--main-color);
-    transition: background-color $time;
+    transition: background-color var(--time);
     @media screen and (max-width: $md) {
       width: 20px;
       height: 20px;
@@ -582,7 +586,7 @@ picture {
     flex-shrink: 0;
     display: grid;
     place-items: center;
-    transition: border-color $time;
+    transition: border-color var(--time);
     &::before {
       content: "";
       display: block;

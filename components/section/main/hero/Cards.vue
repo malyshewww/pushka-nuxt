@@ -98,13 +98,13 @@ const data = reactive({
       top: 5px;
       & .hero-card {
         transition-delay: 2s;
+        background-color: var(--bg-sand);
         &__title {
           max-width: 155px;
           @media screen and (max-width: $md) {
             max-width: 100%;
           }
         }
-        background-color: var(--bg-sand);
       }
       @media screen and (max-width: $xxxl) {
         top: -6px;

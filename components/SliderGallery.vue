@@ -79,9 +79,7 @@ const initSlider = () => {
       },
       init: function (swiper) {
         const slides = swiper.slides;
-        const sliderControls =
-          swiper.navigation.prevEl.parentNode ||
-          swiper.navigation.nextEl.parentNode;
+        const sliderControls = swiper.navigation.prevEl.parentNode || swiper.navigation.nextEl.parentNode;
         if (slides.length <= swiper.passedParams.slidesPerView) {
           swiper.navigation.destroy();
           sliderControls.remove();
@@ -108,7 +106,7 @@ onMounted(() => {
   height: 28px;
   display: grid;
   place-items: center;
-  transition: fill $time;
+  transition: fill var(--time);
 }
 
 .gallery-slider {

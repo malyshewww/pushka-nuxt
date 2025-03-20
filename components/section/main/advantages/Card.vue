@@ -126,7 +126,7 @@ const showInfo = (idx) => {
     place-items: center;
     cursor: default;
     pointer-events: none;
-    transition: opacity $time * 2;
+    transition: opacity calc(var(--time) * 2);
   }
   &__button-icon {
     border-radius: 50%;

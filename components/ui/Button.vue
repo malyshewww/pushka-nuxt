@@ -41,8 +41,7 @@ const buttonClick = () => {
   width: 100%;
   background-color: var(--text-avocado);
   color: var(--text-white);
-  transition: color $time ease 0s, background-color $time ease 0s,
-    border-color $time ease 0s;
+  transition: color var(--time) ease 0s, background-color var(--time) ease 0s, border-color var(--time) ease 0s;
   &.disabled,
   &:disabled {
     pointer-events: none;

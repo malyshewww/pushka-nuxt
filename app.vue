@@ -41,22 +41,18 @@ onMounted(() => {
   // Компенсация ширины полосы прокрути при открытии модального окна fancybox
   const wrapper = document.querySelector(".wrapper");
   if (wrapper) {
-    const scrollWidth =
-      window.innerWidth - document.querySelector(".wrapper").offsetWidth + "px";
-    document.documentElement.style.setProperty(
-      "--scroll-width",
-      `${scrollWidth}`
-    );
+    const scrollWidth = window.innerWidth - document.querySelector(".wrapper").offsetWidth + "px";
+    document.documentElement.style.setProperty("--scroll-width", `${scrollWidth}`);
   }
 });
 </script>
 
 <style lang="scss">
-@import "assets/scss/mixins";
-@import "assets/scss/fonts";
-@import "assets/scss/nullstyle";
-@import "assets/scss/keyframes";
-@import "assets/scss/common";
+@use "assets/scss/variables";
+@use "assets/scss/fonts";
+@use "assets/scss/nullstyle";
+@use "assets/scss/keyframes";
+@use "assets/scss/common";
 
 body.page--home {
   font-family: var(--second-family);

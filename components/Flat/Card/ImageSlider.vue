@@ -213,7 +213,7 @@ onUnmounted(() => {
     width: 20px;
     height: 2px;
     flex-shrink: 0;
-    transition: background-color $time;
+    transition: background-color var(--time);
     &.active {
       background-color: var(--text-gray);
     }
@@ -248,8 +248,7 @@ onUnmounted(() => {
     }
   }
   & .swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
-  .swiper-pagination-horizontal.swiper-pagination-bullets
-    .swiper-pagination-bullet {
+  .swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet {
     width: 20px;
     height: 2px;
     flex-shrink: 0;

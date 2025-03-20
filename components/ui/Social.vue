@@ -81,7 +81,7 @@ defineProps({
     border-radius: 50%;
     width: 60px;
     height: 60px;
-    transition: border-color $time;
+    transition: border-color var(--time);
     display: grid;
     place-items: center;
     & svg {

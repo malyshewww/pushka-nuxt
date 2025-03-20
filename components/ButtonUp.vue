@@ -52,7 +52,7 @@ onMounted(() => {
   visibility: visible;
   opacity: 0;
   transform: translateY(50px);
-  transition: opacity $time * 2, transform $time * 2;
+  transition: opacity calc(var(--time) * 2), transform calc(var(--time) * 2);
   pointer-events: none;
   .page--home & {
     left: 36px;

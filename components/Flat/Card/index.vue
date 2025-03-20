@@ -61,7 +61,7 @@ const newParametersList = computed(() => {
 .flat-card {
   padding: 24px;
   background-color: var(--bg-white);
-  transition: box-shadow $time;
+  transition: box-shadow var(--time);
   border-radius: 10px;
   @media (any-hover: hover) {
     &:hover {
@@ -177,7 +177,7 @@ const newParametersList = computed(() => {
   }
   &__button {
     @extend .parameters-card__item;
-    transition: background-color $time;
+    transition: background-color var(--time);
     display: grid;
     place-items: center;
     position: relative;
@@ -191,7 +191,7 @@ const newParametersList = computed(() => {
     display: grid;
     place-items: center;
     opacity: 0;
-    transition: opacity $time;
+    transition: opacity var(--time);
     pointer-events: none;
     &::before {
       content: "";
@@ -220,7 +220,7 @@ const newParametersList = computed(() => {
     width: 228px;
     opacity: 0;
     pointer-events: none;
-    transition: top $time ease 0s, opacity $time ease 0s;
+    transition: top var(--time) ease 0s, opacity var(--time) ease 0s;
     isolation: isolate;
     &::before {
       content: "";

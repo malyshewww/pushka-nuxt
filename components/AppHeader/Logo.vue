@@ -24,47 +24,47 @@ const router = useRoute();
 
 <style lang="scss" scoped>
 .header__logo {
-   display: block;
-   &-wrap,
-   &-container {
-      width: 182px;
-      height: 36px;
-      flex-shrink: 0;
-      display: grid;
-      place-items: center;
-      position: relative;
-      z-index: 21;
-      @media screen and (max-width: $xl) {
-         width: 102px;
-         height: 21px;
-      }
-   }
+  display: block;
+  &-wrap,
+  &-container {
+    width: 182px;
+    height: 36px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    position: relative;
+    z-index: 21;
+    @media screen and (max-width: $xl) {
+      width: 102px;
+      height: 21px;
+    }
+  }
 }
 .logo-black,
 .logo-white {
-   position: absolute;
-   inset: 0;
-   width: 100%;
-   height: 100%;
-   transition: opacity $time;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity var(--time);
 }
 .logo-black {
-   opacity: 0;
+  opacity: 0;
 }
 .header-black {
-   & .logo-black {
-      opacity: 1;
-   }
-   & .logo-white {
-      opacity: 0;
-   }
+  & .logo-black {
+    opacity: 1;
+  }
+  & .logo-white {
+    opacity: 0;
+  }
 }
 .header-white {
-   & .logo-black {
-      opacity: 0;
-   }
-   & .logo-white {
-      opacity: 1;
-   }
+  & .logo-black {
+    opacity: 0;
+  }
+  & .logo-white {
+    opacity: 1;
+  }
 }
 </style>

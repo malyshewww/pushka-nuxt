@@ -17,7 +17,7 @@ defineProps({
   font-family: "Manrope", sans-serif;
   line-height: 19px;
   border-bottom: 1px solid currentColor;
-  transition: color $time, border-color $time;
+  transition: color var(--time), border-color var(--time);
   @media (any-hover: hover) {
     &:hover {
       border-color: var(--text-avocado);

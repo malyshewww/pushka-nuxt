@@ -73,7 +73,7 @@ defineProps({
     line-height: 27px;
     font-family: var(--second-family);
     text-transform: uppercase;
-    transition: color $time ease 0s;
+    transition: color var(--time) ease 0s;
     @media (any-hover: hover) {
       &:hover {
         color: var(--text-avocado);
@@ -170,7 +170,7 @@ defineProps({
     border: 1px solid var(--bg-gray);
     display: grid;
     place-items: center;
-    transition: border-color $time ease 0s;
+    transition: border-color var(--time) ease 0s;
     @media (any-hover: hover) {
       &:hover {
         border-color: var(--text-gray);

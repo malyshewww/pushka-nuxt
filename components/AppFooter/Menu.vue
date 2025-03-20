@@ -65,7 +65,7 @@ const newMenu = computed(() => {
     font-weight: 600;
     font-size: 16px;
     line-height: 22px;
-    transition: color $time ease 0s;
+    transition: color var(--time) ease 0s;
     &.router-link-active:not([href="/"]):not([href*="#"]) {
       color: var(--text-avocado);
     }

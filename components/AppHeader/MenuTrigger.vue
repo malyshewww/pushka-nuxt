@@ -77,7 +77,7 @@ const openFilter = () => {
       &__close {
         transform: scale(1);
         opacity: 1;
-        transition: transform $time ease-out 0.2s, opacity $time ease-out 0.2s;
+        transition: transform var(--time) ease-out 0.2s, opacity var(--time) ease-out 0.2s;
       }
     }
   }
@@ -115,7 +115,7 @@ const openFilter = () => {
     height: 44px;
     border-radius: 50%;
     overflow: hidden;
-    transition: max-width $time, width $time;
+    transition: max-width var(--time), width var(--time);
     position: relative;
     padding: 4px 16px;
     flex-shrink: 0;
@@ -156,7 +156,7 @@ const openFilter = () => {
     line-height: 20px;
     font-family: var(--font-family);
     opacity: 0;
-    transition: opacity $time;
+    transition: opacity var(--time);
   }
 }
 .burger {
@@ -166,7 +166,7 @@ const openFilter = () => {
   height: 44px;
   flex-shrink: 0;
   background: var(--text-avocado);
-  transition: width $time, border-radius $time;
+  transition: width var(--time), border-radius var(--time);
   position: relative;
   &__close {
     width: 44px;
@@ -198,7 +198,7 @@ const openFilter = () => {
     gap: 4px;
     white-space: nowrap;
     transform-origin: center center;
-    transition: transform $time, opacity $time;
+    transition: transform var(--time), opacity var(--time);
   }
   &__icon-wrap {
     width: 20px;

@@ -40,9 +40,7 @@ onMounted(() => {
     const keyframes = {
       transform: `translate(${x}px, ${y}px)`,
     };
-    interacting
-      ? trailer.classList.add("active")
-      : trailer.classList.remove("active");
+    interacting ? trailer.classList.add("active") : trailer.classList.remove("active");
     trailer.animate(keyframes, {
       duration: 100,
       fill: "forwards",
@@ -67,9 +65,7 @@ onMounted(() => {
   --marquee-height: 48px;
   /* --marquee-elements: 12; */ /* defined with JavaScript */
   --marquee-elements-displayed: 3;
-  --marquee-element-width: calc(
-    var(--marquee-width) / var(--marquee-elements-displayed)
-  );
+  --marquee-element-width: calc(var(--marquee-width) / var(--marquee-elements-displayed));
   --marquee-animation-duration: calc(var(--marquee-elements) * 3s);
 }
 
@@ -92,7 +88,7 @@ onMounted(() => {
   z-index: 20;
   top: 0;
   left: 0;
-  transition: opacity $time, transform $time, height $time;
+  transition: opacity var(--time), transform var(--time), height var(--time);
   transform: scale(0);
   @media screen and (max-width: $xxxl) {
     width: 100px;
@@ -116,7 +112,7 @@ onMounted(() => {
     z-index: 2;
     transform: translate(-50%, -50%);
     background-color: var(--text-avocado);
-    transition: width 0.35s, height 0.35s, opacity $time, background-color $time;
+    transition: width 0.35s, height 0.35s, opacity var(--time), background-color var(--time);
     z-index: -1;
     pointer-events: none;
   }
@@ -131,15 +127,13 @@ onMounted(() => {
       width: 100%;
       height: 100%;
       opacity: 0.5;
-      transition: width 0.35s ease 0.1s, height 0.35s ease 0.1s, opacity $time,
-        background-color $time;
+      transition: width 0.35s ease 0.1s, height 0.35s ease 0.1s, opacity var(--time), background-color var(--time);
     }
     &::after {
       width: 100%;
       height: 100%;
       opacity: 1;
-      transition: width 0.35s ease 0.3s, height 0.35s ease 0.3s, opacity $time,
-        background-color $time;
+      transition: width 0.35s ease 0.3s, height 0.35s ease 0.3s, opacity var(--time), background-color var(--time);
     }
     & .marquee {
       animation-delay: 0.5s;

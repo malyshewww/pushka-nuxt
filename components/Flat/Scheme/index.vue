@@ -182,7 +182,7 @@ onMounted(() => {
     white-space: nowrap;
     padding: 0 38px 0 38px;
     opacity: 0;
-    transition: opacity $time;
+    transition: opacity var(--time);
     position: relative;
     z-index: 2;
     pointer-events: none;
@@ -213,7 +213,7 @@ onMounted(() => {
       display: block;
       height: 1px;
       width: 100%;
-      transition: opacity $time;
+      transition: opacity var(--time);
       @media screen and (max-width: $md) {
         width: calc(100% + 106px);
       }
@@ -230,7 +230,7 @@ onMounted(() => {
       border-radius: 5px;
       background: var(--bg-white-dirt);
       z-index: -1;
-      transition: opacity $time;
+      transition: opacity var(--time);
       opacity: 0;
       width: calc(100% + 177px);
       pointer-events: none;
@@ -253,7 +253,7 @@ onMounted(() => {
     place-items: center;
     font-size: 14px;
     line-height: 18px;
-    transition: background-color $time, color $time;
+    transition: background-color var(--time), color var(--time);
     color: var(--text-white);
     background-color: var(--text-avocado);
     &.broned {

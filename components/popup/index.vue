@@ -20,7 +20,7 @@ const closePopup = () => {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .popup {
   position: fixed;
   top: 0;
@@ -79,7 +79,7 @@ const closePopup = () => {
     .popup-politic & {
       max-width: 800px;
     }
-    @media screen and (max-width: $md) {
+    @include media($md) {
       padding: 30px 15px;
       border-radius: 16px;
     }
@@ -114,7 +114,7 @@ const closePopup = () => {
         }
       }
     }
-    @media screen and (max-width: $xl) {
+    @include media($xl) {
       top: 8px;
       right: 8px;
     }
@@ -136,27 +136,27 @@ const closePopup = () => {
   &__image {
     padding-bottom: math.div(500, 300) * 100%;
     flex: 0 0 300px;
-    @media screen and (max-width: $md) {
+    @include media($md) {
       display: none;
     }
   }
   &__body {
     display: grid;
     grid-template-columns: 300px 1fr;
-    @media screen and (max-width: $md) {
+    @include media($md) {
       display: flex;
     }
   }
 }
 .popup-tpl {
   color: var(--text-white);
-  @media screen and (max-width: $xl) {
+  @include media($xl) {
     transition: opacity 0.3s ease 0s, visibility 0.3s ease-out 0s;
   }
   & .open-popup {
     & .popup {
       &__content {
-        @media screen and (max-width: $xl) {
+        @include media($xl) {
           transform: translate(0%, 0%);
           transition: transform 0.5s ease 0s;
           opacity: 1;
@@ -166,14 +166,14 @@ const closePopup = () => {
   }
   & .popup {
     &__wrapper {
-      @media screen and (max-width: $xl) {
+      @include media($xl) {
         align-items: stretch;
         padding: 0;
       }
     }
     &__content {
       padding: 0;
-      @media screen and (max-width: $xl) {
+      @include media($xl) {
         background-color: var(--main-color);
         max-width: 100%;
         display: flex;
@@ -182,7 +182,7 @@ const closePopup = () => {
         transform: translate(100%, 0%);
         transition: transform 0.5s ease 0s;
       }
-      @media screen and (max-width: $md) {
+      @include media($md) {
         align-items: center;
       }
     }
@@ -194,7 +194,7 @@ const closePopup = () => {
           }
         }
       }
-      @media screen and (max-width: $md) {
+      @include media($md) {
         &::before {
           background-color: var(--bg-white);
         }

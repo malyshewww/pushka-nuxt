@@ -100,15 +100,7 @@ const resetFilter = () => {
 };
 
 // loadData = update function newSliderValues
-const loadData = (
-  minPrice,
-  maxPrice,
-  minFloor,
-  maxFloor,
-  minArea,
-  maxArea,
-  options
-) => {
+const loadData = (minPrice, maxPrice, minFloor, maxFloor, minArea, maxArea, options) => {
   // isFilterChanged - Фильтр активен
   isFilterChanged.value = true;
   const checkOptions = (optionOne, optionTwo, optionThree) => {
@@ -123,11 +115,7 @@ const loadData = (
   };
   flatsScheme.value.newList.map((floor) => {
     floor.apartments.map((room) => {
-      const isHasOptions = checkOptions(
-        room.options[0],
-        room.options[1],
-        room.options[2]
-      );
+      const isHasOptions = checkOptions(room.options[0], room.options[1], room.options[2]);
       if (room.field_status == "available") {
         // Если есть дополнительные опции
         if (options.length) {
@@ -190,18 +178,10 @@ const openTooltip = (event) => {
   data.tooltip.square = `${target.dataset.area} м²`;
   data.tooltip.number = `№ ${target.dataset.number}`;
   data.tooltip.price = `${formatNumber(target.dataset.price)}`;
-  data.tooltip.status =
-    target.dataset.status === "available" ? "в продаже" : "забронирована";
+  data.tooltip.status = target.dataset.status === "available" ? "в продаже" : "забронирована";
   if (window.innerWidth > 1024) {
-    tooltip.value.style.left = `${
-      event.target.getBoundingClientRect().left -
-      scheme.value.getBoundingClientRect().left +
-      15
-    }px`;
-    tooltip.value.style.top = `${
-      event.target.getBoundingClientRect().top -
-      scheme.value.getBoundingClientRect().top
-    }px`;
+    tooltip.value.style.left = `${event.target.getBoundingClientRect().left - scheme.value.getBoundingClientRect().left + 15}px`;
+    tooltip.value.style.top = `${event.target.getBoundingClientRect().top - scheme.value.getBoundingClientRect().top}px`;
   }
   data.tooltip.isActive = !data.tooltip.isActive;
 };
@@ -280,7 +260,7 @@ onMounted(() => {
   min-width: 300px;
   max-width: 310px;
   //   width: fit-content;
-  transition: all $time;
+  transition: all var(--time);
   opacity: 0;
   z-index: 5;
   transform: translate(-50%, calc(-100% - 10px));
@@ -424,7 +404,7 @@ onMounted(() => {
   line-height: 32px;
   padding-bottom: calc(50% - 42px);
   padding-top: 54px;
-  transition: opacity $time, visibility $time;
+  transition: opacity var(--time), visibility var(--time);
   display: none;
   @media screen and (max-width: $xl) {
     display: block;

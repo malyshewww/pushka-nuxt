@@ -48,18 +48,14 @@ const schemeApartment = ref("");
 const switchButtons = (e) => {
   const target = e.target;
   const pill = schemeApartment.value.querySelector("#pill");
-  const switchParent = schemeApartment.value.querySelector(
-    ".switch-scheme__buttons"
-  );
+  const switchParent = schemeApartment.value.querySelector(".switch-scheme__buttons");
   if (target.closest(".switch-scheme__button")) {
     const id = target.dataset.id;
     isSelected.value = id;
     const dimensions = target.getBoundingClientRect();
     pill.style.width = `${dimensions.width}px`;
     pill.style.height = `${dimensions.height}px`;
-    pill.style.left = `${
-      dimensions.left - switchParent.getBoundingClientRect().left
-    }px`;
+    pill.style.left = `${dimensions.left - switchParent.getBoundingClientRect().left}px`;
   }
 };
 onMounted(() => {
@@ -140,7 +136,7 @@ onMounted(() => {
     left: 0;
     width: 100%;
     height: 100%;
-    transition: opacity $time * 1.5 ease 0s, visibility $time * 1.5 ease 0s;
+    transition: opacity calc(var(--time) * 1.5) ease 0s, visibility calc(var(--time) * 1.5) ease 0s;
     &.active {
       opacity: 1;
       visibility: visible;
